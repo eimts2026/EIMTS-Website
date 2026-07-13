@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SiteFooter } from "./components/SiteFooter";
+import { SiteHeader } from "./components/SiteHeader";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://emeraldislemanpower.com"),
@@ -9,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-GB"><body>{children}</body></html>;
+  return <html lang="en-GB"><body><a className="skip-link" href="#main">Skip to main content</a><SiteHeader />{children}<SiteFooter /></body></html>;
 }
