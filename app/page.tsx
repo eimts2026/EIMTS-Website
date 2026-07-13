@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "./components/Link";
 
 const vacancies = [
   ["Barista Positions in Saudi Arabia", "Saudi Arabia", "Hospitality"],
@@ -12,13 +10,6 @@ const vacancies = [
 ];
 
 const categories = ["Engineering & Technical", "Automotive Services", "Construction & Trades", "Hotel & Restaurant", "Logistics & Warehouse", "Healthcare", "Retail & Administration", "Transport & Driving"];
-
-export const metadata: Metadata = {
-  title: "Emerald Isle Manpower – Top Recruitment Agency in Sri Lanka",
-  description: "Award-winning recruitment agency in Sri Lanka, connecting skilled candidates with trusted foreign employers and overseas job opportunities.",
-  alternates: { canonical: "/" },
-  openGraph: { type: "website", locale: "en_GB", url: "/", siteName: "Emerald Isle Manpower", title: "Turn Your Dream Job Into Reality", description: "Trusted overseas recruitment and human capital solutions from Sri Lanka.", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Emerald Isle Manpower" }] },
-};
 
 const schema = {
   "@context": "https://schema.org",

@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 const routes = {
   home: "/",
   about: "/about-us-emerald-isle-manpower/",

@@ -1,12 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "../components/Link";
 import { PageHero } from "../components/PageHero";
-
-export const metadata: Metadata = {
-  title: "Study Abroad & Global Education Services",
-  description: "Study abroad guidance, applications, accommodation and financial support from Emerald Isle Education.",
-  alternates: { canonical: "/education-page/" },
-};
 
 const services = [
   ["Free consultation", "Clarify your goals, preferred countries, programmes and budget with an education adviser."],

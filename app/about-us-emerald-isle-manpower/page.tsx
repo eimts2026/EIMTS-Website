@@ -1,13 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "../components/Link";
 import { PageHero } from "../components/PageHero";
-
-export const metadata: Metadata = {
-  title: "About Emerald Isle Manpower & Travel Services",
-  description: "Discover Emerald Isle Manpower''s mission, values, licensed recruitment expertise and international employer network.",
-  alternates: { canonical: "/about-us-emerald-isle-manpower/" },
-};
 
 const beliefs = [
   ["Mission", "To connect capable people with meaningful international careers through transparent, responsible recruitment."],

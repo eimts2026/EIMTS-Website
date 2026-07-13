@@ -1,11 +1,4 @@
-import type { Metadata } from "next";
 import { PageHero } from "../components/PageHero";
-
-export const metadata: Metadata = {
-  title: "Foreign Job Vacancies for Sri Lankans",
-  description: "Explore current foreign job vacancies in hospitality, automotive, construction, logistics and culinary sectors.",
-  alternates: { canonical: "/foreign-job-vacancies/" },
-};
 
 const jobs = [
   ["Barista Positions in Saudi Arabia", "Saudi Arabia", "Hospitality"],

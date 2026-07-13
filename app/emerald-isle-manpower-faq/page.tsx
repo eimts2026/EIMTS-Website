@@ -1,12 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "../components/Link";
 import { PageHero } from "../components/PageHero";
-
-export const metadata: Metadata = {
-  title: "Emerald Isle Manpower FAQ",
-  description: "Answers about candidate accounts, passwords, CV uploads, profile completion and foreign job applications.",
-  alternates: { canonical: "/emerald-isle-manpower-faq/" },
-};
 
 const faqs = [
   ["How do I log in to my jobseeker account?", "Open the candidate login page and enter the email address and password used during registration."],

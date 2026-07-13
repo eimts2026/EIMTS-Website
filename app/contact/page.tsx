@@ -1,11 +1,4 @@
-import type { Metadata } from "next";
 import { PageHero } from "../components/PageHero";
-
-export const metadata: Metadata = {
-  title: "Contact Emerald Isle Manpower",
-  description: "Contact Emerald Isle Manpower offices in Colombo, Kurunegala, Batticaloa, Kandy, Nepal and the UAE.",
-  alternates: { canonical: "/contact/" },
-};
 
 const offices = [
   ["Head Office", "198 Galle Road, Dehiwala–Mount Lavinia 10370, Colombo"],

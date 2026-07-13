@@ -1,13 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "../components/Link";
 import { PageHero } from "../components/PageHero";
-
-export const metadata: Metadata = {
-  title: "International Recruitment Solutions for Employers",
-  description: "End-to-end international recruitment solutions for employers across hospitality, engineering, construction and more.",
-  alternates: { canonical: "/client-recruitment-solutions/" },
-};
 
 const values = [
   ["Respect", "We treat every client, candidate and colleague with dignity."],

@@ -1,12 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "../components/Link";
 import { PageHero } from "../components/PageHero";
-
-export const metadata: Metadata = {
-  title: "Career & Recruitment Insights",
-  description: "Practical career, interview, leadership and international recruitment insights from Emerald Isle Manpower.",
-  alternates: { canonical: "/insightful-and-engaging-blog-posts-discover-our-latest-articles/" },
-};
 
 const posts = [
   ["Interview", "How to Face an Online Interview Like a Professional", "Prepare your space, technology and examples so you can communicate with confidence."],
