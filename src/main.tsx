@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { App } from "./App";
-import { updateSeo } from "./seo";
-import "../app/globals.css";
+import { App } from "./app/App";
+import { updateSeo } from "./lib/seo";
+import "./styles/globals.css";
 
 const root = createRoot(document.getElementById("root")!);
 
