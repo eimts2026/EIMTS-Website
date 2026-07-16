@@ -16,7 +16,13 @@ const leaders: Leader[] = [
   { name: "Melani White", role: "Operations Manager", initials: "MW", image: "/assets/leadership/melani.webp" },
   { name: "Angeline Cooke", role: "Senior Administrative Manager", initials: "AC", image: "/assets/leadership/angeline.webp" },
 ];
-const awards = [["Five Star Award", "Two consecutive years"], ["Top 100 Employer Brands in Asia", "World HRD Congress, Singapore"], ["Best Employer Brand", "Nine consecutive years, 2016 to 2024"], ["Best Women Leadership", "Leadership recognition"], ["Four Star Award", "Recruitment excellence"], ["Excellence Award", "Service recognition"], ["Certified Training Partner", "Professional development"]];
+const recognitionMilestones = [
+  { marker: "2016—2024", name: "Best Employer Brand", detail: "Recognised for nine consecutive years" },
+  { marker: "Asia", name: "Top 100 Employer Brands", detail: "World HRD Congress, Singapore" },
+  { marker: "Recruitment", name: "Five Star Award", detail: "Recruitment excellence" },
+  { marker: "Service", name: "Excellence Award", detail: "Consistent service standards" },
+  { marker: "Development", name: "Certified Training Partner", detail: "Professional development" },
+];
 const awardGallery: RollingGalleryItem[] = [
   {
     title: "Golden Award 2022",
@@ -99,7 +105,36 @@ export default function AboutPage() {
         </div>
       </div>
     </section>
-    <section className="ei-awards" aria-labelledby="awards-title"><div className="container"><div className="ei-awards-head"><div><p className="ei-kicker">Seven distinctions</p><h2 id="awards-title">Recognition earned over time.</h2></div><p>Our awards and credentials reflect consistent service, ethical recruitment and a culture that values people.</p></div><div className="ei-award-list">{awards.map(([name, detail], index) => <article key={name}><span>{String(index + 1).padStart(2, "0")}</span><h3>{name}</h3><p>{detail}</p></article>)}</div></div></section>
+    <section className="ei-recognition" aria-labelledby="recognition-title">
+      <div className="container">
+        <div className="ei-recognition-head">
+          <h2 id="recognition-title">Trusted by clients.<br />Recognised by the industry.</h2>
+          <p>Every distinction points back to the same standard: responsible recruitment, strong leadership and better outcomes for people.</p>
+        </div>
+        <div className="ei-recognition-wall">
+          <article className="ei-recognition-feature">
+            <div className="ei-recognition-stars" aria-hidden="true">★★★★★</div>
+            <p className="ei-recognition-source">Sri Lanka Bureau of Foreign Employment</p>
+            <h3>Five Star<br />Award</h3>
+            <p>The only SLBFE Five Star Award-winning recruitment company in Sri Lanka, recognised on two consecutive occasions.</p>
+            <div className="ei-recognition-feature-foot">
+              <strong>2×</strong>
+              <span>consecutive<br />recognition</span>
+            </div>
+          </article>
+          <div className="ei-recognition-ledger" aria-label="Additional recognitions">
+            {recognitionMilestones.map((milestone) => <article className="ei-recognition-milestone" key={milestone.name}>
+              <span className="ei-recognition-marker">{milestone.marker}</span>
+              <div>
+                <h3>{milestone.name}</h3>
+                <p>{milestone.detail}</p>
+              </div>
+              <span className="ei-recognition-arrow" aria-hidden="true">↗</span>
+            </article>)}
+          </div>
+        </div>
+      </div>
+    </section>
     <section className="ei-award-showcase" aria-labelledby="award-showcase-title">
       <div className="container">
         <div className="ei-award-showcase-head">

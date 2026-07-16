@@ -82,7 +82,7 @@ export function SiteHeader() {
       <nav className="top-nav" aria-label="Primary navigation">
         <a href={routes.home}>Home</a>
         <a href={routes.about}>About us</a>
-        <div 
+        <div
           className={"nav-group jobs-nav-group" + (isOpen ? " is-open" : "")}
           ref={menuRef}
           onMouseEnter={() => setIsOpen(true)}
@@ -97,7 +97,7 @@ export function SiteHeader() {
           </a>
           <JobMegaMenu />
         </div>
-        <a href={routes.employer}>Employers</a>
+        <a href={routes.employer}>Employer</a>
         <a href={routes.education}>Education</a>
         <a href={routes.blog}>Blogs</a>
       </nav>
@@ -113,7 +113,7 @@ export function SiteHeader() {
         Register now
       </a>
       <details className="global-mobile-menu">
-        <summary aria-label="Open navigation"><span>Menu</span><span className="menu-lines" aria-hidden="true" /></summary>
+        <summary aria-label="Open navigation"><span className="menu-lines" aria-hidden="true" /></summary>
         <nav aria-label="Mobile navigation">
           <a href={routes.home}>Home</a>
           <a href={routes.about}>About us</a>

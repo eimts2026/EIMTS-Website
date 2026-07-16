@@ -531,3 +531,249 @@
     transition: none;
   }
 }
+
+.ei-recognition {
+  overflow: hidden;
+  padding: clamp(90px, 11vw, 150px) 0;
+  background: var(--ei-neutral);
+}
+
+.ei-recognition-head {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(280px, 4fr);
+  align-items: end;
+  gap: clamp(42px, 8vw, 120px);
+  padding-bottom: clamp(34px, 5vw, 58px);
+  border-bottom: 1px solid #bec9c3;
+}
+
+.ei-recognition-head h2 {
+  max-width: 780px;
+  margin: 0;
+  color: var(--ei-ink);
+  font: 620 clamp(2.8rem, 5vw, 5rem)/0.98 var(--font-sans);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.ei-recognition-head p {
+  max-width: 450px;
+  margin: 0;
+  color: #42534b;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.ei-recognition-wall {
+  display: grid;
+  grid-template-columns: minmax(330px, 5fr) minmax(0, 7fr);
+  margin-top: clamp(38px, 5vw, 62px);
+  background: var(--ei-deep);
+}
+
+.ei-recognition-feature {
+  position: relative;
+  min-height: 610px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: clamp(34px, 4.5vw, 62px);
+  background: var(--ei-amber);
+  color: var(--ei-ink);
+  isolation: isolate;
+}
+
+.ei-recognition-feature::after {
+  content: "★";
+  position: absolute;
+  z-index: -1;
+  right: -52px;
+  bottom: -128px;
+  color: rgba(16, 34, 26, 0.08);
+  font: 700 390px/1 var(--font-sans);
+  transform: rotate(-9deg);
+  pointer-events: none;
+}
+
+.ei-recognition-stars {
+  color: var(--ei-deep);
+  font-size: 22px;
+  letter-spacing: 0.14em;
+}
+
+.ei-recognition-source {
+  max-width: 28ch;
+  margin: 22px 0 0;
+  color: #39443d;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.ei-recognition-feature h3 {
+  margin: clamp(44px, 7vw, 92px) 0 22px;
+  color: var(--ei-ink);
+  font: 650 clamp(3.4rem, 6vw, 6rem)/0.88 var(--font-sans);
+  letter-spacing: -0.04em;
+}
+
+.ei-recognition-feature > p:last-of-type {
+  max-width: 44ch;
+  margin: 0;
+  color: #29372f;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.ei-recognition-feature-foot {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 42px;
+}
+
+.ei-recognition-feature-foot strong {
+  color: var(--ei-deep);
+  font: 650 clamp(4rem, 6vw, 6rem)/0.78 var(--font-sans);
+  letter-spacing: -0.04em;
+}
+
+.ei-recognition-feature-foot span {
+  color: #344139;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.ei-recognition-ledger {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.ei-recognition-milestone {
+  min-height: 101px;
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: 122px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 28px;
+  padding: 22px clamp(26px, 3.5vw, 48px);
+  border-bottom: 1px solid #d4dcd7;
+  color: var(--ei-ink);
+  transition: background 220ms var(--ei-ease), color 220ms var(--ei-ease);
+}
+
+.ei-recognition-milestone:last-child {
+  border-bottom: 0;
+}
+
+.ei-recognition-marker {
+  color: #08795d;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.ei-recognition-milestone h3 {
+  margin: 0;
+  color: inherit;
+  font: 620 clamp(1.05rem, 1.6vw, 1.35rem)/1.25 var(--font-sans);
+}
+
+.ei-recognition-milestone p {
+  margin: 7px 0 0;
+  color: #56665e;
+  font-size: 14px;
+}
+
+.ei-recognition-arrow {
+  color: #08795d;
+  font-size: 22px;
+  transition: transform 220ms var(--ei-ease);
+}
+
+.ei-recognition-milestone:hover {
+  background: var(--ei-deep);
+  color: #fff;
+}
+
+.ei-recognition-milestone:hover .ei-recognition-marker,
+.ei-recognition-milestone:hover .ei-recognition-arrow {
+  color: var(--ei-amber);
+}
+
+.ei-recognition-milestone:hover p {
+  color: #ceddd6;
+}
+
+.ei-recognition-milestone:hover .ei-recognition-arrow {
+  transform: translate(3px, -3px);
+}
+
+@media (max-width: 900px) {
+  .ei-recognition-head,
+  .ei-recognition-wall {
+    grid-template-columns: 1fr;
+  }
+
+  .ei-recognition-head {
+    align-items: start;
+    gap: 22px;
+  }
+
+  .ei-recognition-feature {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 620px) {
+  .ei-recognition {
+    padding: 82px 0;
+  }
+
+  .ei-recognition-head h2 {
+    font-size: clamp(2.7rem, 13vw, 3.6rem);
+  }
+
+  .ei-recognition-head p {
+    font-size: 16px;
+  }
+
+  .ei-recognition-feature {
+    min-height: 490px;
+    padding: 30px 24px;
+  }
+
+  .ei-recognition-feature h3 {
+    margin-top: 52px;
+    font-size: clamp(3.5rem, 17vw, 4.7rem);
+  }
+
+  .ei-recognition-feature > p:last-of-type {
+    font-size: 16px;
+  }
+
+  .ei-recognition-milestone {
+    min-height: 118px;
+    grid-template-columns: 1fr 24px;
+    gap: 8px 16px;
+    padding: 22px 24px;
+  }
+
+  .ei-recognition-marker {
+    grid-column: 1 / -1;
+  }
+
+  .ei-recognition-arrow {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ei-recognition-milestone,
+  .ei-recognition-arrow {
+    transition: none;
+  }
+}
