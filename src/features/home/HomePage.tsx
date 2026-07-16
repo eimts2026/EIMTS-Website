@@ -191,8 +191,12 @@ export default function Home() {
 
     <section className="ei-company-story" aria-labelledby="company-story-title">
       <div className="container ei-story-heading" data-reveal>
-        <p>Our story</p>
-        <h2 id="company-story-title">Built one responsible journey at a time.</h2>
+        <div className="ei-story-heading-intro">
+          <p>Our story</p>
+          <span>Three decades of opening doors responsibly.</span>
+          <strong>Since 1995</strong>
+        </div>
+        <h2 id="company-story-title">Built one responsible <span>journey at a time.</span></h2>
       </div>
       <div className="container ei-story-layout">
         <div className="ei-story-stage" aria-hidden="true">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 
 const routes = {
   home: "/",
@@ -31,7 +31,9 @@ function JobMegaMenu() {
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -42,8 +44,39 @@ export function SiteHeader() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
 
-  return <header className="global-header">
+    const updateHeader = () => {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY;
+      const headerHasFocus = headerRef.current?.contains(document.activeElement);
+      const menuIsOpen = isOpen || Boolean(headerRef.current?.querySelector("details[open]"));
+
+      if (currentScrollY <= 80 || delta < -6 || headerHasFocus || menuIsOpen) {
+        setIsHidden(false);
+      } else if (delta > 6 && currentScrollY > 140) {
+        setIsHidden(true);
+        setIsOpen(false);
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeader);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isOpen]);
+
+  return <header ref={headerRef} className={"global-header" + (isHidden ? " is-hidden" : "")}>
     <div className="wide-container nav-shell">
       <a className="global-brand" href={routes.home} aria-label="Emerald Isle Manpower home"><img src="/assets/emerald-isle-logo.webp" width="214" height="55" alt="Emerald Isle Manpower" /></a>
       <nav className="top-nav" aria-label="Primary navigation">
@@ -55,16 +88,13 @@ export function SiteHeader() {
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >
-          <button 
+          <a
             className="nav-group-trigger"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(!isOpen);
-            }}
-            aria-expanded={isOpen}
+            href={routes.jobs}
+            aria-label="View all foreign job vacancies"
           >
             Find jobs <Caret />
-          </button>
+          </a>
           <JobMegaMenu />
         </div>
         <a href={routes.employer}>Employers</a>
