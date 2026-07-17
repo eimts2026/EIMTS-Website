@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "../../components/ui/Link";
+import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
 import ClientGlobe from "../../components/visuals/ClientGlobe";
 
 const categories = [
@@ -21,9 +22,9 @@ const testimonials = [
 const heroSlides = [
   {
     image: "/assets/emerald-journey-hero.webp",
-    kicker: "Global careers. Human guidance.",
-    title: "Your next chapter starts beyond borders.",
-    copy: "Trusted manpower and travel services connecting Sri Lankan talent with respected employers since 1995.",
+    kicker: "Trusted in Sri Lanka since 1995",
+    title: "30+ years of connecting Sri Lankan talent with global opportunity.",
+    copy: "Responsible overseas recruitment, documentation and travel guidance, supported by one accountable team.",
   },
   {
     image: "/assets/hero-employer-partnership.webp",
@@ -64,15 +65,17 @@ const companyStory = [
   {
     year: "Today",
     title: "32 years on, the promise still travels.",
-    copy: "Seven recognitions, regional partnerships and long-standing client relationships reflect a reputation built one responsible placement at a time.",
+    copy: "Five recognitions, regional partnerships and long-standing client relationships reflect a reputation built one responsible placement at a time.",
     image: "/assets/hero-employer-partnership.webp",
-    marker: "7 awards · 32+ years",
+    marker: "5 awards · 32+ years",
   },
 ];
 
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeStory, setActiveStory] = useState(0);
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const inquiryDialogRef = useRef<HTMLDialogElement>(null);
   const activeHero = heroSlides[activeSlide];
 
   useEffect(() => {
@@ -96,6 +99,14 @@ export default function Home() {
       document.documentElement.classList.remove("ei-motion-ready");
     };
   }, []);
+
+  useEffect(() => {
+    const dialog = inquiryDialogRef.current;
+    if (!dialog) return;
+
+    if (isInquiryOpen && !dialog.open) dialog.showModal();
+    if (!isInquiryOpen && dialog.open) dialog.close();
+  }, [isInquiryOpen]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -187,7 +198,63 @@ export default function Home() {
       <div className="container ei-hero-foot" aria-label="Company credentials"><span>Licensed by SLBFE</span><span>License No. 1162</span><span>Europe · Middle East · Asia · Africa</span></div>
     </section>
 
-    <section className="ei-intro" data-reveal><div className="container ei-intro-grid"><p className="ei-side-note">One journey. One accountable partner.</p><div><h2>Opportunity should feel exciting, never uncertain.</h2><p>For three decades, we have helped people and organisations move forward with clarity. This is the story behind every journey we support.</p></div></div></section>
+    <section className="ei-intro" aria-label="Our vision, mission and core values" data-reveal>
+      <div className="container ei-vision-cards">
+        <button
+          className="ei-belief-card ei-belief-card-vision"
+          type="button"
+          aria-label="Vision: To be recognised globally as an innovative and efficient human capital solutions partner."
+        >
+          <span className="ei-belief-card-front" aria-hidden="true">
+            <span className="ei-belief-card-number">01</span>
+            <strong>Vision</strong>
+            <span className="ei-belief-card-hint"><b>↗</b></span>
+          </span>
+          <span className="ei-belief-card-reveal" aria-hidden="true">
+            <small>Vision</small>
+            <span>To be recognised globally as an innovative and efficient human capital solutions partner.</span>
+          </span>
+        </button>
+
+        <button
+          className="ei-belief-card ei-belief-card-mission"
+          type="button"
+          aria-label="Mission: We enhance every client’s success and improve every employee’s quality of life through the dignity and power of gainful employment, delivering best-in-class human capital solutions."
+        >
+          <span className="ei-belief-card-front" aria-hidden="true">
+            <span className="ei-belief-card-number">02</span>
+            <strong>Mission</strong>
+            <span className="ei-belief-card-hint"><b>↗</b></span>
+          </span>
+          <span className="ei-belief-card-reveal" aria-hidden="true">
+            <small>Mission</small>
+            <span>We enhance every client’s success and improve every employee’s quality of life through the dignity and power of gainful employment, delivering best-in-class human capital solutions.</span>
+          </span>
+        </button>
+
+        <button
+          className="ei-belief-card ei-belief-card-values"
+          type="button"
+          aria-label="Core Values: Respect, Diversity, Teamwork, Empowerment and Community."
+        >
+          <span className="ei-belief-card-front" aria-hidden="true">
+            <span className="ei-belief-card-number">03</span>
+            <strong>Core Values</strong>
+            <span className="ei-belief-card-hint"><b>↗</b></span>
+          </span>
+          <span className="ei-belief-card-reveal" aria-hidden="true">
+            <small>Core Values</small>
+            <span className="ei-core-values">
+              <b>Respect</b>
+              <b>Diversity</b>
+              <b>Teamwork</b>
+              <b>Empowerment</b>
+              <b>Community</b>
+            </span>
+          </span>
+        </button>
+      </div>
+    </section>
 
     <section className="ei-company-story" aria-labelledby="company-story-title">
       <div className="container ei-story-heading" data-reveal>
@@ -225,25 +292,37 @@ export default function Home() {
 
     <section className="ei-paths" aria-labelledby="paths-title"><div className="container">
       <div className="ei-title-row" data-reveal><h2 id="paths-title">Built for both sides of the journey.</h2><Link href="/about-us-emerald-isle-manpower/">Why Emerald Isle <span aria-hidden="true">→</span></Link></div>
-      <div className="ei-path-grid"><article className="ei-path ei-path-candidate" data-reveal><span>For candidates</span><h3>Find work that takes your life forward.</h3><p>Verified vacancies, honest guidance and personal support from application to departure.</p><Link href="/foreign-job-vacancies/">Find your opportunity <b className="ei-path__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg ei-path__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></b></Link></article><article className="ei-path ei-path-employer" data-reveal><span>For employers</span><h3>Build teams ready to make an impact.</h3><p>Industry-focused sourcing, rigorous screening and dependable deployment across borders.</p><Link href="/client-recruitment-solutions/">Start recruiting <b className="ei-path__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg ei-path__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></b></Link></article></div>
+      <div className="ei-path-grid"><article className="ei-path ei-path-candidate" data-reveal><span>For candidates</span><h3>Find work that takes your life forward.</h3><p>Verified vacancies, honest guidance and personal support from application to departure.</p><Link href="/foreign-job-vacancies/">Find your opportunity <b className="ei-path__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg ei-path__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></b></Link></article><article className="ei-path ei-path-employer" data-reveal><span>For employers</span><h3>Build teams ready to make an impact.</h3><p>Industry-focused sourcing, rigorous screening and dependable deployment across borders.</p><button type="button" className="ei-path-action" onClick={() => setIsInquiryOpen(true)}>Start recruiting <b className="ei-path__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg ei-path__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></b></button></article></div>
     </div></section>
+
+    <dialog
+      ref={inquiryDialogRef}
+      className="employer-inquiry-dialog"
+      aria-labelledby="home-employer-inquiry-title"
+      onClose={() => setIsInquiryOpen(false)}
+      onCancel={(event) => { event.preventDefault(); setIsInquiryOpen(false); }}
+      onClick={(event) => { if (event.target === event.currentTarget) setIsInquiryOpen(false); }}
+    >
+      <button className="employer-inquiry-dialog-close" type="button" onClick={() => setIsInquiryOpen(false)} aria-label="Close inquiry form">×</button>
+      <EmployerInquiryForm headingId="home-employer-inquiry-title" />
+    </dialog>
 
     <section className="ei-categories" aria-labelledby="categories-title"><div className="container ei-categories-layout">
       <div className="ei-categories-copy" data-reveal><p className="ei-kicker">Where talent travels</p><h2 id="categories-title">Careers for every kind of ambition.</h2><p>Specialist teams understand the skills, standards and cultures behind every placement.</p><Link className="ei-button ei-button-dark" href="/foreign-job-vacancies/">View every vacancy <span className="ei-button__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link></div>
       <div className="ei-category-list">{categories.map(([name, copy], index) => <Link data-reveal href="/foreign-job-vacancies/" key={name}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{name}</strong><small>{copy}</small></div><b aria-hidden="true">↗</b></Link>)}</div>
     </div></section>
 
+    <ClientGlobe />
+
     <section className="ei-proof" aria-labelledby="proof-title"><div className="container ei-proof-grid">
-      <div className="ei-award-statement" data-reveal><span className="ei-award-number">7</span><div><p className="ei-kicker">Awards and recognitions</p><h2 id="proof-title">Excellence is not a claim. It is a record.</h2><p>Five Star recognition, employer-brand honours and decades of responsible recruitment reflect the standard we protect every day.</p><Link href="/about-us-emerald-isle-manpower/">See our credentials <span aria-hidden="true">→</span></Link></div></div>
+      <div className="ei-award-statement" data-reveal><span className="ei-award-number">5</span><div><p className="ei-kicker">Awards and recognitions</p><h2 id="proof-title">Excellence is not a claim. It is a record.</h2><p>Five Star recognition, employer-brand honours and decades of responsible recruitment reflect the standard we protect every day.</p><Link href="/about-us-emerald-isle-manpower/">See our credentials <span aria-hidden="true">→</span></Link></div></div>
       <div className="ei-proof-facts" data-reveal><div><strong>30+</strong><span>years serving people and organisations</span></div><div><strong>8</strong><span>regional partner and branch markets</span></div><div><strong>One</strong><span>team from recruitment to travel</span></div></div>
     </div></section>
-
-    <ClientGlobe />
 
     <section className="ei-testimonials" aria-labelledby="testimonial-title">
       <div className="container">
         <div className="ei-testimonial-heading" data-reveal>
-          <h2 id="testimonial-title">Client testimonials</h2>
+          <h2 id="testimonial-title">Trusted by worldwide clients</h2>
         </div>
       </div>
       <div className="ei-testimonials-slider-wrapper">

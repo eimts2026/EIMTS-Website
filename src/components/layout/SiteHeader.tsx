@@ -5,7 +5,7 @@ const routes = {
   about: "/about-us-emerald-isle-manpower/",
   jobs: "/foreign-job-vacancies/",
   employer: "/client-recruitment-solutions/",
-  education: "/education-page/",
+  projects: "/projects/",
   blog: "/insightful-and-engaging-blog-posts-discover-our-latest-articles/",
   faq: "/emerald-isle-manpower-faq/",
 };
@@ -98,7 +98,7 @@ export function SiteHeader() {
           <JobMegaMenu />
         </div>
         <a href={routes.employer}>Employer</a>
-        <a href={routes.education}>Education</a>
+        <a href={routes.projects}>Projects</a>
         <a href={routes.blog}>Blogs</a>
       </nav>
       <a className="register-pill" href="https://registration.emeraldislemanpower.com/">
@@ -123,7 +123,7 @@ export function SiteHeader() {
             {jobGroups.map((group) => <div className="mobile-job-group" key={group.title}><p>{group.title}</p>{group.links.map((label) => <a href={routes.jobs + "?filter-category=" + encodeURIComponent(label)} key={label}>{label}</a>)}</div>)}
           </details>
           <a href={routes.employer}>Employers</a>
-          <a href={routes.education}>Education</a>
+          <a href={routes.projects}>Projects</a>
           <a href={routes.blog}>Blogs</a>
           <a href={routes.faq}>FAQ</a>
           <a href="https://registration.emeraldislemanpower.com/">Register now</a>

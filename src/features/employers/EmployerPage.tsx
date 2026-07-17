@@ -1,4 +1,5 @@
-﻿import Link from "../../components/ui/Link";
+import Link from "../../components/ui/Link";
+import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
 
 const values = [
   ["Respect", "Building strong relationships through honest communication is essential. We respect our colleagues and understand the perspectives of our clients, ensuring professional and courteous engagement at every level.", "respect"],
@@ -56,27 +57,7 @@ export default function EmployerPage() {
     <section className="employer-partnership" aria-labelledby="partnership-title"><div className="container"><div className="employer-partnership-head"><div><p className="section-kicker">A better working relationship</p><h2 id="partnership-title">Partnership beyond placement</h2></div><p>Strong hiring outcomes come from shared context, honest communication and a team that keeps learning alongside yours.</p></div><div className="employer-principles">{partnershipPrinciples.map(([title, body, icon]) => <article className="employer-principle" key={title}><ValueIcon type={icon} /><div><h3>{title}</h3><p>{body}</p></div></article>)}</div></div></section>
     <section className="employer-inquiry" id="employer-inquiry" aria-labelledby="employer-inquiry-title">
       <div className="container employer-inquiry-grid">
-        <form className="employer-inquiry-form" action="mailto:info@emeraldisle.lk" method="post" encType="text/plain">
-          <div className="employer-inquiry-heading">
-            <p className="section-kicker">Send an inquiry</p>
-            <h2 id="employer-inquiry-title">Tell us about your hiring needs.</h2>
-            <p>Share the essentials and our employer team will help shape the next step.</p>
-          </div>
-          <div className="employer-form-row">
-            <label><span>Your name</span><input required name="name" autoComplete="name" placeholder="Full name" /></label>
-            <label><span>Work email</span><input required type="email" name="email" autoComplete="email" placeholder="name@company.com" /></label>
-          </div>
-          <div className="employer-form-row">
-            <label><span>Company</span><input required name="company" autoComplete="organization" placeholder="Company name" /></label>
-            <label><span>Company website</span><input name="website" type="url" autoComplete="url" inputMode="url" placeholder="https://company.com" /></label>
-          </div>
-          <div className="employer-form-row">
-            <label><span>Phone</span><input name="phone" type="tel" autoComplete="tel" placeholder="+94" /></label>
-            <label><span>Roles or workforce requirement</span><input required name="subject" placeholder="e.g. 20 hospitality staff for Dubai" /></label>
-          </div>
-          <label><span>How can we help?</span><textarea required name="message" rows={5} placeholder="Locations, target dates, roles and anything else we should know." /></label>
-          <button className="employer-inquiry-submit" type="submit">Send inquiry <span aria-hidden="true">→</span></button>
-        </form>
+        <EmployerInquiryForm />
         <aside className="employer-whatsapp" aria-label="Contact us on WhatsApp">
           <div className="employer-handshake-animation" aria-hidden="true">
             <img src="/assets/employer-handshake.png" alt="" width="1664" height="936" loading="lazy" />

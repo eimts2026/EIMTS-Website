@@ -3,7 +3,7 @@ import Home from "../features/home/HomePage";
 import AboutPage from "../features/about/AboutPage";
 import EmployerPage from "../features/employers/EmployerPage";
 import ContactPage from "../features/contact/ContactPage";
-import EducationPage from "../features/education/EducationPage";
+import ProjectsPage from "../features/projects/ProjectsPage";
 import FaqPage from "../features/faq/FaqPage";
 import JobsPage from "../features/jobs/JobsPage";
 import BlogPage from "../features/blog/BlogPage";
@@ -16,7 +16,7 @@ const routes: Record<string, ComponentType> = {
   "/about-us-emerald-isle-manpower": AboutPage,
   "/client-recruitment-solutions": EmployerPage,
   "/contact": ContactPage,
-  "/education-page": EducationPage,
+  "/projects": ProjectsPage,
   "/emerald-isle-manpower-faq": FaqPage,
   "/foreign-job-vacancies": JobsPage,
   "/insightful-and-engaging-blog-posts-discover-our-latest-articles": BlogPage,

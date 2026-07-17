@@ -6,7 +6,7 @@ const seo: Record<string, SeoEntry> = {
   "/contact": { title: "Contact Emerald Isle Manpower", description: "Contact Emerald Isle Manpower offices in Colombo, Kurunegala, Batticaloa, Kandy, Nepal and the UAE." },
   "/foreign-job-vacancies": { title: "Foreign Job Vacancies for Sri Lankans", description: "Explore current foreign job vacancies in hospitality, automotive, construction, logistics and culinary sectors." },
   "/client-recruitment-solutions": { title: "International Recruitment Solutions for Employers", description: "End-to-end international recruitment solutions for employers across hospitality, engineering, construction and more." },
-  "/education-page": { title: "Study Abroad & Global Education Services", description: "Study abroad guidance, applications, accommodation and financial support from Emerald Isle Education." },
+  "/projects": { title: "Recruitment Projects | Emerald Isle Manpower", description: "Explore responsible workforce mobilisation, skilled recruitment and deployment projects delivered by Emerald Isle Manpower." },
   "/insightful-and-engaging-blog-posts-discover-our-latest-articles": { title: "Career & Recruitment Insights", description: "Practical career, interview, leadership and international recruitment insights from Emerald Isle Manpower." },
   "/emerald-isle-manpower-faq": { title: "Emerald Isle Manpower FAQ", description: "Answers about candidate accounts, passwords, CV uploads, profiles and foreign job applications." },
 };
