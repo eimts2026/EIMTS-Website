@@ -9,12 +9,36 @@ type Leader = {
   image?: string;
 };
 
+type LeadershipMessage = {
+  name: string;
+  role: string;
+  image: string;
+  quote: string;
+  detail: string;
+};
+
 const leaders: Leader[] = [
   { name: "Hemantha Sapumohotti", role: "Chief Executive Officer", initials: "HS", image: "/assets/leadership/hemantha.webp" },
   { name: "Linda Gray, MBA (UWS, Australia)", role: "Talent & Culture Director", initials: "LG", image: "/assets/leadership/linda.webp" },
   { name: "Dr. Tara Giovanna, MB, BCh, BAO (Hons)", role: "Director", initials: "TG", image: "/assets/leadership/tara.webp" },
   { name: "Melani White", role: "Operations Manager", initials: "MW", image: "/assets/leadership/melani.webp" },
   { name: "Angeline Cooke", role: "Senior Administrative Manager", initials: "AC", image: "/assets/leadership/angeline.webp" },
+];
+const leadershipMessages: LeadershipMessage[] = [
+  {
+    name: "Hemantha Sapumohotti",
+    role: "Chief Executive Officer",
+    image: "/assets/leadership/hemantha.webp",
+    quote: "For more than three decades, our responsibility has extended beyond filling vacancies. We create opportunities that improve lives while building lasting partnerships with trusted employers.",
+    detail: "That responsibility guides how we screen candidates, support every placement and represent Sri Lankan talent across the world.",
+  },
+  {
+    name: "Linda Gray, MBA (UWS, Australia)",
+    role: "Talent & Culture Director",
+    image: "/assets/leadership/linda.webp",
+    quote: "Every successful placement begins with understanding the person behind the application\u2014their skills, ambitions and the future they are working toward.",
+    detail: "Our role is to bring care and clarity to that journey, while helping employers build capable teams that can thrive for the long term.",
+  },
 ];
 const recognitionMilestones = [
   { marker: "2016—2024", name: "Best Employer Brand", detail: "Recognised for nine consecutive years" },
@@ -100,6 +124,29 @@ export default function AboutPage() {
 
               <h3>{leader.name}</h3>
               <p>{leader.role}</p>
+            </div>
+          </article>)}
+        </div>
+      </div>
+    </section>
+    <section className="ei-leadership-voices" aria-labelledby="leadership-voices-title">
+      <div className="container">
+        <header className="ei-leadership-voices-head">
+          <h2 id="leadership-voices-title">A word from our leadership.</h2>
+          <p>Two perspectives, one shared responsibility: creating opportunity with care, clarity and accountability.</p>
+        </header>
+        <div className="ei-leadership-message-list">
+          {leadershipMessages.map((message, index) => <article className={`ei-leadership-message${index % 2 ? " ei-leadership-message--reverse" : ""}`} key={message.name}>
+            <figure className="ei-leadership-message-portrait">
+              <img src={message.image} alt={`${message.name}, ${message.role}`} width="640" height="800" loading="lazy" />
+            </figure>
+            <div className="ei-leadership-message-copy">
+              <blockquote><p>{message.quote}</p></blockquote>
+              <p className="ei-leadership-message-detail">{message.detail}</p>
+              <footer>
+                <strong>{message.name}</strong>
+                <span>{message.role}</span>
+              </footer>
             </div>
           </article>)}
         </div>

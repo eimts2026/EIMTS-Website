@@ -920,32 +920,17 @@ body{overflow-x:hidden;background:var(--ei-neutral);color:var(--ei-ink)}
 }
 @media(prefers-reduced-motion:reduce){.ei-client-market-list button{transition:none}}
 
-/* Footer social icons styling */
-.footer-socials {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.footer-socials a {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-  color: #c4dfc8;
-  transition: background-color 0.25s var(--ei-ease), color 0.25s var(--ei-ease), transform 0.22s var(--ei-ease);
-}
-.footer-socials a svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-.footer-socials a:hover {
-  background: var(--ei-amber);
-  color: #10221a !important;
-  transform: translateY(-2px);
-}
+/* Fixed social rail */
+.floating-social-links{position:fixed;z-index:70;top:50%;right:0;display:flex;flex-direction:column;gap:14px;padding:20px 12px;transform:translateY(-50%);background:#eef1ed;box-shadow:0 10px 24px rgba(3,39,31,.15)}
+.floating-social-links__link{width:52px;height:52px;display:grid;place-items:center;overflow:hidden;background:#10221a;color:#fff;transform-origin:right center;transition:transform .3s var(--ei-ease),background-color .3s var(--ei-ease),border-radius .3s var(--ei-ease)}
+.floating-social-links__link svg{width:19px;height:19px;fill:currentColor}
+.floating-social-links__link:hover{border-radius:12px;transform:scale(1.22)}
+.floating-social-links__link--youtube:hover{background:#ff0000}.floating-social-links__link--facebook:hover{background:#1877f2}.floating-social-links__link--linkedin:hover{background:#0072b1}.floating-social-links__link--whatsapp:hover{background:#25d366}
+.floating-social-links:has(.floating-social-links__link:hover) .floating-social-links__link:not(:hover){opacity:.2}
+.floating-social-links__link:active{transform:scale(.94)}
+.floating-social-links__link:focus-visible{position:relative;z-index:1;outline:3px solid var(--ei-amber);outline-offset:3px;border-radius:12px}
+@media(max-width:620px){.floating-social-links{right:10px;gap:8px;padding:10px 8px}.floating-social-links__link{width:42px;height:42px}.floating-social-links__link svg{width:17px;height:17px}.floating-social-links__link:hover{transform:scale(1.12)}}
+@media(prefers-reduced-motion:reduce){.floating-social-links__link{transition:none}}
 
 /* Scroll to top button styling */
 .scroll-to-top {

@@ -9,6 +9,7 @@ import JobsPage from "../features/jobs/JobsPage";
 import BlogPage from "../features/blog/BlogPage";
 import { SiteFooter } from "../components/layout/SiteFooter";
 import { SiteHeader } from "../components/layout/SiteHeader";
+import { FloatingSocialLinks } from "../components/layout/FloatingSocialLinks";
 import { ScrollToTop } from "../components/layout/ScrollToTop";
 
 const routes: Record<string, ComponentType> = {
@@ -31,8 +32,8 @@ export function App() {
   const Page = routes[normalizedPath()];
 
   if (!Page) {
-    return <><SiteHeader /><main id="main" className="content-section"><div className="container section-copy center"><p className="section-kicker">404</p><h1>Page not found</h1><p>The page you requested does not exist.</p><a className="primary-button" href="/">Return home</a></div></main><SiteFooter /><ScrollToTop /></>;
+    return <><SiteHeader /><main id="main" className="content-section"><div className="container section-copy center"><p className="section-kicker">404</p><h1>Page not found</h1><p>The page you requested does not exist.</p><a className="primary-button" href="/">Return home</a></div></main><SiteFooter /><FloatingSocialLinks /><ScrollToTop /></>;
   }
 
-  return <><a className="skip-link" href="#main">Skip to main content</a><SiteHeader /><Page /><SiteFooter /><ScrollToTop /></>;
+  return <><a className="skip-link" href="#main">Skip to main content</a><SiteHeader /><Page /><SiteFooter /><FloatingSocialLinks /><ScrollToTop /></>;
 }
