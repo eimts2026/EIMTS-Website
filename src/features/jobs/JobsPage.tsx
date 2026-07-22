@@ -160,8 +160,8 @@ const categoryOptions = [
 ];
 const sortOptions = [
   { value: "default", label: "Sort by: Recommended" },
-  { value: "title-asc", label: "Job title: A–Z" },
-  { value: "location-asc", label: "Location: A–Z" },
+  { value: "title-asc", label: "Job title: A to Z" },
+  { value: "location-asc", label: "Location: A to Z" },
 ];
 const pageSizeOptions = [
   { value: "6", label: "6 per page" },
@@ -331,6 +331,7 @@ export default function JobsPage() {
   const [pageSize, setPageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [applicationMessage, setApplicationMessage] = useState("");
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const filteredJobs = useMemo(() => {
@@ -396,13 +397,32 @@ export default function JobsPage() {
     requestAnimationFrame(() => document.querySelector(".jobs-results-toolbar")?.scrollIntoView({ behavior, block: "start" }));
   }
 
+  async function submitApplication(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const cv = formData.get("cv");
+    if (!(cv instanceof File) || !cv.size) return setApplicationMessage("Please attach your CV.");
+    if (cv.size > 5 * 1024 * 1024) return setApplicationMessage("Your CV must be 5 MB or smaller.");
+    setApplicationMessage("Sending your application...");
+    try {
+      const response = await fetch("/apply.php", { method: "POST", body: formData });
+      const result = await response.json() as { message?: string };
+      if (!response.ok) throw new Error(result.message || "We could not send your application.");
+      form.reset();
+      setApplicationMessage("Thank you - your application has been sent to our recruitment team.");
+    } catch (error) {
+      setApplicationMessage(error instanceof Error ? error.message : "We could not send your application. Please try again.");
+    }
+  }
+
   return <main id="main" className="jobs-shell">
     <section className="jobs-search-hero" aria-labelledby="jobs-page-title">
       <div className="container">
         <div className="jobs-search-intro">
           <p className="section-kicker">Verified overseas opportunities</p>
           <h1 id="jobs-page-title">Find work that moves you forward.</h1>
-          <p>Search current international vacancies and open any role to see the essentials before you register.</p>
+          <p>Search current international vacancies and apply directly for the role that suits you.</p>
         </div>
 
         <form className="jobs-filter jobs-filter-modern" onSubmit={applyFilters}>
@@ -429,7 +449,7 @@ export default function JobsPage() {
             icon={<CategoryIcon />}
             onChange={(category) => setDraft({ ...draft, category })}
           />
-          <button type="submit">Find jobs <span aria-hidden="true">→</span></button>
+          <button type="submit">Find jobs <span aria-hidden="true">-&gt;</span></button>
         </form>
 
         <div className="jobs-popular" aria-label="Popular job searches">
@@ -445,7 +465,7 @@ export default function JobsPage() {
           <div>
             <p className="section-kicker">Current openings</p>
             <h2 id="jobs-results-title">Opportunities ready for you</h2>
-            <p aria-live="polite">Showing {resultStart}–{resultEnd} of {filteredJobs.length} {filteredJobs.length === 1 ? "vacancy" : "vacancies"}</p>
+            <p aria-live="polite">Showing {resultStart} to {resultEnd} of {filteredJobs.length} {filteredJobs.length === 1 ? "vacancy" : "vacancies"}</p>
           </div>
           <div className="jobs-results-controls">
             <SelectMenu
@@ -473,7 +493,7 @@ export default function JobsPage() {
               <span className="job-card-category">{job.category}</span>
               <strong>{job.title}</strong>
               <span className="job-card-location"><PinIcon /> {job.location}</span>
-              <span className="job-card-footer">View details <b aria-hidden="true">↗</b></span>
+              <span className="job-card-footer">View details <b aria-hidden="true">&gt;</b></span>
             </button>
           </article>)}
         </div> : <div className="jobs-empty">
@@ -484,16 +504,16 @@ export default function JobsPage() {
         </div>}
 
         {filteredJobs.length > pageSize && <nav className="jobs-pagination" aria-label="Job results pages">
-          <button type="button" disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>← Previous</button>
+          <button type="button" disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>&lt;- Previous</button>
           <span>Page {currentPage} of {totalPages}</span>
-          <button type="button" disabled={currentPage === totalPages} onClick={() => goToPage(currentPage + 1)}>Next →</button>
+          <button type="button" disabled={currentPage === totalPages} onClick={() => goToPage(currentPage + 1)}>Next -&gt;</button>
         </nav>}
       </div>
     </section>
 
     <dialog className="job-detail-dialog" ref={dialogRef} aria-labelledby={selectedJob ? "job-detail-title" : undefined} onClose={() => setSelectedJob(null)} onClick={(event) => { if (event.target === event.currentTarget) setSelectedJob(null); }}>
       {selectedJob && <div className="job-detail-panel">
-        <button className="job-detail-close" type="button" onClick={() => setSelectedJob(null)} aria-label="Close job details">×</button>
+        <button className="job-detail-close" type="button" onClick={() => setSelectedJob(null)} aria-label="Close job details">x</button>
         <div className="job-detail-visual"><img src={selectedJob.image} alt="" style={{ objectPosition: selectedJob.imagePosition }} /><span>{selectedJob.category}</span></div>
         <div className="job-detail-content">
           <span className={"job-status" + (selectedJob.urgent ? " is-urgent" : "")}>{selectedJob.urgent ? "Urgent vacancy" : "Open vacancy"}</span>
@@ -508,9 +528,21 @@ export default function JobsPage() {
               <div><dt>Status</dt><dd>{selectedJob.urgent ? "Urgent" : "Open"}</dd></div>
             </dl>
           </div>
-          <p className="job-detail-note">The complete job description, eligibility criteria and document requirements will be shared by our recruitment team after you register your interest.</p>
-          <a className="job-detail-apply" aria-label="Register to apply — opens in a new tab" href="https://registration.emeraldislemanpower.com/" target="_blank" rel="noreferrer">Register to apply <span aria-hidden="true">↗</span></a>
-          <small className="job-detail-new-tab">Opens secure registration in a new tab</small>
+          <p className="job-detail-note">Apply directly below. Please include an up-to-date CV so our recruitment team can review your application for this vacancy.</p>
+          <form className="job-application-form" onSubmit={submitApplication} encType="multipart/form-data">
+            <input type="hidden" name="job_title" value={selectedJob.title} />
+            <h3>Apply for this vacancy</h3>
+            <div className="job-application-grid">
+              <label><span>Full name</span><input required name="name" autoComplete="name" /></label>
+              <label><span>Age</span><input required name="age" type="number" min="18" max="99" inputMode="numeric" /></label>
+              <label><span>Email address</span><input required name="email" type="email" autoComplete="email" /></label>
+              <label><span>Phone number <em>(optional)</em></span><input name="phone" type="tel" autoComplete="tel" /></label>
+              <label><span>Job category</span><input required name="category" defaultValue={selectedJob.category} /></label>
+              <label className="cv-upload"><span>CV (PDF, DOC or DOCX - max 5 MB)</span><input required name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" /></label>
+            </div>
+            <button className="job-detail-apply" type="submit">Send application</button>
+            {applicationMessage && <p className="job-application-feedback" role="status">{applicationMessage}</p>}
+          </form>
         </div>
       </div>}
     </dialog>
