@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const routes = {
   home: "/",
@@ -8,6 +8,7 @@ const routes = {
   projects: "/projects/",
   blog: "/insightful-and-engaging-blog-posts-discover-our-latest-articles/",
   faq: "/emerald-isle-manpower-faq/",
+  contact: "/contact/",
 };
 
 const jobGroups = [
@@ -100,6 +101,7 @@ export function SiteHeader() {
         <a href={routes.employer}>Employer</a>
         <a href={routes.projects}>Projects</a>
         <a href={routes.blog}>Blogs</a>
+        <a href={routes.contact}>Contact</a>
       </nav>
       <a className="register-pill" href="https://registration.emeraldislemanpower.com/">
         <span className="register-pill__icon-wrapper">

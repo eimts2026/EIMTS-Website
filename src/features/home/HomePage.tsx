@@ -3,6 +3,10 @@ import Link from "../../components/ui/Link";
 import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
 import ClientGlobe from "../../components/visuals/ClientGlobe";
 
+// ============================================================================
+// 1. RECRUITMENT CATEGORIES DATA
+// Edit job category titles and descriptions displayed on the Home page
+// ============================================================================
 const categories = [
   ["Engineering & Technical", "Skilled roles across complex industries"],
   ["Hospitality & Culinary", "Hotels, restaurants and guest experiences"],
@@ -12,6 +16,10 @@ const categories = [
   ["Retail & Administration", "People who keep businesses moving"],
 ];
 
+// ============================================================================
+// 2. CLIENT TESTIMONIALS DATA
+// Edit quotes, client names, companies, and locations shown in the carousel
+// ============================================================================
 const testimonials = [
   { quote: "Always the best support, whenever it is required. A recruitment partner we genuinely value.", name: "Mohammed Haneefa", company: "Apparel Group", place: "Saudi Arabia", avatar: "" },
   { quote: "Professional staff, a welcoming environment and service that makes every requirement feel carefully handled.", name: "Rajakumar", company: "Thabat", place: "K.S.A", avatar: "" },
@@ -19,11 +27,16 @@ const testimonials = [
   { quote: "A fantastic experience from start to finish. The communication, care and candidate support were excellent.", name: "Taniya Perera", company: "Raffles & Fairmont", place: "Qatar", avatar: "" },
 ];
 
+// ============================================================================
+// 3. HOME HERO SLIDES DATA
+// Edit background images, kickers, titles, and subtitle copy for the hero slider
+// Image files stored in: /public/assets/
+// ============================================================================
 const heroSlides = [
   {
     image: "/assets/emerald-journey-hero.webp",
     kicker: "Trusted in Sri Lanka since 1995",
-    title: "30+ years of connecting Sri Lankan talent with global opportunity.",
+    title: "32+ years of connecting Sri Lankan talent with global opportunity.",
     copy: "Responsible overseas recruitment, documentation and travel guidance, supported by one accountable team.",
   },
   {
@@ -170,6 +183,10 @@ export default function Home() {
   }, []);
 
   return <main id="main" className="ei-home">
+    {/* ====================================================================== */}
+    {/* SECTION 1: HERO SLIDER WITH CALLS-TO-ACTION                            */}
+    {/* Slide content controlled by heroSlides array at top of file             */}
+    {/* ====================================================================== */}
     <section className="ei-hero ei-hero-slider" aria-labelledby="home-title">
       <div className="ei-hero-slides" aria-hidden="true">
         {heroSlides.map((slide, index) => <img
@@ -208,6 +225,10 @@ export default function Home() {
       <div className="container ei-hero-foot" aria-label="Company credentials"><span>Licensed by SLBFE</span><span>License No. 1162</span><span>Europe · Middle East · Asia · Africa</span></div>
     </section>
 
+    {/* ====================================================================== */}
+    {/* SECTION 2: VISION, MISSION & VALUES FLIP CARDS                        */}
+    {/* Edit card titles, descriptions, and flip reveal content below          */}
+    {/* ====================================================================== */}
     <section className="ei-intro" aria-label="Our vision, mission and core values" data-reveal>
       <div className="container ei-vision-cards">
         <button
@@ -317,18 +338,33 @@ export default function Home() {
       <EmployerInquiryForm headingId="home-employer-inquiry-title" />
     </dialog>
 
+    {/* ====================================================================== */}
+    {/* SECTION 5: RECRUITMENT CATEGORIES GRID                                */}
+    {/* Category items populated from categories array at top of file           */}
+    {/* ====================================================================== */}
     <section className="ei-categories" aria-labelledby="categories-title"><div className="container ei-categories-layout">
       <div className="ei-categories-copy" data-reveal><p className="ei-kicker">Where talent travels</p><h2 id="categories-title">Careers for every kind of ambition.</h2><p>Specialist teams understand the skills, standards and cultures behind every placement.</p><Link className="ei-button ei-button-dark" href="/foreign-job-vacancies/">View every vacancy <span className="ei-button__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link></div>
       <div className="ei-category-list">{categories.map(([name, copy], index) => <Link data-reveal href="/foreign-job-vacancies/" key={name}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{name}</strong><small>{copy}</small></div><b aria-hidden="true">↗</b></Link>)}</div>
     </div></section>
 
+    {/* ====================================================================== */}
+    {/* SECTION 6: INTERACTIVE 3D CLIENT NETWORK GLOBE                        */}
+    {/* Static initial focus set to Pakistan; component code in ClientGlobe.tsx */}
+    {/* ====================================================================== */}
     <ClientGlobe />
 
+    {/* ====================================================================== */}
+    {/* SECTION 7: PROOF & AWARDS CREDENTIALS                                 */}
+    {/* ====================================================================== */}
     <section className="ei-proof" aria-labelledby="proof-title"><div className="container ei-proof-grid">
       <div className="ei-award-statement" data-reveal><span className="ei-award-number">5</span><div><p className="ei-kicker">Awards and recognitions</p><h2 id="proof-title">Excellence is not a claim. It is a record.</h2><p>Five Star recognition, employer-brand honours and decades of responsible recruitment reflect the standard we protect every day.</p><Link href="/about-us-emerald-isle-manpower/">See our credentials <span aria-hidden="true">→</span></Link></div></div>
-      <div className="ei-proof-facts" data-reveal><div><strong>30+</strong><span>years serving people and organisations</span></div><div><strong>8</strong><span>regional partner and branch markets</span></div><div><strong>One</strong><span>team from recruitment to travel</span></div></div>
+      <div className="ei-proof-facts" data-reveal><div><strong>32+</strong><span>years serving people and organisations</span></div><div><strong>8</strong><span>regional partner and branch markets</span></div><div><strong>One</strong><span>team from recruitment to travel</span></div></div>
     </div></section>
 
+    {/* ====================================================================== */}
+    {/* SECTION 8: CLIENT TESTIMONIALS CAROUSEL                                */}
+    {/* Populated from testimonials array at top of file                       */}
+    {/* ====================================================================== */}
     <section className="ei-testimonials" aria-labelledby="testimonial-title">
       <div className="container">
         <div className="ei-testimonial-heading" data-reveal>

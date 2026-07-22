@@ -17,6 +17,8 @@ const routes: Record<string, ComponentType> = {
   "/about-us-emerald-isle-manpower": AboutPage,
   "/client-recruitment-solutions": EmployerPage,
   "/contact": ContactPage,
+  "/contact-us": ContactPage,
+  "/contact-us-emerald-isle-manpower": ContactPage,
   "/projects": ProjectsPage,
   "/emerald-isle-manpower-faq": FaqPage,
   "/foreign-job-vacancies": JobsPage,

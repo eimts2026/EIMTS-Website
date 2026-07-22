@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+// ============================================================================
+// 3D CLIENT GLOBE DATA & CONFIGURATION
+// HUB: Primary origin point (Sri Lanka)
+// CLIENT_MARKETS: Destination markets displayed on the interactive 3D globe
+// ============================================================================
 type Market = {
   name: string;
   region: "Africa" | "Asia" | "Europe";
@@ -58,8 +63,10 @@ export default function ClientGlobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const focusMarketRef = useRef<(market: Market) => void>(() => undefined);
-  const selectedRef = useRef("Serbia");
-  const [selectedMarket, setSelectedMarket] = useState<Market>(() => CLIENT_MARKETS.at(-1) ?? CLIENT_MARKETS[0]);
+
+  // Default initial country state set to Pakistan (static on load)
+  const selectedRef = useRef("Pakistan");
+  const [selectedMarket, setSelectedMarket] = useState<Market>(() => CLIENT_MARKETS.find((m) => m.name === "Pakistan") ?? CLIENT_MARKETS[0]);
 
   const selectMarket = (market: Market) => {
     selectedRef.current = market.name;
@@ -89,8 +96,8 @@ export default function ClientGlobe() {
     controls.enableZoom = true;
     controls.minDistance = 2.5;
     controls.maxDistance = 4.2;
-    controls.autoRotate = !reducedMotion;
-    controls.autoRotateSpeed = 0.42;
+    controls.autoRotate = false;
+    controls.autoRotateSpeed = 0;
 
     const globe = new THREE.Group();
     scene.add(globe);
