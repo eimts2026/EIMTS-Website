@@ -38,7 +38,7 @@ export type ApplicationStatus =
 
 export type ApplicationRecord = {
   id: string;
-  job_id: string;
+  job_id: string | null;
   // Snapshot of the vacancy title when the CV arrived, so later edits to the
   // job never relabel applications already received against it.
   job_title: string | null;
