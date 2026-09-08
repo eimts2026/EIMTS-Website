@@ -49,6 +49,16 @@ async function requireAdmin() {
   return context;
 }
 
+function salaryValue(formData: FormData, name: string) {
+  const value = text(formData, name);
+  if (!value) return null;
+  const amount = Number(value);
+  if (!/^\d+(\.\d{1,2})?$/.test(value) || !Number.isFinite(amount) || amount < 0 || amount > 9999999999.99) {
+    throw new Error("Enter a valid salary with up to two decimal places.");
+  }
+  return amount;
+}
+
 function jobPayload(formData: FormData) {
   const title = text(formData, "title");
   const requestedSlug = text(formData, "slug");
@@ -63,8 +73,8 @@ function jobPayload(formData: FormData) {
     category: text(formData, "category"),
     employment_type: text(formData, "employment_type") || "Full-time",
     currency: (text(formData, "currency") || "LKR").toUpperCase(),
-    salary_min: text(formData, "salary_min") || null,
-    salary_max: text(formData, "salary_max") || null,
+    salary_amount: salaryValue(formData, "salary_amount"),
+    salary_lkr: salaryValue(formData, "salary_lkr"),
     summary: text(formData, "summary"),
     description: text(formData, "description"),
     requirements: text(formData, "requirements")
@@ -120,6 +130,42 @@ export async function updateJobStatus(id: string, status: string) {
     .eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/");
+}
+
+export async function deleteJob(id: string): Promise<{ error: string } | null> {
+  const { supabase, profile } = await requireStaff();
+  if (profile.role !== "admin") {
+    return { error: "Only administrators can delete vacancies." };
+  }
+
+  // Remove candidate CV files and associated applications if any exist
+  const { data: apps } = await supabase
+    .from("applications")
+    .select("id, cv_path")
+    .eq("job_id", id);
+
+  if (apps && apps.length > 0) {
+    const cvPaths = apps.map((a) => a.cv_path).filter(Boolean);
+    if (cvPaths.length > 0) {
+      await supabase.storage.from("candidate-cvs").remove(cvPaths);
+    }
+    await supabase.from("applications").delete().eq("job_id", id);
+  }
+
+  const { data, error } = await supabase
+    .from("jobs")
+    .delete()
+    .eq("id", id)
+    .select("id");
+
+  if (error) {
+    return {
+      error: "Could not delete this vacancy. Please try again.",
+    };
+  }
+  if (!data?.length) return { error: "This vacancy was not found or could not be deleted." };
+  revalidatePath("/");
+  return null;
 }
 
 function popupPayload(formData: FormData) {

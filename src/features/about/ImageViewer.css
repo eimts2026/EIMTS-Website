@@ -1,0 +1,16 @@
+.ei-image-trigger{position:relative;display:block;width:100%;border:0;padding:0;background:transparent;color:inherit;cursor:zoom-in;font:inherit;text-align:inherit}
+.ei-image-expand{position:absolute;right:12px;bottom:12px;display:grid;place-items:center;width:44px;height:44px;border:1px solid #ffffff80;border-radius:50%;background:#123b30e6;color:#fff;font-size:26px;transition:transform .2s,background .2s}
+.ei-image-trigger:focus-visible{outline:3px solid var(--ei-amber);outline-offset:4px}
+@media(hover:hover){.ei-image-trigger:hover .ei-image-expand{transform:scale(1.08);background:#24624a}.ei-image-trigger:hover img{filter:brightness(1.04)}}
+.ei-image-viewer{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;padding:24px;border:0;margin:0;background:transparent;color:#fff;overflow:auto}
+.ei-image-viewer[open]{display:grid;place-items:center;animation:ei-image-open .2s ease}
+.ei-image-viewer::backdrop{background:rgba(3,15,11,.94)}
+.ei-image-viewer-content{position:relative;max-width:1200px;width:fit-content;max-height:100%;padding-top:52px}
+.ei-image-viewer-content>img{display:block;width:auto;height:auto;max-width:100%;max-height:calc(100dvh - 160px);object-fit:contain;margin:auto}
+.ei-image-viewer-content>p{text-align:center;margin:16px 0 0;font-size:15px;line-height:1.5}
+.ei-image-viewer-close{position:fixed;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:2;display:grid;place-items:center;width:48px;height:48px;padding:0;border:1px solid #ffffff80;background:#fff;color:#123b30;border-radius:50%;cursor:pointer;box-shadow:0 4px 20px #0004;transition:background .2s,transform .2s}
+.ei-image-viewer-close:hover{background:#e4eee6}.ei-image-viewer-close:active{transform:scale(.94)}
+.ei-image-viewer-close:focus-visible{outline:3px solid var(--ei-amber);outline-offset:4px}
+@keyframes ei-image-open{from{opacity:0}to{opacity:1}}
+@media(max-width:620px){.ei-image-viewer{padding:16px}.ei-image-viewer-content>p{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.ei-image-viewer[open]{animation:none}.ei-image-expand,.ei-image-viewer-close{transition:none}}

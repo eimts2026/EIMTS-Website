@@ -1,12 +1,16 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { countryFlagPath } from "@/lib/country-flags";
 
 export type Job = {
   id: string;
   slug?: string;
   title: string;
   location: string;
+  country?: string;
+  salary?: string | null;
+  expiresAt?: string | null;
   category: string;
   employmentType: string;
   urgent: boolean;
@@ -45,12 +49,18 @@ function PinIcon() {
 }
 
 function JobCardContent({ job }: { job: Job }) {
+  const flag = countryFlagPath(job.country);
   return <>
     <span className={"job-status" + (job.urgent ? " is-urgent" : "")}>{job.urgent ? "Urgent" : "Open"}</span>
-    <span className="job-card-image"><img src={job.image} alt="" loading="lazy" style={{ objectPosition: job.imagePosition }} /></span>
+    <span className="job-card-image job-card-flag">
+      {flag ? <img src={flag} alt={`${job.country} flag`} loading="lazy" /> : (
+        <svg viewBox="0 0 24 24" aria-label="Country" role="img"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 6h14M5 18h14" /></svg>
+      )}
+    </span>
     <span className="job-card-category">{job.category}</span>
     <strong>{job.title}</strong>
     <span className="job-card-location"><PinIcon /> {job.location}</span>
+    <span className="job-card-salary">{job.salary || "Salary not specified"}</span>
     <span className="job-card-footer">View details <b aria-hidden="true">&gt;</b></span>
   </>;
 }
@@ -204,16 +214,23 @@ function updateQuery(filters: Filters) {
 }
 
 export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) {
-  const initial = queryFilters();
   const jobs = initialJobs;
-  const [draft, setDraft] = useState<Filters>(initial);
-  const [active, setActive] = useState<Filters>(initial);
+  const [draft, setDraft] = useState<Filters>(emptyFilters);
+  const [active, setActive] = useState<Filters>(emptyFilters);
   const [sort, setSort] = useState<SortOption>("default");
   const [pageSize, setPageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [applicationMessage, setApplicationMessage] = useState("");
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const filters = queryFilters();
+    if (filters.title || filters.location || filters.category) {
+      setDraft(filters);
+      setActive(filters);
+    }
+  }, []);
 
   const locationOptions = useMemo(
     () => uniqueOptions(jobs.map((job) => job.location), "All locations"),

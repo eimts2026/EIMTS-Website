@@ -1,0 +1,38 @@
+.about-showcase.ei-hero{position:relative;isolation:isolate;display:flex;align-items:center;min-height:100vh;min-height:100dvh;overflow:hidden;background:#102a22;color:#fff}
+.about-showcase-media,.about-showcase-shade{position:absolute;inset:0;pointer-events:none}
+.about-showcase-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:0;transition:opacity .8s ease}
+.about-showcase-media img.is-active{opacity:1}
+.about-showcase-shade{background:linear-gradient(90deg,rgba(2,22,18,.91),rgba(2,28,22,.65) 42%,rgba(2,20,16,.12) 80%),linear-gradient(0deg,rgba(2,22,18,.7),transparent 45%)}
+.about-showcase-content{position:relative;z-index:1;padding-top:clamp(112px,16vh,160px);padding-bottom:clamp(96px,15vh,150px)}
+.about-showcase-content .ei-kicker{margin-bottom:26px;color:#d8eadf}
+.about-showcase-copy{max-width:760px;min-height:310px;animation:about-caption-in .45s ease both}
+.about-showcase.ei-hero h1{font-size:clamp(3.2rem,6.5vw,5.5rem);line-height:.98;font-family:inherit;max-width:760px;margin:0;color:#fff}
+.about-showcase-copy>p{max-width:46ch;margin:26px 0 0;color:#d7e2dd;font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.65}
+.about-showcase-story{display:inline-flex;align-items:center;gap:28px;min-height:52px;margin-top:28px;padding:5px 6px 5px 20px;border:1px solid #a6b9af;border-radius:999px;color:#fff;font-size:14px;font-weight:650;transition:background .2s}
+.about-showcase-story span{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--ei-amber);color:#102a22;transition:transform .2s}
+.about-showcase-story:hover{background:#ffffff14}.about-showcase-story:hover span{transform:translateY(2px)}
+.about-showcase-story:focus-visible{outline:2px solid var(--ei-amber);outline-offset:5px}
+.about-showcase-foot{position:absolute;z-index:1;bottom:30px;left:0;right:0;display:flex;align-items:center;gap:24px;border-top:1px solid #ffffff40;padding-top:20px;color:#d7e2dd;font-size:12px}
+.about-showcase-indicators{display:flex;gap:8px;margin-left:auto}.about-showcase-indicators span{width:32px;height:3px;background:#ffffff40;transition:background .3s}.about-showcase-indicators .is-active{background:var(--ei-amber)}
+.about-showcase-count{font-variant-numeric:tabular-nums}
+@keyframes about-caption-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:620px){.about-showcase.ei-hero{min-height:100vh;min-height:100dvh;align-items:flex-end}.about-showcase-media img{object-position:58% top}.about-showcase-shade{background:linear-gradient(0deg,rgba(2,22,18,.98),rgba(2,22,18,.83) 40%,rgba(2,22,18,.14) 78%)}.about-showcase-content{padding-top:140px;padding-bottom:100px}.about-showcase.ei-hero h1{font-size:clamp(3rem,13vw,4rem)}.about-showcase-copy{min-height:280px}.about-showcase-copy>p{margin-top:22px;font-size:16px}.about-showcase-content .ei-kicker{font-size:11px;margin-bottom:22px}.about-showcase-story{margin-top:16px}.about-showcase-foot{bottom:24px;gap:12px;font-size:11px}.about-showcase-indicators{gap:5px}.about-showcase-indicators span{width:18px}}
+@media(prefers-reduced-motion:reduce){.about-showcase-media img,.about-showcase-story,.about-showcase-story span,.about-showcase-indicators span{transition:none}.about-showcase-copy,.about-showcase.ei-hero h1{animation:none}}
+.about-showcase .about-showcase-media.ei-image-trigger{position:absolute;inset:0;height:100%;pointer-events:auto}
+.about-showcase-media.ei-image-trigger>img{pointer-events:none}
+.about-showcase-media.ei-image-trigger .ei-image-expand{right:32px;top:120px;bottom:auto;z-index:2}
+.about-showcase-content,.about-showcase-foot{pointer-events:none}
+.about-showcase-content a{pointer-events:auto}
+.about-showcase-media.ei-image-trigger:focus-visible{outline-offset:-6px}
+@media(max-width:620px){.about-showcase-media.ei-image-trigger .ei-image-expand{top:100px;right:22px}}
+
+/* Fit compact viewports without hiding text at larger accessibility sizes. */
+@media(max-height:760px){
+  .about-showcase-content{padding-top:112px;padding-bottom:88px}
+  .about-showcase-copy{min-height:0}
+  .about-showcase.ei-hero h1{font-size:clamp(2.4rem,min(6.5vw,8vh),4.5rem)}
+  .about-showcase-content .ei-kicker{margin-bottom:18px}
+  .about-showcase-copy>p{margin-top:18px}
+  .about-showcase-story{margin-top:20px}
+  .about-showcase-foot{bottom:20px;padding-top:14px}
+}

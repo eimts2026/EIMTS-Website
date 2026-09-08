@@ -1,4 +1,5 @@
 import Image from "next/image";
+import "./BlogPage.css";
 import Link from "next/link";
 import { articles } from "@/lib/articles";
 import { siteName, siteUrl } from "@/lib/site";
@@ -28,7 +29,7 @@ export default function BlogPage() {
   };
 
   return (
-    <main id="main" className="insights-page">
+    <main id="main" className="journal-page">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -36,57 +37,57 @@ export default function BlogPage() {
         }}
       />
 
-      <section className="insights-hero" aria-labelledby="insights-title">
-        <span className="insights-hero-marker" aria-hidden="true">Field notes</span>
-        <div className="container insights-hero-grid">
-          <div className="insights-hero-copy">
+      <section className="journal-hero" aria-labelledby="journal-title">
+
+        <div className="container journal-hero-grid">
+          <div className="journal-hero-copy">
             <p className="eyebrow">Career and recruitment insights</p>
-            <h1 id="insights-title">Navigate the world of work with clarity.</h1>
-            <p>Practical guidance for candidates, employers and professionals building careers across borders.</p>
+            <h1 id="journal-title">Navigate the world of work with clarity.</h1>
+            <p>Practical guidance for candidates, employers and professionals building careers across borders.</p><a className="journal-browse" href="#latest-journal-title">Explore all articles <span aria-hidden="true">↓</span></a>
           </div>
 
-          <Link className="insights-feature" href={`/${featured.slug}/`} aria-label={`Read ${featured.title}`}>
-            <Image
+          <Link className="journal-feature" href={`/${featured.slug}/`} aria-label={`Read ${featured.title}`}>
+            <span className="journal-feature-image"><Image
               src={featured.image}
               alt={featured.imageAlt}
               fill
               priority
-              sizes="(max-width: 900px) 100vw, 48vw"
+              sizes="(max-width: 900px) 100vw, 55vw"
             />
-            <span className="insights-feature-shade" aria-hidden="true" />
-            <span className="insights-feature-content">
-              <span className="insights-feature-meta">
+            </span>
+            <span className="journal-feature-content"><span className="journal-feature-label">Featured insight</span>
+              <span className="journal-feature-meta">
                 <time dateTime={featured.publishedDate}>{featured.displayDate}</time>
                 <span aria-hidden="true">/</span>
                 <span>{featured.topic}</span>
                 <span aria-hidden="true">/</span>
                 <span>{featured.readTime}</span>
               </span>
-              <h2 className="insights-feature-title">{featured.title}</h2>
-              <span className="insights-feature-link">Read the field note <span aria-hidden="true">{"↗"}</span></span>
+              <h2 className="journal-feature-title">{featured.title}</h2>
+              <span className="journal-feature-excerpt">{featured.excerpt}</span><span className="journal-author">By {featured.author}</span><span className="journal-feature-link">Read the field note <span aria-hidden="true">{"↗"}</span></span>
             </span>
           </Link>
         </div>
       </section>
 
-      <section className="insights-index" aria-labelledby="latest-insights-title">
-        <div className="container insights-index-heading">
+      <section className="journal-index" aria-labelledby="latest-journal-title">
+        <div className="container journal-index-heading">
           <div>
             <p className="eyebrow">Latest thinking</p>
-            <h2 id="latest-insights-title">Ideas you can put to work.</h2>
+            <h2 id="latest-journal-title">Ideas you can put to work.</h2>
           </div>
           <p>{articles.length} articles on interviews, careers, leadership and international recruitment.</p>
         </div>
 
-        <div className="container insights-grid">
+        <div className="container journal-grid">
           {latestArticles.map((article) => (
-            <article className="insight-card" key={article.slug}>
+            <article className="journal-card" key={article.slug}>
               <Link
-                className="insight-card-link"
+                className="journal-card-link"
                 href={`/${article.slug}/`}
                 aria-label={`Read more: ${article.title}`}
               >
-                <span className="insight-card-image">
+                <span className="journal-card-image">
                   <Image
                     src={article.image}
                     alt=""
@@ -94,15 +95,15 @@ export default function BlogPage() {
                     sizes="(max-width: 620px) 100vw, (max-width: 900px) 50vw, 33vw"
                   />
                 </span>
-                <span className="insight-card-body">
-                  <span className="insight-card-meta">
+                <span className="journal-card-body">
+                  <span className="journal-card-meta">
                   <time dateTime={article.publishedDate}>{article.displayDate}</time>
                   <span>{article.topic}</span>
                   <span>{article.readTime}</span>
                   </span>
-                  <h2 className="insight-card-title">{article.title}</h2>
-                  <span className="insight-card-excerpt">{article.excerpt}</span>
-                  <span className="insight-card-read">Read more <span aria-hidden="true">{"↗"}</span></span>
+                  <h2 className="journal-card-title">{article.title}</h2>
+                  <span className="journal-card-excerpt">{article.excerpt}</span>
+                  <span className="journal-author">By {article.author}</span><span className="journal-card-read">Read more <span aria-hidden="true">{"↗"}</span></span>
                 </span>
               </Link>
             </article>

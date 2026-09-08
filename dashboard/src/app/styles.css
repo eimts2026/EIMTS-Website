@@ -2251,3 +2251,16 @@ td a[href^="mailto:"]:hover {
 :root[data-theme="light"] .auth-footnote {
   color: rgba(86, 107, 96, 0.95);
 }
+
+/* Let the browser own selection, dismissal, and mobile picker behavior. */
+select.glass-select-native{display:block;appearance:auto;cursor:pointer;font-family:inherit;padding-right:0.85rem}
+select.glass-select-native option{background:var(--field);color:var(--ink)}
+
+/* Searchable form selections */
+.glass-combobox-field{position:relative}
+.glass-combobox-field input.glass-select-trigger{padding-right:2.5rem;cursor:text}
+.glass-combobox-chevron{position:absolute;right:1rem;top:50%;width:18px;height:18px;transform:translateY(-50%);fill:none;stroke:var(--muted);stroke-width:1.8;pointer-events:none}
+.glass-select:has([aria-expanded="true"]){z-index:45}
+.glass-select-list li{min-height:44px;line-height:1.4}
+.glass-select-list li[aria-disabled="true"]{color:var(--muted);cursor:default}
+@media(prefers-reduced-motion:reduce){.glass-select-list{animation:none}}

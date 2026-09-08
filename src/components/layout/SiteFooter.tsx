@@ -1,7 +1,8 @@
-﻿type SocialName = "facebook" | "instagram" | "linkedin";
+import StickyFooter from "../ui/StickyFooter";
+type SocialName = "facebook" | "instagram" | "linkedin";
 
 export function SiteFooter() {
-  return <footer className="global-footer">
+  return <StickyFooter><footer className="global-footer">
     <div className="wide-container global-footer-lead">
       <p>Global careers begin with a trusted conversation.</p>
       <a href="/contact/">
@@ -26,5 +27,5 @@ export function SiteFooter() {
     <div className="wide-container global-footer-bottom">
       <span>{new Date().getFullYear()} Emerald Isle. All rights reserved.</span>
     </div>
-  </footer>;
+  </footer></StickyFooter>;
 }

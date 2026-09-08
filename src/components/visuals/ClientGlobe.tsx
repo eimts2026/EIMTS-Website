@@ -68,6 +68,8 @@ export default function ClientGlobe() {
 
   // Default initial country state set to Pakistan (static on load)
   const selectedRef = useRef("Pakistan");
+  const [region, setRegion] = useState("All");
+  const [globeState, setGlobeState] = useState("loading");
   const [selectedMarket, setSelectedMarket] = useState<Market>(() => CLIENT_MARKETS.find((m) => m.name === "Pakistan") ?? CLIENT_MARKETS[0]);
 
   const selectMarket = (market: Market) => {
@@ -86,7 +88,14 @@ export default function ClientGlobe() {
     const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
     camera.position.set(0, 0.2, 3.25);
 
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
+    let disposed = false;
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    } catch {
+      setGlobeState("error");
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -95,7 +104,8 @@ export default function ClientGlobe() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.enablePan = false;
-    controls.enableZoom = true;
+    controls.enableZoom = false;
+    canvas.style.touchAction = "pan-y";
     controls.minDistance = 2.5;
     controls.maxDistance = 4.2;
     controls.autoRotate = false;
@@ -104,7 +114,9 @@ export default function ClientGlobe() {
     const globe = new THREE.Group();
     scene.add(globe);
 
-    const earthTexture = new THREE.TextureLoader().load("/assets/earth-blue-marble.jpg");
+    const earthTexture = new THREE.TextureLoader().load("/assets/earth-blue-marble.jpg", () => {
+      if (!disposed) setGlobeState("ready");
+    }, undefined, () => { if (!disposed) setGlobeState("error"); });
     earthTexture.colorSpace = THREE.SRGBColorSpace;
     earthTexture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
 
@@ -130,12 +142,15 @@ export default function ClientGlobe() {
 
     const hubPosition = toGlobePosition(HUB, 1.025);
     const arcMaterial = new THREE.LineBasicMaterial({ color: 0xf3b84b, transparent: true, opacity: 0.62 });
+    const routes = new Map<string, THREE.Line>();
     CLIENT_MARKETS.forEach((market) => {
       const destination = toGlobePosition(market, 1.025);
       const lift = 1.16 + hubPosition.angleTo(destination) * 0.25;
       const midpoint = hubPosition.clone().add(destination).normalize().multiplyScalar(lift);
       const curve = new THREE.QuadraticBezierCurve3(hubPosition, midpoint, destination);
-      globe.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(48)), arcMaterial));
+      const route = new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(48)), arcMaterial.clone());
+      routes.set(market.name, route);
+      globe.add(route);
     });
 
     const markets = [HUB, ...CLIENT_MARKETS];
@@ -221,6 +236,9 @@ export default function ClientGlobe() {
     const focusMarket = (market: Market) => {
       controls.autoRotate = false;
       updateSelectedHalo(market);
+      routes.forEach((route, name) => {
+        (route.material as THREE.LineBasicMaterial).opacity = name === market.name ? 1 : 0.18;
+      });
 
       const targetDirection = toGlobePosition(market).normalize();
       if (reducedMotion) {
@@ -284,6 +302,8 @@ export default function ClientGlobe() {
     render();
 
     return () => {
+      disposed = true;
+      focusMarketRef.current = () => undefined;
       window.cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
       canvas.removeEventListener("pointermove", handlePointerMove);
@@ -297,6 +317,7 @@ export default function ClientGlobe() {
       atmosphere.material.dispose();
       gridMaterial.dispose();
       arcMaterial.dispose();
+      routes.forEach((route) => (route.material as THREE.Material).dispose());
       selectedHaloMaterial.dispose();
       pinMeshes.forEach((pin) => (pin.material as THREE.Material).dispose());
       earthTexture.dispose();
@@ -324,8 +345,11 @@ export default function ClientGlobe() {
       <div className="ei-client-map-layout" data-reveal>
         <div className="ei-client-market-panel">
           <p>Explore our client markets</p>
+          <div className="ei-globe-filters" role="group" aria-label="Filter markets by region">
+            {["All", "Asia", "Africa", "Europe"].map((item) => <button type="button" key={item} aria-pressed={region === item} onClick={() => setRegion(item)}>{item}</button>)}
+          </div>
           <div className="ei-client-market-list" aria-label="Client countries">
-            {CLIENT_MARKETS.map((market) => <button
+            {CLIENT_MARKETS.filter((market) => region === "All" || market.region === region).map((market) => <button
               type="button"
               className={selectedMarket.name === market.name ? "is-active" : ""}
               aria-pressed={selectedMarket.name === market.name}
@@ -337,17 +361,20 @@ export default function ClientGlobe() {
             </button>)}
           </div>
           <div className="ei-client-map-status" aria-live="polite">
-            <span>Active connection</span>
+            <span>Selected connection</span>
             <strong>Sri Lanka <i aria-hidden="true">to</i> {selectedMarket.name}</strong>
             <small>{selectedMarket.region} client market</small>
           </div>
         </div>
 
         <div className="ei-client-globe-wrap">
+          <div className="ei-globe-caption"><span>FROM SRI LANKA</span><strong>{selectedMarket.name} <small>/ {selectedMarket.region}</small></strong></div>
           <div className="ei-client-globe" ref={stageRef}>
+            {globeState !== "ready" && <div className="ei-globe-feedback" role="status">{globeState === "loading" ? "Loading the globe…" : "Globe unavailable. Explore our markets using the country list."}</div>}
             <canvas ref={canvasRef} role="img" aria-label="Interactive 3D globe showing client connections from Sri Lanka. Drag to rotate or use the country controls." />
           </div>
-          <div className="ei-client-map-legend" aria-hidden="true"><span><i className="is-hub" /> Sri Lanka hub</span><span><i /> Client market</span><span>Drag to explore</span></div>
+          <p className="ei-globe-hint">Drag sideways to rotate · Select a country to follow its connection</p>
+          <div className="ei-client-map-legend"><span><i className="is-hub" /> Sri Lanka hub</span><span><i /> Client market</span></div>
         </div>
       </div>
     </div>

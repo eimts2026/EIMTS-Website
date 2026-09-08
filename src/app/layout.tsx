@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { FloatingSocialLinks } from "@/components/layout/FloatingSocialLinks";
@@ -30,7 +31,9 @@ export default function RootLayout({
         {/* Runs before first paint so reveal targets start hidden instead of
             flashing visible then re-animating. Without JS it never runs and
             every reveal rule stays inert (see globals.css ei-motion-ready). */}
-        <script
+        <Script
+          id="ei-motion-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html:
               "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('ei-motion-ready')}catch(e){}",

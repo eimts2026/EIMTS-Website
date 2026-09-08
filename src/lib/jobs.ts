@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Job } from "@/features/jobs/JobsPage";
+import { formatJobSalary } from "@/lib/salary";
 
 export type PublicJobDetail = {
   id: string;
@@ -10,6 +11,8 @@ export type PublicJobDetail = {
   category: string;
   employment_type: string;
   salary_min: number | null;
+  salary_amount: number | null;
+  salary_lkr: number | null;
   salary_max: number | null;
   currency: string;
   summary: string;
@@ -22,6 +25,11 @@ export type PublicJobDetail = {
 };
 
 type PublishedJobRow = {
+  salary_amount: number | null;
+  salary_min: number | null;
+  salary_max: number | null;
+  salary_lkr: number | null;
+  currency: string;
   id: string;
   slug: string;
   title: string;
@@ -32,6 +40,7 @@ type PublishedJobRow = {
   urgent: boolean;
   image_url: string | null;
   image_position: string | null;
+  expires_at: string | null;
 };
 
 export async function getPublishedJobs(): Promise<Job[]> {
@@ -47,7 +56,7 @@ export async function getPublishedJobs(): Promise<Job[]> {
   const { data, error } = await supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position",
+      "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position,expires_at,salary_amount,salary_min,salary_max,salary_lkr,currency",
     )
     .eq("status", "published")
     .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
@@ -64,6 +73,9 @@ export async function getPublishedJobs(): Promise<Job[]> {
     slug: job.slug,
     title: job.title,
     location: job.location || job.country,
+    country: job.country,
+    salary: formatJobSalary(job),
+    expiresAt: job.expires_at,
     category: job.category,
     employmentType: job.employment_type,
     urgent: job.urgent,
@@ -85,7 +97,7 @@ export async function getPublishedJobBySlug(
   const { data, error } = await supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,salary_min,salary_max,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
+      "id,slug,title,country,location,category,employment_type,salary_amount,salary_lkr,salary_min,salary_max,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
     )
     .eq("slug", slug)
     .eq("status", "published")

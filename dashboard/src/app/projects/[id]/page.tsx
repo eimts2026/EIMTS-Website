@@ -1,3 +1,4 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import type { ProjectRecord } from "@eimts/database";
 import { notFound, redirect } from "next/navigation";
 import { updateProject } from "@/app/actions";
@@ -17,6 +18,7 @@ export default async function EditProjectPage({
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/projects/[id]");
 
   const {
     data: { user },

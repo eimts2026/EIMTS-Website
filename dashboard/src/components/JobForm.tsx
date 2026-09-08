@@ -24,6 +24,8 @@ const countrySuggestions = [
   "Maldives",
   "Japan",
   "South Korea",
+  "Korea",
+  "Ireland",
   "Romania",
   "Poland",
   "Cyprus",
@@ -47,7 +49,7 @@ const categorySuggestions = [
   "Domestic Work",
 ];
 
-const currencies = ["LKR", "USD", "AED", "SAR", "QAR", "KWD", "BHD", "OMR", "TRY", "MYR", "SGD", "EUR", "GBP"];
+const currencies = ["LKR", "USD", "AED", "SAR", "QAR", "KWD", "BHD", "OMR", "TRY", "MYR", "SGD", "KRW", "EUR", "GBP"];
 
 export function JobForm({ action, job }: Props) {
   return (
@@ -73,18 +75,7 @@ export function JobForm({ action, job }: Props) {
           </label>
           <label>
             Country *
-            <input
-              name="country"
-              list="country-options"
-              defaultValue={job?.country}
-              placeholder="Start typing to pick"
-              required
-            />
-            <datalist id="country-options">
-              {countrySuggestions.map((country) => (
-                <option key={country} value={country} />
-              ))}
-            </datalist>
+            <GlassSelect name="country" ariaLabel="country" defaultValue={job?.country} options={countrySuggestions} placeholder="Search or enter country" required allowCustom />
           </label>
           <label>
             City or site (optional)
@@ -96,18 +87,7 @@ export function JobForm({ action, job }: Props) {
           </label>
           <label>
             Category *
-            <input
-              name="category"
-              list="category-options"
-              defaultValue={job?.category}
-              placeholder="Start typing to pick"
-              required
-            />
-            <datalist id="category-options">
-              {categorySuggestions.map((category) => (
-                <option key={category} value={category} />
-              ))}
-            </datalist>
+            <GlassSelect name="category" ariaLabel="category" defaultValue={job?.category} options={categorySuggestions} placeholder="Search or enter category" required allowCustom />
           </label>
           <label>
             Employment type
@@ -119,23 +99,25 @@ export function JobForm({ action, job }: Props) {
             />
           </label>
           <label>
-            Minimum salary
+            Salary amount
             <input
-              name="salary_min"
+              name="salary_amount"
               type="number"
               min="0"
-              defaultValue={job?.salary_min ?? ""}
+              step="0.01"
+              defaultValue={job?.salary_amount ?? job?.salary_min ?? job?.salary_max ?? ""}
               placeholder="e.g. 199080"
             />
           </label>
           <label>
-            Maximum salary
+            LKR equivalent (optional)
             <input
-              name="salary_max"
+              name="salary_lkr"
               type="number"
               min="0"
-              defaultValue={job?.salary_max ?? ""}
-              placeholder="Leave empty for a fixed salary"
+              step="0.01"
+              defaultValue={job?.salary_lkr ?? ""}
+              placeholder="e.g. 385678"
             />
           </label>
           <label>
@@ -221,13 +203,13 @@ export function JobForm({ action, job }: Props) {
         <Toggle
           name="urgent"
           label="Mark as urgent"
-          hint="Shows an urgent badge on the vacancy card."
+          hint="Shows an urgent badge and includes published, unexpired jobs in the homepage urgent list."
           defaultChecked={job?.urgent}
         />
         <Toggle
           name="featured"
           label="Feature on homepage"
-          hint="Pins this vacancy to the homepage list."
+          hint="Legacy featured flag. Use Mark as urgent to include this vacancy in the homepage urgent list."
           defaultChecked={job?.featured}
         />
         <SubmitButton label={job ? "Save changes" : "Create vacancy"} />

@@ -1,0 +1,27 @@
+.ei-social-link--youtube{--social-start:#c01724;--social-end:#ed3946}
+.ei-social-link--facebook{--social-start:#184ab4;--social-end:#2871de}
+.ei-social-link--linkedin{--social-start:#075488;--social-end:#1479ad}
+.ei-social-link--whatsapp{--social-start:#116d41;--social-end:#198750}
+.ei-social-link{color:#fff;background:linear-gradient(115deg,var(--social-start),var(--social-end));text-decoration:none;box-shadow:0 4px 14px #001b1626}
+.ei-social-link svg{width:22px;height:22px;fill:currentColor;flex:0 0 22px;transition:transform .3s ease}
+.ei-social-tabs{position:fixed;top:35%;left:0;z-index:70;display:flex;flex-direction:column;gap:12px;pointer-events:none}
+.ei-social-tabs .ei-social-link{display:flex;align-items:center;justify-content:space-between;width:176px;height:56px;padding:0 17px 0 22px;border-radius:0 12px 12px 0;transform:translateX(-120px);transition:transform .35s cubic-bezier(.2,.8,.2,1),filter .2s;pointer-events:auto}
+.ei-social-tabs .ei-social-link span{font-size:14px;font-weight:650;letter-spacing:.02em}
+.ei-social-tabs .ei-social-link:hover,.ei-social-tabs .ei-social-link:focus-visible{transform:translateX(-6px);filter:brightness(1.08)}
+.ei-social-tabs .ei-social-link:hover svg{transform:scale(1.15)}
+.ei-social-link:focus-visible,.ei-social-toggle:focus-visible{outline:3px solid #e7bc60;outline-offset:4px}
+.ei-social-dock{display:none}
+@media(max-width:1023px){
+  .ei-social-tabs{display:none}
+  .ei-social-dock{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:80;display:block}
+  .ei-social-toggle{display:grid;place-items:center;width:56px;height:56px;border:1px solid #ffffff55;border-radius:50%;background:#173e32;color:#fff;cursor:pointer;box-shadow:0 8px 24px #001b1633;transition:transform .2s,background .2s}
+  .ei-social-toggle:active{transform:scale(.94)}
+  .ei-social-dock.is-open .ei-social-toggle{background:#315a48}
+  .ei-social-dock-links{position:absolute;bottom:72px;right:0;display:flex;flex-direction:column;gap:12px;visibility:hidden;pointer-events:none;transition:visibility 0s .25s}
+  .ei-social-dock-links .ei-social-link{position:relative;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;opacity:0;transform:translateY(16px) scale(.9);transition:transform .25s,opacity .25s}
+  .ei-social-dock-links .ei-social-link span{position:absolute;right:64px;padding:7px 11px;border-radius:7px;background:#173e32;color:#fff;font-size:12px;box-shadow:0 3px 12px #001b1626;white-space:nowrap}
+  .ei-social-dock.is-open .ei-social-dock-links{visibility:visible;pointer-events:auto;transition-delay:0s}
+  .ei-social-dock.is-open .ei-social-link{opacity:1;transform:none}
+}
+@media(max-height:440px) and (max-width:1023px){.ei-social-dock-links{flex-direction:row;bottom:68px}.ei-social-dock-links .ei-social-link span{display:none}}
+@media(prefers-reduced-motion:reduce){.ei-social-tabs .ei-social-link,.ei-social-link svg,.ei-social-toggle,.ei-social-dock-links,.ei-social-dock-links .ei-social-link{transition:none!important}}

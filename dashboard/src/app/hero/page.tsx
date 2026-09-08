@@ -1,3 +1,4 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import Link from "next/link";
 import type { HeroSlideRecord } from "@eimts/database";
 import { redirect } from "next/navigation";
@@ -37,6 +38,7 @@ export default async function HeroSlidesPage() {
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/hero");
 
   const {
     data: { user },

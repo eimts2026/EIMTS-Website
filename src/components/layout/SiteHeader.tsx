@@ -58,6 +58,7 @@ export function SiteHeader() {
   const [isHidden, setIsHidden] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -114,6 +115,23 @@ export function SiteHeader() {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+        mobileToggleRef.current?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 1041px)");
+    const closeOnDesktop = () => { if (desktop.matches) setIsMobileMenuOpen(false); };
+    document.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", closeOnDesktop);
+    };
+  }, [isMobileMenuOpen]);
+
   return <header ref={headerRef} className={"global-header" + (isHidden ? " is-hidden" : "")}>
     <div className="wide-container nav-shell">
       <a className="global-brand" href={routes.home} aria-label="Emerald Isle Manpower home"><img src="/assets/emerald-isle-logo.webp" width="214" height="55" alt="Emerald Isle Manpower" /></a>
@@ -151,9 +169,13 @@ export function SiteHeader() {
         </span>
         Register now
       </a>
-      <details className="global-mobile-menu">
-        <summary aria-label="Open navigation"><span className="menu-lines" aria-hidden="true" /></summary>
-        <nav aria-label="Mobile navigation">
+      <div className={"global-mobile-menu" + (isMobileMenuOpen ? " is-open" : "")} ref={mobileMenuRef}
+        onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) closeMobileMenu(); }}>
+        <button type="button" className="mobile-nav-toggle" ref={mobileToggleRef} onClick={toggleMobileMenu} aria-expanded={isMobileMenuOpen} aria-controls="mobile-navigation" aria-label={isMobileMenuOpen ? "Close navigation" : "Open navigation"}>
+          <span className={"menu-lines" + (isMobileMenuOpen ? " is-active" : "")} aria-hidden="true" />
+        </button>
+        <nav id="mobile-navigation" aria-label="Mobile navigation" inert={!isMobileMenuOpen} onClick={(event) => { if ((event.target as Element).closest("a")) closeMobileMenu(); }}>
+          <p className="mobile-nav-heading">Explore Emerald Isle</p>
           <a href={routes.home}>Home</a>
           <a href={routes.about}>About us</a>
           <details className="mobile-job-menu">
@@ -168,7 +190,7 @@ export function SiteHeader() {
           <a href={routes.contact}>Contact</a>
           <a href="https://registration.emeraldislemanpower.com/">Register now</a>
         </nav>
-      </details>
+      </div>
     </div>
   </header>;
 }

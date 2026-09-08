@@ -1,7 +1,9 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import Link from "next/link";
 import type { JobRecord } from "@eimts/database";
 import { redirect } from "next/navigation";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { DeleteJobButton } from "@/components/DeleteJobButton";
 import { SetupRequired } from "@/components/SetupRequired";
 import { updateJobStatus } from "./actions";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -14,6 +16,7 @@ export default async function DashboardPage() {
 
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/");
 
   const {
     data: { user },
@@ -144,6 +147,9 @@ export default async function DashboardPage() {
                           >
                             <button type="submit">Pause</button>
                           </form>
+                        )}
+                        {profile.role === "admin" && (
+                          <DeleteJobButton id={job.id} title={job.title} />
                         )}
                       </td>
                     </tr>

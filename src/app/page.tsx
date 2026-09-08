@@ -1,3 +1,4 @@
+import { getPublishedJobs } from "@/lib/jobs";
 import HomePage from "@/features/home/HomePage";
 import { getHeroContent } from "@/lib/hero";
 import { pageMetadata } from "@/lib/site";
@@ -8,11 +9,11 @@ export const metadata = pageMetadata(
   "/",
 );
 
-// Hero slides are managed from the dashboard; pick up changes within a minute
-// while keeping the homepage statically cached.
-export const revalidate = 60;
+// Match Find Jobs: dashboard publishing and expiry changes appear on page load.
+export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const hero = await getHeroContent();
-  return <HomePage hero={hero} />;
+  const [hero, jobs] = await Promise.all([getHeroContent(), getPublishedJobs()]);
+  const urgentJobs = jobs.filter((job) => job.urgent && job.slug).slice(0, 6);
+  return <HomePage hero={hero} urgentJobs={urgentJobs} />;
 }

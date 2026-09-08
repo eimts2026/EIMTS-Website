@@ -1,3 +1,4 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import type { ApplicationRecord } from "@eimts/database";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -40,6 +41,7 @@ export default async function ApplicationsPage() {
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/applications");
 
   const {
     data: { user },

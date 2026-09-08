@@ -1,3 +1,4 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import { redirect } from "next/navigation";
 import { createProject } from "@/app/actions";
 import { DashboardHeader } from "@/components/DashboardHeader";
@@ -12,6 +13,7 @@ export default async function NewProjectPage() {
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/projects/new");
 
   const {
     data: { user },

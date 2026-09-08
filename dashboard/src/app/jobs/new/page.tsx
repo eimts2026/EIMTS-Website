@@ -1,3 +1,4 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import { redirect } from "next/navigation";
 import { createJob } from "@/app/actions";
 import { DashboardHeader } from "@/components/DashboardHeader";
@@ -12,6 +13,7 @@ export default async function NewJobPage() {
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/jobs/new");
 
   const {
     data: { user },

@@ -8,6 +8,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
+import ImageViewer from "./ImageViewer";
 
 export type RollingGalleryItem = {
   title: string;
@@ -33,6 +34,8 @@ export default function RollingGallery({
   const dragStartRef = useRef({ x: 0, rotation: 0 });
   const lastPointerRef = useRef({ x: 0, time: 0 });
   const velocityRef = useRef(0);
+  const movedRef = useRef(false);
+  const viewingRef = useRef(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
 
@@ -69,7 +72,7 @@ export default function RollingGallery({
       previousTime = time;
       const hoverPaused = pauseOnHover && hoveringRef.current;
 
-      if (autoplay && !hoverPaused && !draggingRef.current && !reduceMotion) {
+      if (autoplay && !hoverPaused && !draggingRef.current && !viewingRef.current && !reduceMotion) {
         applyRotation(rotationRef.current - elapsed * 0.012);
       }
       frameId = requestAnimationFrame(animate);
@@ -81,14 +84,17 @@ export default function RollingGallery({
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     draggingRef.current = true;
+    movedRef.current = false;
     dragStartRef.current = { x: event.clientX, rotation: rotationRef.current };
     lastPointerRef.current = { x: event.clientX, time: performance.now() };
     velocityRef.current = 0;
-    event.currentTarget.setPointerCapture(event.pointerId);
+    ((event.target as Element).closest("button") ?? event.currentTarget).setPointerCapture(event.pointerId);
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     if (!draggingRef.current) return;
+
+    if (Math.abs(event.clientX - dragStartRef.current.x) > 6) movedRef.current = true;
 
     const now = performance.now();
     const elapsed = Math.max(now - lastPointerRef.current.time, 1);
@@ -131,6 +137,16 @@ export default function RollingGallery({
         aria-label="Emerald Isle awards"
         tabIndex={0}
         onKeyDown={handleKeyDown}
+        onClickCapture={(event) => {
+          // Portalled lightbox events still traverse React ancestors. Only
+          // suppress drag-clicks originating inside the actual gallery DOM.
+          if (!event.currentTarget.contains(event.target as Node)) return;
+          if (event.detail > 0 && movedRef.current) {
+            movedRef.current = false;
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
@@ -149,9 +165,9 @@ export default function RollingGallery({
                   transform: `translate(-50%, -50%) rotateY(${(360 / faceCount) * index}deg) translateZ(${radius}px)`,
                 }}
               >
-                <div className="ei-award-gallery-media">
+                <ImageViewer className="ei-award-gallery-media" src={item.image} alt={item.alt ?? item.title} title={item.title} onOpenChange={(open) => { viewingRef.current = open; }}>
                   <img src={item.image} alt={item.alt ?? item.title} loading="lazy" />
-                </div>
+                </ImageViewer>
               </figure>
             ))}
           </div>

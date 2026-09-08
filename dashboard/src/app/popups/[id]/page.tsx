@@ -1,3 +1,4 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import type { PopupRecord } from "@eimts/database";
 import { notFound, redirect } from "next/navigation";
 import { updatePopup } from "@/app/actions";
@@ -17,6 +18,7 @@ export default async function EditPopupPage({
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/popups/[id]");
 
   const {
     data: { user },

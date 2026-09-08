@@ -1,0 +1,5 @@
+.ei-footer-reveal{position:relative;width:100%}
+.ei-footer-reveal.is-sticky{height:var(--footer-height);clip-path:inset(0)}
+.ei-footer-reveal.is-sticky>.ei-footer-reveal-content{position:fixed;bottom:0;left:0;width:100%}
+@media(prefers-reduced-motion:reduce){.ei-footer-reveal.is-sticky{height:auto;clip-path:none}.ei-footer-reveal.is-sticky>.ei-footer-reveal-content{position:static}}
+@media print{.ei-footer-reveal.is-sticky{height:auto;clip-path:none}.ei-footer-reveal.is-sticky>.ei-footer-reveal-content{position:static}}

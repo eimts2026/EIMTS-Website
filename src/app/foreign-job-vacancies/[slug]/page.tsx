@@ -73,7 +73,12 @@ export default async function JobDetailPage({ params }: PageProps) {
   const job = await getPublishedJobBySlug(slug);
   if (!job) notFound();
 
-  const salary = formatSalary(job.salary_min, job.salary_max, job.currency);
+  const baseSalary = job.salary_amount != null
+    ? `${job.currency} ${new Intl.NumberFormat("en-GB").format(job.salary_amount)}`
+    : formatSalary(job.salary_min, job.salary_max, job.currency);
+  const salary = baseSalary && job.currency !== "LKR" && job.salary_lkr != null
+    ? `${baseSalary} / LKR ${new Intl.NumberFormat("en-GB").format(job.salary_lkr)}`
+    : baseSalary;
 
   const overview = [
     job.published_at && {
@@ -130,15 +135,15 @@ export default async function JobDetailPage({ params }: PageProps) {
         addressCountry: job.country,
       },
     },
-    ...(job.salary_min
+    ...((job.salary_amount ?? job.salary_min) != null
       ? {
           baseSalary: {
             "@type": "MonetaryAmount",
             currency: job.currency,
             value: {
               "@type": "QuantitativeValue",
-              minValue: job.salary_min,
-              maxValue: job.salary_max || job.salary_min,
+              minValue: job.salary_amount ?? job.salary_min,
+              maxValue: job.salary_amount ?? job.salary_max ?? job.salary_min,
               unitText: "MONTH",
             },
           },

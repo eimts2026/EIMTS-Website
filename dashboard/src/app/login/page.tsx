@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
 import { AuthField } from "@/components/AuthField";
 import { DotGridBackground } from "@/components/DotGridBackground";
+import { safeNext } from "@/lib/auth-policy";
 
 const MAX_ATTEMPTS = 5;
 const LOCK_SECONDS = 30;
@@ -27,7 +28,7 @@ export default function LoginPage() {
     let active = true;
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (active && user) {
-        router.replace("/");
+        router.replace(safeNext(new URLSearchParams(window.location.search).get("next")));
         router.refresh();
       }
     });
@@ -85,7 +86,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.replace("/");
+    router.replace(safeNext(new URLSearchParams(window.location.search).get("next")));
     router.refresh();
   }
 

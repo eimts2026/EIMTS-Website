@@ -4,27 +4,23 @@ import { useEffect, useRef, useState } from "react";
 import type { HeroContent } from "../../lib/hero";
 import Link from "../../components/ui/Link";
 import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
+import type { Job } from "../jobs/JobsPage";
 import ClientGlobe from "../../components/visuals/ClientGlobe";
 
 // ============================================================================
 // 1. RECRUITMENT CATEGORIES DATA
 // Edit job category titles and descriptions displayed on the Home page
 // ============================================================================
-const categories = [
-  ["Engineering & Technical", "Skilled roles across complex industries"],
-  ["Hospitality & Culinary", "Hotels, restaurants and guest experiences"],
-  ["Automotive & Transport", "Mobility, maintenance and logistics"],
-  ["Construction & Trades", "Experienced hands for ambitious projects"],
-  ["Healthcare", "Care professionals for global organisations"],
-  ["Retail & Administration", "People who keep businesses moving"],
-];
+
 
 // ============================================================================
 // 2. CLIENT TESTIMONIALS DATA
-// Edit quotes, client names, companies, and locations shown in the quote grid.
-// All entries render at once; the last entry gets the inverted accent cell.
+// Edit quotes, client names, companies, and locations shown in the looping track.
+// All entries are retained; an accessible-hidden copy makes the loop seamless.
 // ============================================================================
 const testimonials = [
+  { quote: "Professional approach at Emeraldisle", name: "Chandana weerasinghe", company: "Afaq Al saree", place: "", avatar: "" },
+  { quote: "This 5th intake is one of the most challenging intake recruitment drives in recent memory with the holiday season and Simultaneously deployment of 3rd and 4th intake nurses. Inspite of the challenges. This recruitment drive has also seen the largest number", name: "Mr.Aden", company: "Vision Manpower Singapore", place: "", avatar: "" },
   { quote: "Always the best support, whenever it is required. A recruitment partner we genuinely value.", name: "Mohammed Haneefa", company: "Apparel Group", place: "Saudi Arabia", avatar: "" },
   { quote: "Professional staff, a welcoming environment and service that makes every requirement feel carefully handled.", name: "Rajakumar", company: "Thabat", place: "Saudi Arabia", avatar: "" },
   { quote: "From the first day, the team took our requirements seriously. I truly appreciate the partnership.", name: "Sultan Rashid", company: "Alshaheen Arabic Modern", place: "Muscat, Oman", avatar: "" },
@@ -40,6 +36,8 @@ const testimonials = [
 const companyStory = [
   {
     year: "1995",
+    shortTitle: "Opportunity, with guidance.",
+    shortCopy: "Helping Sri Lankans take their next career step with clear, personal guidance since 1995.",
     title: "A Sri Lankan promise with a global horizon.",
     copy: "Emerald Isle began with a simple belief: overseas opportunity should improve a person’s life without leaving them to navigate uncertainty alone.",
     image: "/assets/home-story/career-guidance.webp",
@@ -47,6 +45,8 @@ const companyStory = [
   },
   {
     year: "Responsible recruitment",
+    shortTitle: "Trust at every step.",
+    shortCopy: "Careful screening and honest communication from an SLBFE-licensed recruitment partner.",
     title: "Trust became the way we work.",
     copy: "Careful screening, honest communication and accountable processes shaped every placement. Today we continue that standard as an SLBFE-licensed recruitment partner.",
     image: "/assets/home-story/responsible-screening.webp",
@@ -54,6 +54,8 @@ const companyStory = [
   },
   {
     year: "One journey",
+    shortTitle: "Support through to arrival.",
+    shortCopy: "One team for recruitment, documentation and travel guidance.",
     title: "Recruitment does not end with an offer letter.",
     copy: "Our teams connect recruitment, documentation and travel guidance into one continuous experience, supporting candidates and employers from first conversation to arrival.",
     image: "/assets/home-story/travel-support.webp",
@@ -61,6 +63,8 @@ const companyStory = [
   },
   {
     year: "Today",
+    shortTitle: "Lasting partnerships.",
+    shortCopy: "Regional partnerships and five recognitions, built one responsible placement at a time.",
     title: "32 years on, the promise still travels.",
     copy: "Five recognitions, regional partnerships and long-standing client relationships reflect a reputation built one responsible placement at a time.",
     image: "/assets/home-story/global-partnership.webp",
@@ -68,23 +72,13 @@ const companyStory = [
   },
 ];
 
-export default function Home({ hero }: { hero: HeroContent }) {
+export default function Home({ hero, urgentJobs = [] }: { hero: HeroContent; urgentJobs?: Job[] }) {
   const heroSlides = hero.slides;
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeStory, setActiveStory] = useState(0);
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const inquiryDialogRef = useRef<HTMLDialogElement>(null);
   const activeHero = heroSlides[activeSlide] ?? heroSlides[0];
-
-  // Testimonial cells carry an amber spotlight that follows the pointer.
-  // Pointer events cover mouse, touch and pen: move tracks the cursor,
-  // down places the glow under a finger before the press style shows it.
-  const placeQuoteSpotlight = (event: React.PointerEvent<HTMLElement>) => {
-    const cell = event.currentTarget;
-    const rect = cell.getBoundingClientRect();
-    cell.style.setProperty("--spot-x", `${event.clientX - rect.left}px`);
-    cell.style.setProperty("--spot-y", `${event.clientY - rect.top}px`);
-  };
 
   // Reveal-on-scroll for [data-reveal] sections is handled globally by
   // ScrollReveal in the root layout.
@@ -199,6 +193,16 @@ export default function Home({ hero }: { hero: HeroContent }) {
       <div className="container ei-hero-foot" aria-label="Company credentials"><span>Licensed by SLBFE</span><span>License No. 1162</span><span>Europe · Middle East · Asia · Africa</span></div>
     </section>
 
+    <section className="ei-quick-start" aria-label="Choose your next step">
+      <div className="container">
+        <div className="ei-quick-start-grid">
+          <Link href="/foreign-job-vacancies/"><span>For job seekers<strong>Find overseas jobs</strong></span><b aria-hidden="true">↗</b></Link>
+          <Link href="/client-recruitment-solutions/"><span>For employers<strong>Hire talent</strong></span><b aria-hidden="true">↗</b></Link>
+        </div>
+        <p className="ei-quick-proof"><Link href="/about-us-emerald-isle-manpower/">Our credentials <span aria-hidden="true">→</span></Link></p>
+      </div>
+    </section>
+
     {/* ====================================================================== */}
     {/* SECTION 2: VISION, MISSION & VALUES FLIP CARDS                        */}
     {/* Edit card titles, descriptions, and flip reveal content below          */}
@@ -271,24 +275,24 @@ export default function Home({ hero }: { hero: HeroContent }) {
         <h2 id="company-story-title">Built one responsible <span>journey at a time.</span></h2>
       </div>
       <div className="container ei-story-layout">
-        <div className="ei-story-stage" aria-hidden="true">
+        <div className="ei-story-stage">
           <div className="ei-story-images">
             {companyStory.map((chapter, index) => <img className={index === activeStory ? "is-active" : ""} src={chapter.image} alt="" width="900" height="1125" loading="lazy" key={chapter.title} />)}
             <div className="ei-story-image-shade" />
             <p>{companyStory[activeStory].marker}</p>
           </div>
-          <div className="ei-story-progress">
+          <nav className="ei-story-progress" aria-label="Our story chapters">
             <span>{String(activeStory + 1).padStart(2, "0")}</span>
-            <div>{companyStory.map((chapter, index) => <i className={index <= activeStory ? "is-active" : ""} key={chapter.title} />)}</div>
+            <div>{companyStory.map((chapter, index) => <a href={`#story-chapter-${index + 1}`} aria-label={`Chapter ${index + 1}: ${chapter.year}`} aria-current={index === activeStory ? "step" : undefined} className={index === activeStory ? "is-current" : index < activeStory ? "is-complete" : ""} key={chapter.title}><i /></a>)}</div>
             <span>{String(companyStory.length).padStart(2, "0")}</span>
-          </div>
+          </nav>
         </div>
         <div className="ei-story-chapters">
-          {companyStory.map((chapter, index) => <article className={"ei-story-chapter" + (index === activeStory ? " is-active" : "")} data-story-step={index} key={chapter.title}>
+          {companyStory.map((chapter, index) => <article id={`story-chapter-${index + 1}`} className={"ei-story-chapter" + (index === activeStory ? " is-active" : "")} data-story-step={index} key={chapter.title}>
             <img className="ei-story-mobile-image" src={chapter.image} alt="" width="900" height="650" loading="lazy" />
-            <span>{chapter.year}</span>
-            <h3>{chapter.title}</h3>
-            <p>{chapter.copy}</p>
+            <span><small className="ei-story-step-number">{String(index + 1).padStart(2, "0")} / 04 · </small>{chapter.year}</span>
+            <h3><span className="ei-copy-desktop">{chapter.title}</span><span className="ei-copy-mobile">{chapter.shortTitle}</span></h3>
+            <p><span className="ei-copy-desktop">{chapter.copy}</span><span className="ei-copy-mobile">{chapter.shortCopy}</span></p>
             {index === companyStory.length - 1 && <Link href="/about-us-emerald-isle-manpower/">Discover our company <b aria-hidden="true">→</b></Link>}
           </article>)}
         </div>
@@ -314,12 +318,22 @@ export default function Home({ hero }: { hero: HeroContent }) {
 
     {/* ====================================================================== */}
     {/* SECTION 5: RECRUITMENT CATEGORIES GRID                                */}
-    {/* Category items populated from categories array at top of file           */}
+    {/* Published urgent vacancies from the dashboard           */}
     {/* ====================================================================== */}
-    <section className="ei-categories" aria-labelledby="categories-title"><div className="container ei-categories-layout">
-      <div className="ei-categories-copy" data-reveal><p className="ei-kicker">Where talent travels</p><h2 id="categories-title">Careers for every kind of ambition.</h2><p>Specialist teams understand the skills, standards and cultures behind every placement.</p><Link className="ei-button ei-button-dark" href="/foreign-job-vacancies/">View every vacancy <span className="ei-button__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link></div>
-      <div className="ei-category-list">{categories.map(([name, copy], index) => <Link data-reveal href="/foreign-job-vacancies/" key={name}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{name}</strong><small>{copy}</small></div><b aria-hidden="true">↗</b></Link>)}</div>
-    </div></section>
+    {urgentJobs.length > 0 && <section className="ei-urgent-jobs" aria-labelledby="urgent-jobs-title">
+      <div className="container">
+        <header className="ei-urgent-heading">
+          <div><p className="ei-kicker">Now hiring</p><h2 id="urgent-jobs-title">Urgent job opportunities.</h2><p>Explore current urgent vacancies and take the next step in your career.</p></div>
+          <Link className="ei-button ei-button-dark" href="/foreign-job-vacancies/">View all vacancies <span aria-hidden="true">↗</span></Link>
+        </header>
+        <div className="ei-urgent-grid">
+          {urgentJobs.map((job) => <Link className="ei-urgent-card" href={`/foreign-job-vacancies/${job.slug}/`} key={job.id}>
+            <div className="ei-urgent-image"><img src={job.image} alt="" loading="lazy" style={{ objectPosition: job.imagePosition }} /><span>Urgent hiring</span></div>
+            <div className="ei-urgent-body"><p>{job.country && job.country !== job.location ? `${job.location}, ${job.country}` : job.location}</p><h3>{job.title}</h3><div className="ei-urgent-meta"><span>{job.category}</span><span>{job.employmentType}</span></div>{job.expiresAt && <small>Apply by {new Date(job.expiresAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Colombo" })}</small>}<span className="ei-urgent-link">View job &amp; apply <span aria-hidden="true">↗</span></span></div>
+          </Link>)}
+        </div>
+      </div>
+    </section>}
 
     {/* ====================================================================== */}
     {/* SECTION 6: INTERACTIVE 3D CLIENT NETWORK GLOBE                        */}
@@ -337,40 +351,32 @@ export default function Home({ hero }: { hero: HeroContent }) {
 
     {/* ====================================================================== */}
     {/* SECTION 8: CLIENT TESTIMONIALS \u2014 QUOTE LEDGER                          */}
-    {/* All entries from the testimonials array render at once in a hairline   */}
-    {/* grid of uniform white cells.                                           */}
     {/* ====================================================================== */}
     <section className="ei-testimonials" aria-labelledby="testimonial-title">
       <div className="container">
         <div className="ei-testimonial-heading" data-reveal>
           <p>Client testimonials</p>
-          <h2 id="testimonial-title">Trusted by worldwide clients</h2>
+          <h2 id="testimonial-title">Trust, in their words.</h2>
         </div>
-        {/* data-reveal sits on the grid (not the cells) so all four quotes
-            appear together — per-cell reveal can strand the bottom row
-            hidden when the section is the last thing above the footer. */}
-        <div className="ei-quote-grid" data-reveal>
-          {testimonials.map((testimonial) => (
-            <figure
-              className="ei-quote"
-              key={testimonial.name}
-              onPointerMove={placeQuoteSpotlight}
-              onPointerDown={placeQuoteSpotlight}
-            >
-              <div className="ei-quote-top">
-                <span className="ei-quote-place">{testimonial.place}</span>
-                <span className="ei-quote-stars" aria-label="Five-star client testimonial"><span aria-hidden="true">{"\u2605\u2605\u2605\u2605\u2605"}</span></span>
+        <div className="ei-testimonial-loop" tabIndex={0} role="region" aria-label="Client testimonials. Hover, focus, or hold to pause the loop.">
+          <div className="ei-testimonial-track">
+            {[false, true].map((isCopy) => (
+              <div className="ei-testimonial-set" key={String(isCopy)} aria-hidden={isCopy || undefined}>
+                {testimonials.map((testimonial) => (
+                  <figure className="ei-quote" key={testimonial.name}>
+                    <div className="ei-quote-top">
+                      <span className="ei-quote-place">{testimonial.place}</span>
+                      <span className="ei-quote-mark" aria-hidden="true">“</span>
+                    </div>
+                    <blockquote>&ldquo;{testimonial.quote}&rdquo;</blockquote>
+                    <figcaption>
+                      <span className="ei-quote-who"><strong>{testimonial.name}</strong><small>{testimonial.company}</small></span>
+                    </figcaption>
+                  </figure>
+                ))}
               </div>
-              <blockquote>&ldquo;{testimonial.quote}&rdquo;</blockquote>
-              <figcaption>
-                <span className="ei-quote-avatar" aria-hidden="true">
-                  {testimonial.avatar ? <img src={testimonial.avatar} alt="" /> : testimonial.name.split(" ").map((part) => part[0]).join("")}
-                </span>
-                <span className="ei-quote-who"><strong>{testimonial.name}</strong><small>{testimonial.company}</small></span>
-                <em className="ei-quote-verified">Verified client</em>
-              </figcaption>
-            </figure>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

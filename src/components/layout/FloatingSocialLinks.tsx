@@ -1,3 +1,6 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import "./FloatingSocialLinks.css";
 type SocialName = "facebook" | "youtube" | "linkedin" | "whatsapp";
 
 function SocialIcon({ name }: { name: SocialName }) {
@@ -15,7 +18,41 @@ const socials: Array<{ name: SocialName; label: string; href: string }> = [
 ];
 
 export function FloatingSocialLinks() {
-  return <aside className="floating-social-links" aria-label="Follow Emerald Isle">
-    {socials.map((social) => <a className={`floating-social-links__link floating-social-links__link--${social.name}`} href={social.href} aria-label={`Follow Emerald Isle on ${social.label}`} title={social.label} target="_blank" rel="noreferrer" key={social.name}><SocialIcon name={social.name} /></a>)}
-  </aside>;
+  const [open, setOpen] = useState(false);
+  const dockRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (!dockRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setOpen(false); toggleRef.current?.focus(); }
+    };
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const resize = () => { if (desktop.matches) setOpen(false); };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", escape);
+    desktop.addEventListener("change", resize);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", escape);
+      desktop.removeEventListener("change", resize);
+    };
+  }, [open]);
+  return <>
+    <aside className="ei-social-tabs" aria-label="Follow Emerald Isle">
+      {socials.map((social) => <a className={`ei-social-link ei-social-link--${social.name}`} href={social.href} aria-label={`Emerald Isle on ${social.label}`} target="_blank" rel="noreferrer" key={social.name}><span>{social.label}</span><SocialIcon name={social.name} /></a>)}
+    </aside>
+    <div className={`ei-social-dock${open ? " is-open" : ""}`} ref={dockRef} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setOpen(false); }}>
+      <nav className="ei-social-dock-links" id="social-dock-links" aria-label="Social media" inert={!open}>
+        {socials.map((social, index) => <a style={{ transitionDelay: open ? `${index * 50}ms` : "0ms" }} className={`ei-social-link ei-social-link--${social.name}`} href={social.href} aria-label={`Emerald Isle on ${social.label}`} target="_blank" rel="noreferrer" key={social.name} onClick={() => setOpen(false)}><span>{social.label}</span><SocialIcon name={social.name} /></a>)}
+      </nav>
+      <button className="ei-social-toggle" ref={toggleRef} type="button" aria-label={open ? "Close social links" : "Open social links"} aria-expanded={open} aria-controls="social-dock-links" onClick={() => setOpen(!open)}>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          {open ? <path d="m6 6 12 12M18 6 6 18" /> : <><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4" /></>}
+        </svg>
+      </button>
+    </div>
+  </>;
 }

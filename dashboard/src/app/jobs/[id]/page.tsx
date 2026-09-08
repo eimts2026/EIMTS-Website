@@ -1,3 +1,4 @@
+import { requireRouteAccess } from "@/lib/require-route-access";
 import type { JobRecord } from "@eimts/database";
 import { notFound, redirect } from "next/navigation";
 import { updateJob } from "@/app/actions";
@@ -17,6 +18,7 @@ export default async function EditJobPage({
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
   if (!supabase) return <SetupRequired />;
+  await requireRouteAccess("/jobs/[id]");
 
   const {
     data: { user },
