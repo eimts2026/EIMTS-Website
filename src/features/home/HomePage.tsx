@@ -1,23 +1,11 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import type { HeroContent } from "../../lib/hero";
 import Link from "../../components/ui/Link";
 import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
 import type { Job } from "../jobs/JobsPage";
 import ClientGlobe from "../../components/visuals/ClientGlobe";
-
-// ============================================================================
-// 1. RECRUITMENT CATEGORIES DATA
-// Edit job category titles and descriptions displayed on the Home page
-// ============================================================================
-
-
-// ============================================================================
-// 2. CLIENT TESTIMONIALS DATA
-// Edit quotes, client names, companies, and locations shown in the looping track.
-// All entries are retained; an accessible-hidden copy makes the loop seamless.
-// ============================================================================
+import "./HomePage.css";
 const testimonials = [
   { quote: "Professional approach at Emeraldisle", name: "Chandana weerasinghe", company: "Afaq Al saree", place: "", avatar: "" },
   { quote: "This 5th intake is one of the most challenging intake recruitment drives in recent memory with the holiday season and Simultaneously deployment of 3rd and 4th intake nurses. Inspite of the challenges. This recruitment drive has also seen the largest number", name: "Mr.Aden", company: "Vision Manpower Singapore", place: "", avatar: "" },
@@ -27,358 +15,71 @@ const testimonials = [
   { quote: "A fantastic experience from start to finish. The communication, care and candidate support were excellent.", name: "Taniya Perera", company: "Raffles & Fairmont", place: "Qatar", avatar: "" },
 ];
 
-// ============================================================================
-// 3. HOME HERO SLIDES
-// Slides are managed from the staff dashboard (Hero section) and passed in as
-// the `hero` prop by src/app/page.tsx. Fallback copies live in src/lib/hero.ts.
-// ============================================================================
 
-const companyStory = [
-  {
-    year: "1995",
-    shortTitle: "Opportunity, with guidance.",
-    shortCopy: "Helping Sri Lankans take their next career step with clear, personal guidance since 1995.",
-    title: "A Sri Lankan promise with a global horizon.",
-    copy: "Emerald Isle began with a simple belief: overseas opportunity should improve a person’s life without leaving them to navigate uncertainty alone.",
-    image: "/assets/home-story/career-guidance.webp",
-    marker: "Founded in Sri Lanka",
-  },
-  {
-    year: "Responsible recruitment",
-    shortTitle: "Trust at every step.",
-    shortCopy: "Careful screening and honest communication from an SLBFE-licensed recruitment partner.",
-    title: "Trust became the way we work.",
-    copy: "Careful screening, honest communication and accountable processes shaped every placement. Today we continue that standard as an SLBFE-licensed recruitment partner.",
-    image: "/assets/home-story/responsible-screening.webp",
-    marker: "SLBFE License No. 1162",
-  },
-  {
-    year: "One journey",
-    shortTitle: "Support through to arrival.",
-    shortCopy: "One team for recruitment, documentation and travel guidance.",
-    title: "Recruitment does not end with an offer letter.",
-    copy: "Our teams connect recruitment, documentation and travel guidance into one continuous experience, supporting candidates and employers from first conversation to arrival.",
-    image: "/assets/home-story/travel-support.webp",
-    marker: "Recruitment · documents · travel",
-  },
-  {
-    year: "Today",
-    shortTitle: "Lasting partnerships.",
-    shortCopy: "Regional partnerships and five recognitions, built one responsible placement at a time.",
-    title: "32 years on, the promise still travels.",
-    copy: "Five recognitions, regional partnerships and long-standing client relationships reflect a reputation built one responsible placement at a time.",
-    image: "/assets/home-story/global-partnership.webp",
-    marker: "5 awards · 32+ years",
-  },
-];
-
+const jobsUrl = "/foreign-job-vacancies/";
+const aboutUrl = "/about-us-emerald-isle-manpower/";
 export default function Home({ hero, urgentJobs = [] }: { hero: HeroContent; urgentJobs?: Job[] }) {
-  const heroSlides = hero.slides;
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [activeStory, setActiveStory] = useState(0);
-  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
-  const inquiryDialogRef = useRef<HTMLDialogElement>(null);
-  const activeHero = heroSlides[activeSlide] ?? heroSlides[0];
-
-  // Reveal-on-scroll for [data-reveal] sections is handled globally by
-  // ScrollReveal in the root layout.
-
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const trigger = useRef<HTMLElement | null>(null);
+  const slide = hero.slides[active] ?? hero.slides[0];
   useEffect(() => {
-    const dialog = inquiryDialogRef.current;
-    if (!dialog) return;
-
-    if (isInquiryOpen && !dialog.open) dialog.showModal();
-    if (!isInquiryOpen && dialog.open) dialog.close();
-  }, [isInquiryOpen]);
-
-  useEffect(() => {
-    // An occasion takeover (or a single slide) shows statically — no rotation.
-    if (hero.takeover || heroSlides.length < 2) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % heroSlides.length);
-    }, 6500);
+    if (paused || hero.takeover || hero.slides.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => setActive(n => (n + 1) % hero.slides.length), 7000);
     return () => window.clearInterval(timer);
-  }, [hero.takeover, heroSlides.length]);
-
-  useEffect(() => {
-    const steps = Array.from(document.querySelectorAll<HTMLElement>("[data-story-step]"));
-    if (steps.length === 0) return;
-
-    let ticking = false;
-
-    const updateActiveStory = () => {
-      const viewportCenter = window.innerHeight / 2;
-      let closestStep = 0;
-      let minDistance = Infinity;
-
-      steps.forEach((step, index) => {
-        const rect = step.getBoundingClientRect();
-        const stepCenter = rect.top + rect.height / 2;
-        const distance = Math.abs(stepCenter - viewportCenter);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestStep = index;
-        }
-      });
-
-      setActiveStory(closestStep);
-      ticking = false;
-    };
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateActiveStory);
-        ticking = true;
-      }
-    };
-
-    updateActiveStory();
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
-  }, []);
-
-  return <main id="main" className="ei-home">
-    {/* ====================================================================== */}
-    {/* SECTION 1: HERO SLIDER WITH CALLS-TO-ACTION                            */}
-    {/* Slide content controlled by heroSlides array at top of file             */}
-    {/* ====================================================================== */}
-    <section className="ei-hero ei-hero-slider" aria-labelledby="home-title">
-      <div className="ei-hero-slides" aria-hidden="true">
-        {heroSlides.map((slide, index) => <img
-          className={"ei-hero-image ei-hero-slide" + (index === activeSlide ? " is-active" : "")}
-          src={slide.image}
-          alt=""
-          width="1824"
-          height="1024"
-          fetchPriority={index === 0 ? "high" : "auto"}
-          loading={index === 0 ? "eager" : "lazy"}
-          key={index}
-        />)}
-      </div>
-      <div className="ei-hero-shade" />
-      <div className="container ei-hero-content">
-        <div className="ei-hero-copy" key={activeSlide}>
-          {activeHero.kicker && <p className="ei-kicker">{activeHero.kicker}</p>}
-          <h1 id="home-title">{activeHero.title}</h1>
-          <p>{activeHero.copy}</p>
-          {(activeHero.ctaLabel && activeHero.ctaUrl) || (activeHero.cta2Label && activeHero.cta2Url) ? (
-            <div className="ei-actions">
-              {activeHero.ctaLabel && activeHero.ctaUrl && (
-                <Link className="ei-button ei-button-bright" href={activeHero.ctaUrl}>
-                  {activeHero.ctaLabel}
-                  <span className="ei-button__icon-wrapper">
-                    <svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}>
-                      <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" />
-                    </svg>
-                    <svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy">
-                      <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" />
-                    </svg>
-                  </span>
-                </Link>
-              )}
-              {activeHero.cta2Label && activeHero.cta2Url && (
-                <Link className="ei-text-action" href={activeHero.cta2Url}>{activeHero.cta2Label} <span aria-hidden="true">→</span></Link>
-              )}
-            </div>
-          ) : null}
-        </div>
-      </div>
-      <div className="container ei-hero-foot" aria-label="Company credentials"><span>Licensed by SLBFE</span><span>License No. 1162</span><span>Europe · Middle East · Asia · Africa</span></div>
-    </section>
-
-    <section className="ei-quick-start" aria-label="Choose your next step">
-      <div className="container">
-        <div className="ei-quick-start-grid">
-          <Link href="/foreign-job-vacancies/"><span>For job seekers<strong>Find overseas jobs</strong></span><b aria-hidden="true">↗</b></Link>
-          <Link href="/client-recruitment-solutions/"><span>For employers<strong>Hire talent</strong></span><b aria-hidden="true">↗</b></Link>
-        </div>
-        <p className="ei-quick-proof"><Link href="/about-us-emerald-isle-manpower/">Our credentials <span aria-hidden="true">→</span></Link></p>
-      </div>
-    </section>
-
-    {/* ====================================================================== */}
-    {/* SECTION 2: VISION, MISSION & VALUES FLIP CARDS                        */}
-    {/* Edit card titles, descriptions, and flip reveal content below          */}
-    {/* ====================================================================== */}
-    <section className="ei-intro" aria-label="Our vision, mission and core values" data-reveal>
-      <div className="container ei-vision-cards">
-        <button
-          className="ei-belief-card ei-belief-card-vision"
-          type="button"
-          aria-label="Vision: To be recognised globally as an innovative and efficient human capital solutions partner."
-        >
-          <span className="ei-belief-card-front" aria-hidden="true">
-            <span className="ei-belief-card-number">01</span>
-            <strong>Vision</strong>
-            <span className="ei-belief-card-hint"><b>↗</b></span>
-          </span>
-          <span className="ei-belief-card-reveal" aria-hidden="true">
-            <small>Vision</small>
-            <span>To be recognised globally as an innovative and efficient human capital solutions partner.</span>
-          </span>
-        </button>
-
-        <button
-          className="ei-belief-card ei-belief-card-mission"
-          type="button"
-          aria-label="Mission: We enhance every client’s success and improve every employee’s quality of life through the dignity and power of gainful employment, delivering best-in-class human capital solutions."
-        >
-          <span className="ei-belief-card-front" aria-hidden="true">
-            <span className="ei-belief-card-number">02</span>
-            <strong>Mission</strong>
-            <span className="ei-belief-card-hint"><b>↗</b></span>
-          </span>
-          <span className="ei-belief-card-reveal" aria-hidden="true">
-            <small>Mission</small>
-            <span>We enhance every client’s success and improve every employee’s quality of life through the dignity and power of gainful employment, delivering best-in-class human capital solutions.</span>
-          </span>
-        </button>
-
-        <button
-          className="ei-belief-card ei-belief-card-values"
-          type="button"
-          aria-label="Core Values: Respect, Diversity, Teamwork, Empowerment and Community."
-        >
-          <span className="ei-belief-card-front" aria-hidden="true">
-            <span className="ei-belief-card-number">03</span>
-            <strong>Core Values</strong>
-            <span className="ei-belief-card-hint"><b>↗</b></span>
-          </span>
-          <span className="ei-belief-card-reveal" aria-hidden="true">
-            <small>Core Values</small>
-            <span className="ei-core-values">
-              <b>Respect</b>
-              <b>Diversity</b>
-              <b>Teamwork</b>
-              <b>Empowerment</b>
-              <b>Community</b>
-            </span>
-          </span>
-        </button>
-      </div>
-    </section>
-
-    <section className="ei-company-story" aria-labelledby="company-story-title">
-      <div className="container ei-story-heading" data-reveal>
-        <div className="ei-story-heading-intro">
-          <p>Our story</p>
-          <span>Three decades of opening doors responsibly.</span>
-          <strong>Since 1995</strong>
-        </div>
-        <h2 id="company-story-title">Built one responsible <span>journey at a time.</span></h2>
-      </div>
-      <div className="container ei-story-layout">
-        <div className="ei-story-stage">
-          <div className="ei-story-images">
-            {companyStory.map((chapter, index) => <img className={index === activeStory ? "is-active" : ""} src={chapter.image} alt="" width="900" height="1125" loading="lazy" key={chapter.title} />)}
-            <div className="ei-story-image-shade" />
-            <p>{companyStory[activeStory].marker}</p>
+  }, [paused, hero.takeover, hero.slides.length]);
+  const enquire = () => { trigger.current = document.activeElement as HTMLElement; dialog.current?.showModal(); };
+  return <main id="main" className="home-foundation">
+    <section className="hf-hero" aria-labelledby="home-title">
+      <div className="hf-shell hf-hero-layout">
+        <div className="hf-hero-copy">
+          <p className="hf-eyebrow"><i />{slide.kicker || "People. Possibility. Partnership."}</p>
+          <h1 id="home-title">{slide.title}</h1>
+          <p className="hf-lead">{slide.copy}</p>
+          <div className="hf-actions">
+            {slide.ctaLabel && slide.ctaUrl && <Link className="hf-button" href={slide.ctaUrl}>{slide.ctaLabel}<span aria-hidden="true">↗</span></Link>}
+            {slide.cta2Label && slide.cta2Url && <Link className="hf-link" href={slide.cta2Url}>{slide.cta2Label}<span aria-hidden="true">↗</span></Link>}
           </div>
-          <nav className="ei-story-progress" aria-label="Our story chapters">
-            <span>{String(activeStory + 1).padStart(2, "0")}</span>
-            <div>{companyStory.map((chapter, index) => <a href={`#story-chapter-${index + 1}`} aria-label={`Chapter ${index + 1}: ${chapter.year}`} aria-current={index === activeStory ? "step" : undefined} className={index === activeStory ? "is-current" : index < activeStory ? "is-complete" : ""} key={chapter.title}><i /></a>)}</div>
-            <span>{String(companyStory.length).padStart(2, "0")}</span>
-          </nav>
+          <div className="hf-assurance"><b aria-hidden="true">✓</b><div><strong>Opportunity, with peace of mind.</strong><small>SLBFE licensed · License No. 1162</small></div></div>
         </div>
-        <div className="ei-story-chapters">
-          {companyStory.map((chapter, index) => <article id={`story-chapter-${index + 1}`} className={"ei-story-chapter" + (index === activeStory ? " is-active" : "")} data-story-step={index} key={chapter.title}>
-            <img className="ei-story-mobile-image" src={chapter.image} alt="" width="900" height="650" loading="lazy" />
-            <span><small className="ei-story-step-number">{String(index + 1).padStart(2, "0")} / 04 · </small>{chapter.year}</span>
-            <h3><span className="ei-copy-desktop">{chapter.title}</span><span className="ei-copy-mobile">{chapter.shortTitle}</span></h3>
-            <p><span className="ei-copy-desktop">{chapter.copy}</span><span className="ei-copy-mobile">{chapter.shortCopy}</span></p>
-            {index === companyStory.length - 1 && <Link href="/about-us-emerald-isle-manpower/">Discover our company <b aria-hidden="true">→</b></Link>}
-          </article>)}
+        <div className="hf-hero-visual">
+          {hero.slides.map((item, index) => <img className={index === active ? "is-active" : ""} key={index} src={item.image} alt="" width="900" height="1050" loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : "auto"} />)}
+          <div className="hf-image-note"><span>ROOTED IN SRI LANKA</span><strong>Connected to a<br />world of possibility.</strong><a href="#client-network" aria-label="Explore our global network">↗</a></div>
+          {hero.slides.length > 1 && !hero.takeover && <div className="hf-slide-controls" aria-label="Hero slides">{hero.slides.map((_, index) => <button key={index} aria-label={"Show slide " + (index + 1)} aria-pressed={index === active} onClick={() => { setActive(index); setPaused(true); }} />)}<button className="hf-pause" aria-label={paused ? "Play slideshow" : "Pause slideshow"} onClick={() => setPaused(!paused)}>{paused ? "▶" : "Ⅱ"}</button></div>}
         </div>
       </div>
+      <div className="hf-shell hf-trust"><span>Bringing people and opportunity together.</span><strong>Since 1995</strong><span>Recruitment</span><span>Documentation</span><span>Travel guidance</span></div>
     </section>
-
-    <section className="ei-paths" aria-labelledby="paths-title"><div className="container">
-      <div className="ei-title-row" data-reveal><h2 id="paths-title">Built for both sides of the journey.</h2><Link href="/about-us-emerald-isle-manpower/">Why Emerald Isle <span aria-hidden="true">→</span></Link></div>
-      <div className="ei-path-grid"><article className="ei-path ei-path-candidate" data-reveal><span>For candidates</span><h3>Find work that takes your life forward.</h3><p>Verified vacancies, honest guidance and personal support from application to departure.</p><Link href="/foreign-job-vacancies/">Find your opportunity <b className="ei-path__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg ei-path__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></b></Link></article><article className="ei-path ei-path-employer" data-reveal><span>For employers</span><h3>Build teams ready to make an impact.</h3><p>Industry-focused sourcing, rigorous screening and dependable deployment across borders.</p><button type="button" className="ei-path-action" onClick={() => setIsInquiryOpen(true)}>Start recruiting <b className="ei-path__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-path__icon-svg ei-path__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></b></button></article></div>
+    <section className="hf-section hf-jobs" aria-labelledby="urgent-title"><div className="hf-shell">
+      <div className="hf-heading"><div><p className="hf-eyebrow"><i />Your next chapter</p><h2 id="urgent-title">Urgent opportunities.<br /><em>A world ahead of you.</em></h2></div><Link className="hf-link" href={jobsUrl}>View all vacancies <span aria-hidden="true">↗</span></Link></div>
+      {urgentJobs.length > 0 ? <div className="hf-job-grid">{urgentJobs.map(job => <Link className="hf-job-card" href={jobsUrl + job.slug + "/"} key={job.id}>
+        <div className="hf-job-image"><img src={job.image} alt="" loading="lazy" style={{ objectPosition: job.imagePosition }} /><span>Urgent hiring</span></div>
+        <div className="hf-job-body"><p className="hf-eyebrow">{job.country && job.country !== job.location ? job.location + ", " + job.country : job.location}</p><h3>{job.title}</h3><div className="hf-job-meta"><span>{job.category}</span><span>{job.employmentType}</span></div><div className="hf-job-bottom"><small>{job.expiresAt ? "Apply by " + new Date(job.expiresAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Colombo" }) : "View job details"}</small><span aria-label="View job and apply">↗</span></div></div>
+      </Link>)}</div> : <div className="hf-empty"><div><h3>Your next opportunity starts here.</h3><p>No urgent vacancies are listed right now. Explore our current openings or speak with our team for guidance.</p></div><Link className="hf-button" href={jobsUrl}>Explore vacancies <span aria-hidden="true">↗</span></Link></div>}
     </div></section>
-
-    <dialog
-      ref={inquiryDialogRef}
-      className="employer-inquiry-dialog"
-      aria-labelledby="home-employer-inquiry-title"
-      onClose={() => setIsInquiryOpen(false)}
-      onCancel={(event) => { event.preventDefault(); setIsInquiryOpen(false); }}
-      onClick={(event) => { if (event.target === event.currentTarget) setIsInquiryOpen(false); }}
-    >
-      <button className="employer-inquiry-dialog-close" type="button" onClick={() => setIsInquiryOpen(false)} aria-label="Close inquiry form">×</button>
-      <EmployerInquiryForm headingId="home-employer-inquiry-title" />
-    </dialog>
-
-    {/* ====================================================================== */}
-    {/* SECTION 5: RECRUITMENT CATEGORIES GRID                                */}
-    {/* Published urgent vacancies from the dashboard           */}
-    {/* ====================================================================== */}
-    {urgentJobs.length > 0 && <section className="ei-urgent-jobs" aria-labelledby="urgent-jobs-title">
-      <div className="container">
-        <header className="ei-urgent-heading">
-          <div><p className="ei-kicker">Now hiring</p><h2 id="urgent-jobs-title">Urgent job opportunities.</h2><p>Explore current urgent vacancies and take the next step in your career.</p></div>
-          <Link className="ei-button ei-button-dark" href="/foreign-job-vacancies/">View all vacancies <span aria-hidden="true">↗</span></Link>
-        </header>
-        <div className="ei-urgent-grid">
-          {urgentJobs.map((job) => <Link className="ei-urgent-card" href={`/foreign-job-vacancies/${job.slug}/`} key={job.id}>
-            <div className="ei-urgent-image"><img src={job.image} alt="" loading="lazy" style={{ objectPosition: job.imagePosition }} /><span>Urgent hiring</span></div>
-            <div className="ei-urgent-body"><p>{job.country && job.country !== job.location ? `${job.location}, ${job.country}` : job.location}</p><h3>{job.title}</h3><div className="ei-urgent-meta"><span>{job.category}</span><span>{job.employmentType}</span></div>{job.expiresAt && <small>Apply by {new Date(job.expiresAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Colombo" })}</small>}<span className="ei-urgent-link">View job &amp; apply <span aria-hidden="true">↗</span></span></div>
-          </Link>)}
-        </div>
+    <section className="hf-section hf-paths" aria-labelledby="paths-title"><div className="hf-shell">
+      <div className="hf-heading"><div><p className="hf-eyebrow">Different ambitions. Shared commitment.</p><h2 id="paths-title">Built for both sides<br />of the journey.</h2></div><p>Whether you’re taking your next career step or building your team, it starts with a conversation.</p></div>
+      <div className="hf-path-grid">
+        <article className="hf-path"><img src="/assets/home-story/career-guidance.webp" alt="" loading="lazy" /><div><p className="hf-eyebrow">For candidates</p><h3>A career that<br />takes you further.</h3><p>Verified vacancies, honest guidance and personal support from application to departure.</p><Link className="hf-button hf-white" href={jobsUrl}>Find your opportunity <span aria-hidden="true">↗</span></Link><Link className="hf-path-contact" href="/contact/">Talk to our team →</Link></div></article>
+        <article className="hf-path"><img src="/assets/hero-employer-partnership.webp" alt="" loading="lazy" /><div><p className="hf-eyebrow">For employers</p><h3>The right people.<br />A stronger team.</h3><p>Industry-focused sourcing, rigorous screening and dependable deployment across borders.</p><button className="hf-button hf-white" onClick={enquire}>Start recruiting <span aria-hidden="true">↗</span></button><Link className="hf-path-contact" href="/client-recruitment-solutions/">Explore our solutions →</Link></div></article>
       </div>
-    </section>}
-
-    {/* ====================================================================== */}
-    {/* SECTION 6: INTERACTIVE 3D CLIENT NETWORK GLOBE                        */}
-    {/* Static initial focus set to Pakistan; component code in ClientGlobe.tsx */}
-    {/* ====================================================================== */}
+    </div></section>
     <ClientGlobe />
-
-    {/* ====================================================================== */}
-    {/* SECTION 7: PROOF & AWARDS CREDENTIALS                                 */}
-    {/* ====================================================================== */}
-    <section className="ei-proof" aria-labelledby="proof-title"><div className="container ei-proof-grid">
-      <div className="ei-award-statement" data-reveal><span className="ei-award-number">5</span><div><p className="ei-kicker">Awards and recognitions</p><h2 id="proof-title">Excellence is not a claim. It is a record.</h2><p>Five Star recognition, employer-brand honours and decades of responsible recruitment reflect the standard we protect every day.</p><Link href="/about-us-emerald-isle-manpower/">See our credentials <span aria-hidden="true">→</span></Link></div></div>
-      <div className="ei-proof-facts" data-reveal><div><strong>32+</strong><span>years serving people and organisations</span></div><div><strong>8</strong><span>regional partner and branch markets</span></div><div><strong>One</strong><span>team from recruitment to travel</span></div></div>
+    <section className="hf-section hf-purpose" aria-labelledby="purpose-title"><div className="hf-shell">
+      <div className="hf-heading"><div><p className="hf-eyebrow">What we stand for</p><h2 id="purpose-title">People at the heart.<br /><em>Purpose in every placement.</em></h2></div><Link className="hf-link" href={aboutUrl}>Get to know us <span aria-hidden="true">↗</span></Link></div>
+      <div className="hf-purpose-grid"><article><span aria-hidden="true">↗</span><h3>Our vision</h3><p>To be recognised globally as an innovative and efficient human capital solutions partner.</p></article><article><span aria-hidden="true">◎</span><h3>Our mission</h3><p>We enhance every client’s success and improve every employee’s quality of life through the dignity and power of gainful employment, delivering best-in-class human capital solutions.</p></article></div>
+      <div className="hf-values"><h3>Our core values</h3><div>{["Respect", "Diversity", "Teamwork", "Empowerment", "Community"].map(value => <span key={value}><i aria-hidden="true">✳</i>{value}</span>)}</div></div>
     </div></section>
-
-    {/* ====================================================================== */}
-    {/* SECTION 8: CLIENT TESTIMONIALS \u2014 QUOTE LEDGER                          */}
-    {/* ====================================================================== */}
-    <section className="ei-testimonials" aria-labelledby="testimonial-title">
-      <div className="container">
-        <div className="ei-testimonial-heading" data-reveal>
-          <p>Client testimonials</p>
-          <h2 id="testimonial-title">Trust, in their words.</h2>
-        </div>
-        <div className="ei-testimonial-loop" tabIndex={0} role="region" aria-label="Client testimonials. Hover, focus, or hold to pause the loop.">
-          <div className="ei-testimonial-track">
-            {[false, true].map((isCopy) => (
-              <div className="ei-testimonial-set" key={String(isCopy)} aria-hidden={isCopy || undefined}>
-                {testimonials.map((testimonial) => (
-                  <figure className="ei-quote" key={testimonial.name}>
-                    <div className="ei-quote-top">
-                      <span className="ei-quote-place">{testimonial.place}</span>
-                      <span className="ei-quote-mark" aria-hidden="true">“</span>
-                    </div>
-                    <blockquote>&ldquo;{testimonial.quote}&rdquo;</blockquote>
-                    <figcaption>
-                      <span className="ei-quote-who"><strong>{testimonial.name}</strong><small>{testimonial.company}</small></span>
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+    <section className="hf-section hf-story" aria-labelledby="story-title"><div className="hf-shell hf-story-grid">
+      <div className="hf-story-image"><img src="/assets/home-story/global-partnership.webp" alt="" loading="lazy" width="900" height="1000" /><span>Our roots are local.<br /><strong>Our outlook is global.</strong></span></div>
+      <div className="hf-story-copy"><p className="hf-eyebrow">The Emerald Isle story · Since 1995</p><h2 id="story-title">Built one responsible<br /><em>journey at a time.</em></h2><p>Emerald Isle began with a simple belief: overseas opportunity should improve a person’s life without leaving them to navigate uncertainty alone.</p><p>Our teams connect recruitment, documentation and travel guidance into one continuous experience, supporting candidates and employers from first conversation to arrival.</p><div className="hf-story-facts"><div><strong>Since 1995</strong><span>Opening doors responsibly</span></div><div><strong>One team</strong><span>From application to arrival</span></div></div><Link className="hf-link" href={aboutUrl}>Discover our company <span aria-hidden="true">↗</span></Link><Link className="hf-awards" href={aboutUrl}><img src="/assets/about-awards/award-hero-1.webp" alt="Emerald Isle award recognition" loading="lazy" /><div><strong>A recognised recruitment partner.</strong><span>Explore our awards and credentials ↗</span></div></Link></div>
+    </div></section>
+    <section className="hf-section hf-testimonials" aria-labelledby="testimonial-title"><div className="hf-shell">
+      <div className="hf-heading"><div><p className="hf-eyebrow">Client testimonials</p><h2 id="testimonial-title">Good partnerships.<br /><em>In their own words.</em></h2></div><p>The people and organisations behind the journeys we make possible.</p></div>
+      <div className="hf-quote-grid">{testimonials.map(item => <figure className="hf-quote" key={item.name}><span className="hf-quote-mark" aria-hidden="true">“</span><blockquote>{item.quote}</blockquote><figcaption><span className="hf-avatar" aria-hidden="true">{item.name.split(" ").slice(0, 2).map(part => part[0]).join("")}</span><div><strong>{item.name}</strong><span>{item.company}</span>{item.place && <small>{item.place}</small>}</div></figcaption></figure>)}</div>
+    </div></section>
+    <section className="hf-contact" aria-labelledby="contact-title"><div className="hf-shell"><div><p className="hf-eyebrow">Your next chapter starts here</p><h2 id="contact-title">Let’s move<br />forward, together.</h2></div><div><p>A new opportunity. A growing team.<br />Tell us where you want to go.</p><div className="hf-actions"><Link className="hf-button hf-white" href="/contact/">Talk to our team <span aria-hidden="true">↗</span></Link><button className="hf-link" onClick={enquire}>Hire talent <span aria-hidden="true">↗</span></button></div></div></div></section>
+    <dialog ref={dialog} className="employer-inquiry-dialog" aria-labelledby="home-employer-inquiry-title" onClose={() => trigger.current?.focus()} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}><button type="button" className="employer-inquiry-dialog-close" onClick={() => dialog.current?.close()} aria-label="Close inquiry form">×</button><EmployerInquiryForm headingId="home-employer-inquiry-title" /></dialog>
   </main>;
 }

@@ -1153,12 +1153,9 @@ select option {
 }
 
 .project-media-dropzone {
-  grid-template-columns: auto minmax(0, auto);
+  grid-template-columns: 1fr;
+  justify-items: center;
   min-height: 104px;
-}
-
-.project-media-dropzone small {
-  grid-column: 1 / -1;
 }
 
 .project-media-upload-mark {
@@ -1353,12 +1350,12 @@ select option {
 }
 
 .projects-table {
-  min-width: 1080px;
+  min-width: 820px;
 }
 
 .projects-table th:last-child,
 .projects-table td:last-child {
-  width: 390px;
+  width: auto;
 }
 
 .project-order-actions {
@@ -1747,14 +1744,6 @@ td a[href^="mailto:"]:hover {
   }
 
   .project-focus-fields > div:first-child {
-    grid-column: auto;
-  }
-
-  .project-media-dropzone {
-    grid-template-columns: 1fr;
-  }
-
-  .project-media-dropzone small {
     grid-column: auto;
   }
 

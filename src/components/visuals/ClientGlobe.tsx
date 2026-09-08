@@ -23,6 +23,7 @@ const CLIENT_MARKETS: Market[] = [
   { name: "Nepal", region: "Asia", latitude: 28.3949, longitude: 84.124 },
   { name: "Myanmar", region: "Asia", latitude: 21.9162, longitude: 95.956 },
   { name: "Korea", region: "Asia", latitude: 35.9078, longitude: 127.7669 },
+  { name: "Japan", region: "Asia", latitude: 36.2048, longitude: 138.2529 },
   { name: "Saudi Arabia", region: "Asia", latitude: 23.8859, longitude: 45.0792 },
   { name: "Qatar", region: "Asia", latitude: 25.3548, longitude: 51.1839 },
   { name: "Kuwait", region: "Asia", latitude: 29.3117, longitude: 47.4818 },
@@ -33,6 +34,7 @@ const CLIENT_MARKETS: Market[] = [
   { name: "Kenya", region: "Africa", latitude: -0.0236, longitude: 37.9062 },
   { name: "Serbia", region: "Europe", latitude: 44.0165, longitude: 21.0059 },
   { name: "Romania", region: "Europe", latitude: 45.9432, longitude: 24.9668 },
+  { name: "Ireland", region: "Europe", latitude: 53.1424, longitude: -7.6921 },
 ];
 
 const toGlobePosition = ({ latitude, longitude }: Market, radius = 1) => {
@@ -335,7 +337,7 @@ export default function ClientGlobe() {
         <div className="ei-client-map-intro">
           <p>From our Sri Lankan hub, we support trusted client relationships across Africa, Asia and Europe.</p>
           <dl>
-            <div><dt>14</dt><dd>client markets</dd></div>
+            <div><dt>{CLIENT_MARKETS.length}</dt><dd>client markets</dd></div>
             <div><dt>3</dt><dd>global regions</dd></div>
             <div><dt>1</dt><dd>accountable partner</dd></div>
           </dl>
