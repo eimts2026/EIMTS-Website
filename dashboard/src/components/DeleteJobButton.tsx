@@ -13,6 +13,7 @@ export function DeleteJobButton({ id, title }: { id: string; title: string }) {
         type="button"
         className="danger-button"
         disabled={pending}
+        aria-busy={pending}
         aria-label={`Delete ${title}`}
         onClick={() => {
           if (!window.confirm(`Delete “${title}”? This cannot be undone.`)) return;
@@ -27,7 +28,8 @@ export function DeleteJobButton({ id, title }: { id: string; title: string }) {
           });
         }}
       >
-        {pending ? "Deleting…" : "Delete"}
+        {pending && <span className="action-spinner" aria-hidden="true" />}
+        <span role="status" aria-live="polite">{pending ? "Deleting…" : "Delete"}</span>
       </button>
       {error && <p role="alert" style={{ maxWidth: "16rem", whiteSpace: "normal" }}>{error}</p>}
     </div>

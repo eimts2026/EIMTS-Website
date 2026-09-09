@@ -1,3 +1,4 @@
+import { SubmitButton } from "@/components/SubmitButton";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import Link from "next/link";
 import type { PopupRecord } from "@eimts/database";
@@ -140,16 +141,12 @@ export default async function PopupsPage() {
                                 !popup.active,
                               )}
                             >
-                              <button type="submit">
-                                {popup.active ? "Deactivate" : "Activate"}
-                              </button>
+                              <SubmitButton className="" label={popup.active ? "Deactivate" : "Activate"} pendingLabel="Updating…" />
                             </form>
                           )}
                           {role === "admin" && (
                             <form action={deletePopup.bind(null, popup.id)}>
-                              <button className="danger-button" type="submit">
-                                Delete
-                              </button>
+                              <SubmitButton className="danger-button" label="Delete" pendingLabel="Deleting…" />
                             </form>
                           )}
                         </td>

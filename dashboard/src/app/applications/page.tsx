@@ -1,3 +1,4 @@
+import { SubmitButton } from "@/components/SubmitButton";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import type { ApplicationRecord } from "@eimts/database";
 import Link from "next/link";
@@ -227,9 +228,7 @@ export default async function ApplicationsPage() {
                                     </option>
                                   ))}
                                 </select>
-                                <button className="chip-save" type="submit">
-                                  Save
-                                </button>
+                                <SubmitButton className="chip-save" label="Save" pendingLabel="Saving…" />
                               </form>
                             ) : (
                               <span

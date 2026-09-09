@@ -4,13 +4,14 @@ import type { ProjectRecord } from "@eimts/database";
 import { redirect } from "next/navigation";
 import {
   deleteProject,
-  migrateBundledProjectImages,
   moveProject,
   setProjectActive,
 } from "@/app/actions";
 import { ConfirmActionButton } from "@/components/ConfirmActionButton";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { SetupRequired } from "@/components/SetupRequired";
+import { SubmitButton } from "@/components/SubmitButton";
+import { MoveToStorageButton } from "@/components/MoveToStorageButton";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
@@ -148,16 +149,16 @@ export default async function ProjectsDashboardPage() {
                           {isAdmin ? (
                             <>
                               <form action={moveProject.bind(null, project.id, "up")}>
-                                <button type="submit" disabled={index === 0} aria-label="Move project earlier">↑</button>
+                                <SubmitButton className="" label="↑" pendingLabel="Moving…" disabled={index === 0} aria-label="Move project earlier" />
                               </form>
                               <form action={moveProject.bind(null, project.id, "down")}>
-                                <button
-                                  type="submit"
+                                <SubmitButton
+                                  className=""
+                                  label="↓"
+                                  pendingLabel="Moving…"
                                   disabled={index === projects.length - 1}
                                   aria-label="Move project later"
-                                >
-                                  ↓
-                                </button>
+                                />
                               </form>
                             </>
                           ) : (
@@ -169,14 +170,10 @@ export default async function ProjectsDashboardPage() {
                             <>
                               <Link href={`/projects/${project.id}`}>Edit</Link>
                               <form action={setProjectActive.bind(null, project.id, !project.active)}>
-                                <button type="submit">
-                                  {project.active ? "Hide" : "Show"}
-                                </button>
+                                <SubmitButton className="" label={project.active ? "Hide" : "Show"} pendingLabel={project.active ? "Hiding…" : "Showing…"} />
                               </form>
                               {bundledCount > 0 && (
-                                <form action={migrateBundledProjectImages.bind(null, project.id)}>
-                                  <button type="submit">Move to storage</button>
-                                </form>
+                                <MoveToStorageButton projectId={project.id} />
                               )}
                               <form action={deleteProject.bind(null, project.id)}>
                                 <ConfirmActionButton

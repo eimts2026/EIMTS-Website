@@ -319,6 +319,9 @@
 .content aside button {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 48px;
   padding: 0.9rem 1rem;
   border: 0;
   border-radius: 10px;
@@ -326,6 +329,91 @@
   background: #08794c;
   cursor: pointer;
   font-weight: 750;
+  transition: background 180ms ease, transform 140ms ease, box-shadow 180ms ease;
+}
+
+.content aside input[type="file"] {
+  padding: 0.35rem;
+  min-width: 0;
+  background: #f4f8f5;
+  cursor: pointer;
+}
+
+.content aside input[type="file"]::file-selector-button {
+  min-height: 40px;
+  margin-right: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #b6d2c3;
+  border-radius: 6px;
+  background: #e1efe7;
+  color: #075a39;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 180ms ease, transform 140ms ease;
+}
+
+.content aside input[type="file"]:hover::file-selector-button {
+  background: #cce5d7;
+}
+
+.content aside input[type="file"]:active::file-selector-button {
+  transform: scale(0.96);
+}
+
+.content aside button:not(:disabled):hover {
+  background: #05623d;
+  box-shadow: 0 6px 16px rgba(7, 63, 42, 0.16);
+}
+
+.content aside button:not(:disabled):active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
+.content aside button:focus-visible,
+.content aside input[type="file"]:focus-visible {
+  outline: 3px solid #08794c;
+  outline-offset: 3px;
+}
+
+.content aside button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 180ms ease;
+}
+
+.content aside button:not(:disabled):hover svg {
+  transform: translateX(3px);
+}
+
+.content aside button svg[data-submit-spinner] {
+  stroke-dasharray: 42 15;
+  animation: application-spin 800ms linear infinite;
+}
+
+@keyframes application-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content aside button,
+  .content aside button svg,
+  .content aside button svg[data-submit-spinner],
+  .content aside input[type="file"]::file-selector-button {
+    transition: none;
+    animation: none;
+  }
+  .content aside button:not(:disabled):active,
+  .content aside button:not(:disabled):hover svg,
+  .content aside input[type="file"]:active::file-selector-button {
+    transform: none;
+  }
 }
 
 .content aside button:disabled {

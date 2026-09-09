@@ -1,3 +1,4 @@
+import { SubmitButton } from "@/components/SubmitButton";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import Link from "next/link";
 import type { HeroSlideRecord } from "@eimts/database";
@@ -138,9 +139,7 @@ export default async function HeroSlidesPage() {
                               <form
                                 action={moveHeroSlide.bind(null, slide.id, "up")}
                               >
-                                <button type="submit" disabled={rotationIndex <= 0}>
-                                  ↑
-                                </button>
+                                <SubmitButton disabled={rotationIndex <= 0} className="" label="↑" pendingLabel="Moving…" aria-label="Move slide earlier" />
                               </form>
                               <form
                                 action={moveHeroSlide.bind(
@@ -149,12 +148,7 @@ export default async function HeroSlidesPage() {
                                   "down",
                                 )}
                               >
-                                <button
-                                  type="submit"
-                                  disabled={rotationIndex === rotationIds.length - 1}
-                                >
-                                  ↓
-                                </button>
+                                <SubmitButton className="" label="↓" pendingLabel="Moving…" disabled={rotationIndex === rotationIds.length - 1} aria-label="Move slide later" />
                               </form>
                             </>
                           ) : (
@@ -181,16 +175,12 @@ export default async function HeroSlidesPage() {
                                 !slide.active,
                               )}
                             >
-                              <button type="submit">
-                                {slide.active ? "Deactivate" : "Activate"}
-                              </button>
+                              <SubmitButton className="" label={slide.active ? "Deactivate" : "Activate"} pendingLabel="Updating…" />
                             </form>
                           )}
                           {role === "admin" && (
                             <form action={deleteHeroSlide.bind(null, slide.id)}>
-                              <button className="danger-button" type="submit">
-                                Delete
-                              </button>
+                              <SubmitButton className="danger-button" label="Delete" pendingLabel="Deleting…" />
                             </form>
                           )}
                         </td>

@@ -8,6 +8,7 @@ export function JobApplicationForm({ jobId }: { jobId: string }) {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (busy) return;
     const form = event.currentTarget;
     const formData = new FormData(form);
     const cv = formData.get("cv");
@@ -71,10 +72,13 @@ export function JobApplicationForm({ jobId }: { jobId: string }) {
           type="file"
           accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           required
+          disabled={busy}
         />
       </label>
-      <button type="submit" disabled={busy}>
-        {busy ? "Submitting…" : "Apply for this vacancy"}
+      <button type="submit" disabled={busy} aria-busy={busy}>
+        {busy && <svg data-submit-spinner viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /></svg>}
+        <span>{busy ? "Submitting…" : "Apply for this vacancy"}</span>
+        {!busy && <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>}
       </button>
       {message && <p role="status">{message}</p>}
     </form>

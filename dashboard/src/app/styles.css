@@ -327,6 +327,27 @@ textarea:focus-visible,
   animation: spin 0.7s linear infinite;
 }
 
+.action-pending {
+  cursor: progress;
+}
+
+.action-spinner {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-spinner { animation: none; }
+}
+
 .ghost-button {
   display: inline-flex;
   justify-content: center;

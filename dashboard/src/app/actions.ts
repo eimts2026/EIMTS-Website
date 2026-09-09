@@ -359,6 +359,9 @@ const bundledProjectPathPattern =
 const projectSiteOrigin = (
   process.env.NEXT_PUBLIC_SITE_URL || "https://emeraldislemanpower.com"
 ).replace(/\/$/, "");
+const projectAssetOrigin = (
+  process.env.PROJECT_ASSET_ORIGIN || "https://eimts-website.vercel.app"
+).replace(/\/$/, "");
 
 function integerInRange(
   formData: FormData,
@@ -610,7 +613,7 @@ export async function migrateBundledProjectImages(id: string) {
     .select("images")
     .eq("id", id)
     .single();
-  if (loadError || !data) throw new Error(loadError?.message || "Project not found.");
+  if (loadError || !data) return { error: "Could not load this project. Refresh the page and try again." };
 
   const images = (data.images || []) as ProjectImageRecord[];
   const uploadedPaths: string[] = [];
@@ -624,12 +627,13 @@ export async function migrateBundledProjectImages(id: string) {
       }
 
       const sourceUrl = bundledProjectImageUrl(image.image_url);
-      const absoluteSourceUrl = sourceUrl.startsWith("/")
-        ? `${projectSiteOrigin}${sourceUrl}`
-        : sourceUrl;
+      // Stored URLs may still point to the old website. Only use the validated
+      // asset path, fetched from the current public site's configured origin.
+      const sourcePath = new URL(sourceUrl, projectSiteOrigin).pathname;
+      const absoluteSourceUrl = new URL(sourcePath, projectAssetOrigin).toString();
       const response = await fetch(absoluteSourceUrl, { cache: "no-store" });
       if (!response.ok) {
-        throw new Error(`Could not download bundled image (${response.status}).`);
+        throw new Error(`Could not download ${sourcePath.split("/").pop()} (${response.status}). Check the project image source and retry.`);
       }
       const contentType = response.headers.get("content-type")?.split(";")[0];
       if (contentType !== "image/webp") {
@@ -663,11 +667,17 @@ export async function migrateBundledProjectImages(id: string) {
       .eq("id", id);
     if (updateError) throw new Error(updateError.message);
   } catch (migrationError) {
-    await removeProjectMedia(supabase, uploadedPaths);
-    throw migrationError;
+    try {
+      await removeProjectMedia(supabase, uploadedPaths);
+    } catch (cleanupError) {
+      console.error("Could not clean up migrated project images", cleanupError);
+      return { error: "The move failed and some uploaded files could not be cleaned up. Ask an administrator to check storage before retrying." };
+    }
+    return { error: migrationError instanceof Error ? migrationError.message : "Could not move these images. Please try again." };
   }
 
   revalidatePath("/projects");
+  return { error: null };
 }
 
 const applicationStatuses = [

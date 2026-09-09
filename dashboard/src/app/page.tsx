@@ -1,3 +1,4 @@
+import { SubmitButton } from "@/components/SubmitButton";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import Link from "next/link";
 import type { JobRecord } from "@eimts/database";
@@ -138,14 +139,14 @@ export default async function DashboardPage() {
                               "published",
                             )}
                           >
-                            <button type="submit">Publish</button>
+                            <SubmitButton className="" label="Publish" pendingLabel="Publishing…" />
                           </form>
                         )}
                         {profile.role !== "viewer" && job.status === "published" && (
                           <form
                             action={updateJobStatus.bind(null, job.id, "paused")}
                           >
-                            <button type="submit">Pause</button>
+                            <SubmitButton className="" label="Pause" pendingLabel="Pausing…" />
                           </form>
                         )}
                         {profile.role === "admin" && (
