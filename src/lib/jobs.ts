@@ -10,10 +10,8 @@ export type PublicJobDetail = {
   location: string | null;
   category: string;
   employment_type: string;
-  salary_min: number | null;
   salary_amount: number | null;
   salary_lkr: number | null;
-  salary_max: number | null;
   currency: string;
   summary: string;
   description: string;
@@ -26,8 +24,6 @@ export type PublicJobDetail = {
 
 type PublishedJobRow = {
   salary_amount: number | null;
-  salary_min: number | null;
-  salary_max: number | null;
   salary_lkr: number | null;
   currency: string;
   id: string;
@@ -56,7 +52,7 @@ export async function getPublishedJobs(): Promise<Job[]> {
   const { data, error } = await supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position,expires_at,salary_amount,salary_min,salary_max,salary_lkr,currency",
+      "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position,expires_at,salary_amount,salary_lkr,currency",
     )
     .eq("status", "published")
     .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
@@ -97,7 +93,7 @@ export async function getPublishedJobBySlug(
   const { data, error } = await supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,salary_amount,salary_lkr,salary_min,salary_max,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
+      "id,slug,title,country,location,category,employment_type,salary_amount,salary_lkr,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
     )
     .eq("slug", slug)
     .eq("status", "published")

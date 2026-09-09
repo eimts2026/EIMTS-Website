@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JobApplicationForm } from "@/components/jobs/JobApplicationForm";
+import { formatJobSalary } from "@/lib/salary";
 import { getPublishedJobBySlug } from "@/lib/jobs";
 import { pageMetadata, siteName, siteUrl } from "@/lib/site";
 import styles from "./job-detail.module.css";
@@ -16,18 +17,6 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
   month: "long",
   year: "numeric",
 });
-
-function formatSalary(
-  min: number | null,
-  max: number | null,
-  currency: string,
-) {
-  if (!min && !max) return null;
-  const amount = new Intl.NumberFormat("en-GB");
-  if (min && max && max !== min)
-    return `${currency} ${amount.format(min)} – ${amount.format(max)}`;
-  return `${currency} ${amount.format(min || max || 0)}`;
-}
 
 export async function generateMetadata({
   params,
@@ -73,12 +62,7 @@ export default async function JobDetailPage({ params }: PageProps) {
   const job = await getPublishedJobBySlug(slug);
   if (!job) notFound();
 
-  const baseSalary = job.salary_amount != null
-    ? `${job.currency} ${new Intl.NumberFormat("en-GB").format(job.salary_amount)}`
-    : formatSalary(job.salary_min, job.salary_max, job.currency);
-  const salary = baseSalary && job.currency !== "LKR" && job.salary_lkr != null
-    ? `${baseSalary} / LKR ${new Intl.NumberFormat("en-GB").format(job.salary_lkr)}`
-    : baseSalary;
+  const salary = formatJobSalary(job);
 
   const overview = [
     job.published_at && {
@@ -135,15 +119,14 @@ export default async function JobDetailPage({ params }: PageProps) {
         addressCountry: job.country,
       },
     },
-    ...((job.salary_amount ?? job.salary_min) != null
+    ...(job.salary_amount != null
       ? {
           baseSalary: {
             "@type": "MonetaryAmount",
             currency: job.currency,
             value: {
               "@type": "QuantitativeValue",
-              minValue: job.salary_amount ?? job.salary_min,
-              maxValue: job.salary_amount ?? job.salary_max ?? job.salary_min,
+              value: job.salary_amount,
               unitText: "MONTH",
             },
           },

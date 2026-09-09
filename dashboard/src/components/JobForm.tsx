@@ -105,7 +105,7 @@ export function JobForm({ action, job }: Props) {
               type="number"
               min="0"
               step="0.01"
-              defaultValue={job?.salary_amount ?? job?.salary_min ?? job?.salary_max ?? ""}
+              defaultValue={job?.salary_amount ?? ""}
               placeholder="e.g. 199080"
             />
           </label>
