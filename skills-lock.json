@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "deep-security-scan": {
+      "source": "openai/codex-security",
+      "sourceType": "github",
+      "skillPath": "plugins/codex-security/skills/deep-security-scan/SKILL.md",
+      "computedHash": "e62c0b0919190a7cf9f80f0072d849bcbea7e6b3739790f45cf2812e92f54491"
+    },
     "supabase": {
       "source": "supabase/agent-skills",
       "sourceType": "github",

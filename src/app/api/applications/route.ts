@@ -22,6 +22,10 @@ export async function POST(request: Request) {
     );
   }
 
+  const declaredLength = Number(request.headers.get("content-length") || 0);
+  if (declaredLength > 6 * 1024 * 1024) {
+    return failure("Your application is too large.", 413);
+  }
   const formData = await request.formData();
   const jobId = String(formData.get("job_id") || "");
   const fullName = String(formData.get("name") || "").trim();
@@ -69,7 +73,21 @@ export async function POST(request: Request) {
     return failure("This vacancy is no longer accepting online applications.");
   }
 
-  const extension = cv.name.split(".").pop()?.toLowerCase() || "bin";
+  const extension = cv.type === "application/pdf"
+    ? "pdf"
+    : cv.type === "application/msword"
+      ? "doc"
+      : "docx";
+  const header = new Uint8Array(await cv.slice(0, 8).arrayBuffer());
+  const isPdf = cv.type === "application/pdf" &&
+    new TextDecoder().decode(header.slice(0, 5)) === "%PDF-";
+  const isOffice = cv.type === "application/msword"
+    ? header[0] === 0xd0 && header[1] === 0xcf && header[2] === 0x11 && header[3] === 0xe0
+    : cv.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      && header[0] === 0x50 && header[1] === 0x4b && header[2] === 0x03 && header[3] === 0x04;
+  if (!isPdf && !isOffice) {
+    return failure("The CV contents do not match the selected file type.");
+  }
   const cvPath = `${jobId}/${crypto.randomUUID()}.${extension}`;
   const bytes = await cv.arrayBuffer();
   const { error: uploadError } = await supabase.storage
@@ -98,6 +116,7 @@ export async function POST(request: Request) {
     });
 
   if (applicationError) {
+    await supabase.storage.from("candidate-cvs").remove([cvPath]);
     return failure(
       "We could not save your application. Please email cv@emeraldisle.lk.",
       500,
