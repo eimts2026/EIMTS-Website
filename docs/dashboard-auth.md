@@ -9,6 +9,16 @@ cookies on redirects, and marks authenticated responses private/no-store.
 Every protected page independently verifies identity and the database profile
 role. Server actions and Supabase RLS enforce writes separately.
 
+The `authenticated` database role must retain `EXECUTE` on `public.is_staff()`
+and `public.is_admin()`: RLS evaluates these helpers as the caller. Revoking
+these grants breaks the profile lookup with `permission denied for function
+is_staff`, even for an admin. Migration `20260930091329` restores these grants.
+The helpers take no arguments and return only the current caller's membership,
+using `auth.uid()` and protected profiles; anonymous execution remains revoked.
+Supabase's signed-in SECURITY DEFINER advisor warnings for these two helpers
+are intentional with this design. Do not silence them by revoking the grants;
+moving the helpers to a non-exposed schema requires updating dependent policies.
+
 | Role | Access |
 | --- | --- |
 | Missing or unknown | Access-denied page |
