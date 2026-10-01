@@ -41,6 +41,24 @@ export function FloatingSocialLinks() {
     };
   }, [open]);
   return <>
+    <a
+      className="ei-whatsapp-bot"
+      href="https://wa.me/94765606454"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with the AI chat bot on WhatsApp (opens in a new tab)"
+    >
+      <span className="ei-whatsapp-bot-copy">
+        <strong>Chat with us</strong>
+      </span>
+      <span className="ei-whatsapp-bot-icon">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#fff" stroke="#cfd8dc" strokeWidth="1" d="M4.868 43.303l2.694-9.835A18.986 18.986 0 1 1 24.014 42.974h-.008a18.97 18.97 0 0 1-9.073-2.311z" />
+          <path fill="#40c351" d="M35.176 12.832c-2.98-2.982-6.941-4.625-11.157-4.626-8.704 0-15.783 7.076-15.787 15.774-.001 2.981.833 5.883 2.413 8.396l.376.597-1.595 5.821 5.973-1.566.577.342c2.422 1.438 5.2 2.198 8.032 2.199h.006c8.698 0 15.777-7.077 15.78-15.776.001-4.215-1.638-8.179-4.618-11.161z" />
+          <path fill="#fff" fillRule="evenodd" d="M19.268 16.045c-.355-.79-.729-.806-1.068-.82-.277-.012-.593-.011-.909-.011-.316 0-.83.119-1.265.594-.435.475-1.661 1.622-1.661 3.956s1.7 4.59 1.937 4.906c.237.316 3.282 5.259 8.104 7.161 4.007 1.58 4.823 1.266 5.693 1.187.87-.079 2.807-1.147 3.202-2.255.395-1.108.395-2.057.277-2.255-.119-.198-.435-.316-.909-.554s-2.807-1.385-3.242-1.543c-.435-.158-.751-.237-1.068.238-.316.474-1.225 1.543-1.502 1.859-.277.317-.554.357-1.028.119-.474-.238-2.002-.738-3.815-2.354-1.41-1.257-2.362-2.81-2.639-3.285-.277-.474-.03-.731.208-.968.213-.213.474-.554.712-.831.237-.277.316-.475.474-.791.158-.317.079-.594-.04-.831-.119-.238-1.041-2.584-1.463-3.522z" />
+        </svg>
+      </span>
+    </a>
     <aside className="ei-social-tabs" aria-label="Follow Emerald Isle">
       {socials.map((social) => <a className={`ei-social-link ei-social-link--${social.name}`} href={social.href} aria-label={`Emerald Isle on ${social.label}`} target="_blank" rel="noreferrer" key={social.name}><span>{social.label}</span><SocialIcon name={social.name} /></a>)}
     </aside>

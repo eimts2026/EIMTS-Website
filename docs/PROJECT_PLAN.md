@@ -1,4 +1,5 @@
 # Emerald Isle Manpower - Admin Dashboard & Job Management System
+
 ## Comprehensive Implementation Plan
 
 **Project Date:** July 28, 2026  
@@ -10,12 +11,14 @@
 ## 1. PROJECT OVERVIEW
 
 ### Current Situation
+
 - Existing WordPress site where graphics team uploads jobs and popups
 - New React site built with Vite (deployed on Vercel)
 - Jobs currently hardcoded in `JobsPage.tsx`
 - Need to migrate to dynamic content management system
 
 ### Objective
+
 Create a free admin dashboard where the graphics team can independently manage and publish jobs and popups in real-time without IT involvement.
 
 ---
@@ -23,6 +26,7 @@ Create a free admin dashboard where the graphics team can independently manage a
 ## 2. ARCHITECTURE & TECH STACK
 
 ### Frontend Applications
+
 ```
 apps/
 ├── site/                    (Main public website - React + Vite)
@@ -31,6 +35,7 @@ apps/
 ```
 
 ### Technology Stack
+
 - **Frontend:** React 19, Vite, TypeScript
 - **Database:** Supabase (PostgreSQL)
 - **Storage:** Supabase Storage (Images)
@@ -39,8 +44,9 @@ apps/
 - **Deployment:** Git + Vercel CI/CD
 
 ### Deployment URLs
+
 - **Main Site:** `emerald-isle.lk` (public)
-- **Admin Dashboard:** `admin.emerald-isle.lk` (graphics team only)
+- **Admin Dashboard:** `admin.emerald-isle.lk` (Admin team only)
 
 ---
 
@@ -49,7 +55,9 @@ apps/
 ### 3.1 Content Types to Manage
 
 #### A. Job Listings
+
 **Fields:**
+
 - Job ID (auto-generated)
 - Job Title (text)
 - Location (dropdown: Ireland, Saudi Arabia, Serbia, Kuwait)
@@ -60,32 +68,37 @@ apps/
 - Image Position (CSS background-position value for cropping)
 
 **Requirements:**
+
 - Graphics team uploads job poster as image
 - Fill in job details
 - One-click publish
 - Appears live immediately on public site
 - Can edit/update existing jobs
 - Can deactivate jobs (soft delete - not visible to public)
-- IT & grahpics team can permanently delete jobs 
+- IT & grahpics team can permanently delete jobs
 
 #### B. Popups/Banners
+
 **Fields:**
+
 - Popup ID (auto-generated)
 - Popup Image (1 image per popup, <20MB)
 - Display Title (optional text)
 - Status (Active/Inactive)
 
 **Requirements:**
+
 - Single popup visible at a time (one active at any moment)
 - Display in center of screen (floating modal)
 - User can close with X button
 - If multiple popups exist, rotate them (carousel support)
 - Publish immediately when created
-- IT & grahpics team can delete popups too 
+- IT & grahpics team can delete popups too
 
 ### 3.2 Storage Specifications
 
 **Images:**
+
 - Free tier: 1 GB storage (Supabase)
 - Bandwidth: 3 GB/month (Supabase free tier)
 - Expected capacity: 50+ images (more than enough for weekly/daily updates)
@@ -93,6 +106,7 @@ apps/
 - Max file size: 20 MB per image
 
 **Database:**
+
 - Free tier: Sufficient for current needs
 - PostgreSQL via Supabase
 - Real-time sync enabled
@@ -102,6 +116,7 @@ apps/
 ## 4. USER ROLES & WORKFLOW
 
 ### Graphics Team
+
 - **Access:** Admin dashboard at `admin.emerald-isle.lk`
 - **Authentication:** Email/password login (shared or individual)
 - **Permissions:**
@@ -116,6 +131,7 @@ apps/
   - ❌ Access code or deployment settings
 
 ### IT Team
+
 - **Access:** Main site code repository + admin dashboard (full access)
 - **Permissions:**
   - ✅ All admin functions
@@ -126,6 +142,7 @@ apps/
   - ✅ Backup data
 
 ### Public (Website Visitors)
+
 - **Access:** `emerald-isle.lk`
 - **Can:**
   - ✅ View active jobs
@@ -142,6 +159,7 @@ apps/
 ### Supabase Tables
 
 #### Table: `jobs`
+
 ```sql
 CREATE TABLE jobs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -160,6 +178,7 @@ CREATE TABLE jobs (
 ```
 
 #### Table: `popups`
+
 ```sql
 CREATE TABLE popups (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -174,6 +193,7 @@ CREATE TABLE popups (
 ```
 
 #### Table: `job_applications`
+
 ```sql
 CREATE TABLE job_applications (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -195,12 +215,14 @@ CREATE TABLE job_applications (
 ### Admin Dashboard Features
 
 #### 6.1 Authentication
+
 - Login page with email/password
 - Password reset via email
 - Session management
 - Auto-logout after inactivity
 
 #### 6.2 Jobs Management
+
 - **List View:**
   - Table with all jobs
   - Columns: Title, Location, Category, Status (Active/Inactive), Posted Date, Actions
@@ -228,6 +250,7 @@ CREATE TABLE job_applications (
   - Quick stats
 
 #### 6.3 Popups Management
+
 - **List View:**
   - All popups with thumbnails
   - Active/Inactive status
@@ -245,6 +268,7 @@ CREATE TABLE job_applications (
   - Reorder display sequence
 
 #### 6.4 Analytics Dashboard (Phase 2)
+
 - Total jobs posted
 - Total applications received
 - Jobs by location/category
@@ -254,12 +278,14 @@ CREATE TABLE job_applications (
 ### Main Site Changes
 
 #### 6.1 Jobs Page Updates
+
 - Fetch jobs from Supabase instead of hardcoded array
 - Real-time updates (jobs appear immediately after publish)
 - Keep existing filtering/search functionality
 - Keep existing UI/UX
 
 #### 6.2 Popup Component
+
 - New component to display active popups
 - Show single popup at a time (center screen, floating modal)
 - Close button (X)
@@ -267,6 +293,7 @@ CREATE TABLE job_applications (
 - Auto-hide if no active popups
 
 #### 6.3 Job Application Form
+
 - Update to save applications to Supabase
 - Track applications
 - Store CV files in Supabase Storage
@@ -276,6 +303,7 @@ CREATE TABLE job_applications (
 ## 7. SECURITY SPECIFICATIONS
 
 ### Authentication & Authorization
+
 - ✅ Email/password login via Supabase Auth
 - ✅ Password hashing (bcrypt via Supabase)
 - ✅ Session tokens with expiration
@@ -283,6 +311,7 @@ CREATE TABLE job_applications (
 - ✅ Role-based access control (Graphics Team vs IT)
 
 ### Data Protection
+
 - ✅ HTTPS for all communications (Vercel)
 - ✅ Environment variables for secrets (API keys, URLs)
 - ✅ No hardcoded credentials in code
@@ -290,12 +319,14 @@ CREATE TABLE job_applications (
 - ✅ Audit trail (created_by, timestamps)
 
 ### Privacy & SEO
+
 - ✅ Admin dashboard marked as "private" in robots.txt
 - ✅ No sitemap entry for `/admin` routes
 - ✅ Separate domain for admin (`admin.emerald-isle.lk`)
 - ✅ Login required before accessing dashboard
 
 ### Backup & Recovery
+
 - ✅ Supabase automatic backups (included in free tier)
 - ✅ Database versioning via git
 - ✅ Image storage versioning (Supabase)
@@ -305,6 +336,7 @@ CREATE TABLE job_applications (
 ## 8. DEPLOYMENT STRATEGY
 
 ### Development Environment
+
 ```
 Local Machine
 ├── /apps/site (npm run dev)
@@ -315,6 +347,7 @@ Local Machine
 ### Production Environment
 
 #### Option A: Separate Vercel Projects (Recommended)
+
 ```
 Main Site Project
 ├── Repository: Your git repo
@@ -332,6 +365,7 @@ Admin Dashboard Project
 ```
 
 #### Option B: Single Vercel Project (Not recommended)
+
 ```
 Single Project
 ├── URL: emerald-isle.lk
@@ -342,6 +376,7 @@ Single Project
 ```
 
 ### Environment Variables (Both Apps)
+
 ```
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
 VITE_SUPABASE_ANON_KEY=xxxxx
@@ -349,6 +384,7 @@ VITE_SUPABASE_SERVICE_KEY=xxxxx (only in admin)
 ```
 
 ### CI/CD Pipeline
+
 - Git push → Vercel detects → Auto-builds → Auto-deploys
 - Failed builds = no deployment
 - Easy rollback to previous version
@@ -358,6 +394,7 @@ VITE_SUPABASE_SERVICE_KEY=xxxxx (only in admin)
 ## 9. IMPLEMENTATION ROADMAP
 
 ### Phase 1: Foundation (Week 1)
+
 - [ ] Set up Supabase project (free tier)
 - [ ] Create database tables (jobs, popups, applications)
 - [ ] Set up Supabase Storage buckets (images)
@@ -365,6 +402,7 @@ VITE_SUPABASE_SERVICE_KEY=xxxxx (only in admin)
 - [ ] Set up environment variables
 
 ### Phase 2: Admin Dashboard (Week 2)
+
 - [ ] Create admin app folder structure
 - [ ] Build login page
 - [ ] Build jobs management (CRUD operations)
@@ -374,6 +412,7 @@ VITE_SUPABASE_SERVICE_KEY=xxxxx (only in admin)
 - [ ] Deploy to `admin.emerald-isle.lk`
 
 ### Phase 3: Main Site Integration (Week 3)
+
 - [ ] Update JobsPage to fetch from Supabase
 - [ ] Create Popup component
 - [ ] Integrate popups into main layout
@@ -382,6 +421,7 @@ VITE_SUPABASE_SERVICE_KEY=xxxxx (only in admin)
 - [ ] Deploy to `emerald-isle.lk`
 
 ### Phase 4: Testing & Polish (Week 4)
+
 - [ ] End-to-end testing
 - [ ] Graphics team UAT (user acceptance testing)
 - [ ] Performance optimization
@@ -389,6 +429,7 @@ VITE_SUPABASE_SERVICE_KEY=xxxxx (only in admin)
 - [ ] Documentation
 
 ### Phase 5: Go Live & Handover (Week 5)
+
 - [ ] Migrate existing jobs to Supabase
 - [ ] Final testing on production URLs
 - [ ] Training for graphics team
@@ -400,7 +441,9 @@ VITE_SUPABASE_SERVICE_KEY=xxxxx (only in admin)
 ## 10. CURRENT STATE REFERENCE
 
 ### Existing Jobs in JobsPage.tsx
+
 Currently 12 jobs are hardcoded in the component:
+
 - Barista Positions in Saudi Arabia (Urgent)
 - Assistant General Manager (Hotel) - Ireland
 - Automotive Job Opportunities - Saudi Arabia (Urgent)
@@ -471,19 +514,20 @@ EIMTS/
 
 ## 12. COST BREAKDOWN
 
-| Item | Cost | Notes |
-|------|------|-------|
-| Supabase (Database + Storage) | **FREE** | 1GB storage, 3GB bandwidth/month |
-| Vercel (Hosting) | **FREE** | Two free projects allowed |
-| Hostinger MySQL | Already owned | Can keep for other purposes |
-| Custom domain | Already owned | `emerald-isle.lk` |
-| **Total Monthly Cost** | **$0** | Fully free tier! |
+| Item                          | Cost          | Notes                            |
+| ----------------------------- | ------------- | -------------------------------- |
+| Supabase (Database + Storage) | **FREE**      | 1GB storage, 3GB bandwidth/month |
+| Vercel (Hosting)              | **FREE**      | Two free projects allowed        |
+| Hostinger MySQL               | Already owned | Can keep for other purposes      |
+| Custom domain                 | Already owned | `emerald-isle.lk`                |
+| **Total Monthly Cost**        | **$0**        | Fully free tier!                 |
 
 ---
 
 ## 13. SUCCESS CRITERIA
 
 ### Functional Requirements Met
+
 - ✅ Graphics team can login to admin dashboard
 - ✅ Graphics team can upload and publish jobs in <5 minutes
 - ✅ Jobs appear live on public site immediately
@@ -492,6 +536,7 @@ EIMTS/
 - ✅ Job applications save to database
 
 ### Non-Functional Requirements Met
+
 - ✅ Admin dashboard loads in <3 seconds
 - ✅ Image upload completes in <30 seconds (for 20MB files)
 - ✅ Real-time sync (changes visible within 5 seconds)
@@ -500,6 +545,7 @@ EIMTS/
 - ✅ No conflicts between teams' work
 
 ### Team Satisfaction
+
 - ✅ Graphics team finds dashboard intuitive (no training needed)
 - ✅ IT team has full control when needed
 - ✅ Job posting takes <5 minutes
@@ -510,12 +556,14 @@ EIMTS/
 ## 14. MAINTENANCE & SUPPORT
 
 ### Regular Tasks (Graphics Team)
+
 - Post new jobs when recruitment needs arise
 - Update job details if requirements change
 - Create/update popups as needed
 - Monitor job application count
 
 ### Regular Tasks (IT Team)
+
 - Monitor system performance
 - Handle database backups (automatic via Supabase)
 - Deploy site updates
@@ -523,6 +571,7 @@ EIMTS/
 - Track analytics
 
 ### Troubleshooting
+
 - Failed image upload → Check file size, format
 - Slow job posting → Check internet connection
 - Jobs not appearing → Check browser cache, refresh
@@ -583,7 +632,7 @@ Before implementation, confirm:
 **Use Case:** Admin Dashboard Development  
 **Version:** 1.0  
 **Last Updated:** July 28, 2026  
-**Next Review:** After Phase 1 completion  
+**Next Review:** After Phase 1 completion
 
 ---
 
