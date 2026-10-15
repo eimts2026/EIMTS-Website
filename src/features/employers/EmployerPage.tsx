@@ -1,5 +1,7 @@
 import Link from "../../components/ui/Link";
 import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
+import { EmployerMotion } from "./EmployerMotion";
+import "./EmployerPage.css";
 
 const values = [
   ["Respect", "Building strong relationships through honest communication is essential. We respect our colleagues and understand the perspectives of our clients, ensuring professional and courteous engagement at every level.", "respect"],
@@ -28,7 +30,8 @@ const partnershipPrinciples = [
 ] as const;
 
 export default function EmployerPage() {
-  return <main id="main">
+  return <main id="main" className="employer-page">
+    <EmployerMotion />
     <section className="employer-hero" aria-labelledby="employer-hero-title">
       <div className="container employer-hero-grid">
         <div className="employer-hero-copy">
@@ -44,16 +47,16 @@ export default function EmployerPage() {
           </div>
         </div>
         <figure className="employer-certificate">
-          <div className="employer-certificate-crop">
+          <a className="employer-certificate-crop" href="/assets/slbfe-license-reference.png" target="_blank" rel="noreferrer" aria-label="View the full SLBFE certificate image in a new tab">
             <img src="/assets/slbfe-license-reference.png" alt="Sri Lanka Bureau of Foreign Employment licence No. 1162 issued to Emerald Isle Manpower and Travel Services" width="1603" height="637" fetchPriority="high" />
-          </div>
-          <figcaption><span>Official credential</span><strong>SLBFE License No. 1162</strong></figcaption>
+          </a>
+          <figcaption><span>View full credential ↗</span><strong>SLBFE License No. 1162</strong></figcaption>
           <div className="employer-certificate-seal" aria-hidden="true"><strong>5</strong><span>Star<br />Award</span></div>
         </figure>
       </div>
     </section>
     <section className="content-section employer-proof" id="employer-proof"><div className="container split-layout"><div className="split-copy"><p className="section-kicker">Licensed recruitment partner</p><h2>Recruit flexibly. Grow with confidence.</h2><p>Since 1995, Emerald Isle has helped employers build dependable international teams across the GCC, Europe, Africa and Asia.</p><p>Our specialists cover hospitality, sales, finance, administration, HR, engineering, construction, automotive and transport—with compliance considered from the first brief.</p><div className="employer-proof-license"><strong>SLBFE 1162</strong><span>Licensed and accountable</span></div></div><div className="employer-proof-visual"><div className="employer-proof-image"><img src="/assets/candidate-service.webp" alt="Candidate and employer discussing an international recruitment opportunity" /></div><div className="metric-card"><strong>30+ years</strong><span>of responsible recruitment</span></div></div></div></section>
-    <section className="content-section alt employer-values" aria-labelledby="employer-values-title"><div className="container"><div className="section-copy center"><p className="section-kicker">Our values</p><h2 id="employer-values-title">Relationships that last</h2></div><div className="values-grid employer-values-grid">{values.map(([title, body, icon]) => <article className="value-card employer-value-card" key={title}><ValueIcon type={icon} /><h3>{title}</h3><p>{body}</p></article>)}</div></div></section>
+    <section className="content-section alt employer-values" aria-labelledby="employer-values-title"><div className="container employer-values-layout"><div className="section-copy"><p className="section-kicker">Our values</p><h2 id="employer-values-title">Relationships that last</h2></div><div className="employer-values-list">{values.map(([title, body, icon], index) => <details className="employer-value-detail" key={title} open={index === 0}><summary><ValueIcon type={icon} /><h3>{title}</h3><span aria-hidden="true">+</span></summary><p>{body}</p></details>)}</div></div></section>
     <section className="employer-partnership" aria-labelledby="partnership-title"><div className="container"><div className="employer-partnership-head"><div><p className="section-kicker">A better working relationship</p><h2 id="partnership-title">Partnership beyond placement</h2></div><p>Strong hiring outcomes come from shared context, honest communication and a team that keeps learning alongside yours.</p></div><div className="employer-principles">{partnershipPrinciples.map(([title, body, icon]) => <article className="employer-principle" key={title}><ValueIcon type={icon} /><div><h3>{title}</h3><p>{body}</p></div></article>)}</div></div></section>
     <section className="employer-inquiry" id="employer-inquiry" aria-labelledby="employer-inquiry-title">
       <div className="container employer-inquiry-grid">

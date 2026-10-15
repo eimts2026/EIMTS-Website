@@ -7,6 +7,7 @@ import { ScrollReveal } from "@/components/layout/ScrollReveal";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { siteName, siteUrl } from "@/lib/site";
 import "@/styles/globals.css";
+import "@/styles/employer-tailwind.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

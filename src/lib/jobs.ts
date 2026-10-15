@@ -39,7 +39,7 @@ type PublishedJobRow = {
   expires_at: string | null;
 };
 
-export async function getPublishedJobs(): Promise<Job[]> {
+export async function getPublishedJobs(options: { urgentOnly?: boolean; limit?: number } = {}): Promise<Job[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -49,7 +49,7 @@ export async function getPublishedJobs(): Promise<Job[]> {
     auth: { persistSession: false },
   });
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("jobs")
     .select(
       "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position,expires_at,salary_amount,salary_lkr,currency",
@@ -58,6 +58,10 @@ export async function getPublishedJobs(): Promise<Job[]> {
     .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
     .order("urgent", { ascending: false })
     .order("published_at", { ascending: false });
+
+  if (options.urgentOnly) query = query.eq("urgent", true).not("slug", "is", null).neq("slug", "");
+  if (options.limit) query = query.limit(options.limit);
+  const { data, error } = await query;
 
   if (error || !data) {
     console.error("Could not load published jobs", error?.message);

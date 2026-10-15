@@ -241,10 +241,6 @@ export default async function JobDetailPage({ params }: PageProps) {
           <h2>Interested in this role?</h2>
           <p>Register your details and upload an up-to-date CV for review.</p>
           <JobApplicationForm jobId={job.id} />
-          <small>
-            Emerald Isle never guarantees placement or requests unofficial
-            payments through this website.
-          </small>
         </aside>
       </div>
     </main>

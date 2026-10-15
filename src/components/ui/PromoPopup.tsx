@@ -1,4 +1,5 @@
 "use client";
+import { safeNavigationUrl } from "@/lib/safe-url";
 
 import { useEffect, useState } from "react";
 import type { PublicPopup } from "@/lib/popups";
@@ -9,7 +10,7 @@ type Props = {
 
 export function PromoPopup({ popup }: Props) {
   const hasImage = Boolean(popup?.image_url);
-  const hasLink = Boolean(popup?.link_url);
+  const linkUrl = safeNavigationUrl(popup?.link_url);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -61,10 +62,10 @@ export function PromoPopup({ popup }: Props) {
         >
           ×
         </button>
-        {hasLink ? (
+        {linkUrl ? (
           <a
             className="promo-popup-link"
-            href={popup.link_url!}
+            href={linkUrl}
             aria-label={popup.title || "Open popup destination"}
             onClick={dismiss}
           >

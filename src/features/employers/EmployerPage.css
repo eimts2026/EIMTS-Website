@@ -1,0 +1,83 @@
+/* Recruitment-page layout. Existing site typography and brand colours remain the source. */
+.employer-page { --employer-border:#d9e3dd; }
+.employer-page .employer-hero { min-height:0; padding:150px 0 64px; }
+.employer-page .employer-hero-grid { grid-template-columns:1.15fr .85fr; gap:60px; align-items:center; }
+.employer-page .employer-hero h1 { font-size:clamp(42px,5vw,72px); line-height:1.04; max-width:12ch; animation:none; }
+.employer-page .employer-hero-lede { font-size:17px; line-height:1.7; max-width:58ch; animation:none; }
+.employer-page .employer-hero-actions { margin-top:26px; animation:none; }
+.employer-page .employer-hero-regions { margin-top:28px; }
+.employer-page .employer-certificate { animation:none; }
+.employer-page .employer-certificate-crop { display:block; border-radius:12px; border-width:6px; transform:none; }
+.employer-page .employer-certificate-crop:focus-visible { outline:3px solid var(--ei-amber); outline-offset:6px; }
+.employer-page .employer-certificate:hover .employer-certificate-crop { transform:translateY(-3px); }
+.employer-page .employer-certificate-seal { width:76px; height:76px; right:-16px; top:-20px; }
+.employer-page .content-section { padding:56px 0; }
+.employer-page .split-layout { gap:48px; align-items:center; }
+.employer-page .split-copy h2,.employer-page .section-copy h2,.employer-page .employer-partnership h2 { font-size:clamp(30px,3vw,44px); line-height:1.1; }
+.employer-page .employer-proof-visual { min-height:320px; }
+.employer-page .employer-proof-image { border-radius:14px; inset:0 0 24px; }
+.employer-page .employer-proof-license { margin-top:20px; }
+.employer-values-layout { display:grid; grid-template-columns:.8fr 1.2fr; gap:64px; align-items:start; }
+.employer-values-list { border-top:1px solid var(--employer-border); }
+.employer-value-detail { border-bottom:1px solid var(--employer-border); }
+.employer-value-detail summary { display:flex; align-items:center; gap:16px; padding:18px 0; cursor:pointer; list-style:none; }
+.employer-value-detail summary::-webkit-details-marker { display:none; }
+.employer-value-detail summary:focus-visible { outline:3px solid #08795d; outline-offset:3px; }
+.employer-value-detail summary h3 { margin:0; font-size:20px; font-weight:600; }
+.employer-value-detail summary .employer-value-icon { width:28px; height:28px; margin:0; }
+.employer-value-detail summary>span { margin-left:auto; font-size:26px; transition:transform .2s; }
+.employer-value-detail[open] summary>span { transform:rotate(45deg); }
+.employer-value-detail>p { margin:0 0 20px 44px; color:var(--ei-muted); line-height:1.7; max-width:66ch; }
+.employer-page .employer-partnership { padding:56px 0; }
+.employer-page .employer-partnership-head { margin-bottom:28px; gap:40px; }
+.employer-page .employer-principles { grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 40px; }
+.employer-page .employer-principle { padding:22px 0; border-top:1px solid #ffffff30; }
+.employer-page .employer-principle h3 { font-size:20px; margin:0 0 8px; }
+.employer-page .employer-principle p { font-size:15px; line-height:1.7; }
+.employer-page .employer-inquiry { padding:48px 0 64px; background:#f5f8f6; }
+.employer-page .employer-inquiry-grid { grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr); max-width:1100px; gap:24px; align-items:start; background:transparent; }
+.employer-inquiry-form { padding:28px; border:1px solid #d9e3dd; border-radius:16px; box-shadow:0 8px 30px #08271908; }
+.employer-inquiry-heading { gap:8px; margin-bottom:6px; }
+.employer-inquiry-heading h2 { font-size:clamp(28px,3vw,38px); line-height:1.08; max-width:20ch; }
+.employer-inquiry-heading>p:last-child { font-size:14px; line-height:1.6; }
+.employer-inquiry-form label { display:block; font-size:13px; font-weight:600; color:var(--ei-ink); }
+.inquiry-field-hint { color:#617169; font-size:11px; font-weight:400; margin-left:4px; }
+.employer-inquiry-form input,.employer-inquiry-form textarea { min-height:44px; border:1px solid #cbd5cf; border-radius:7px; padding:10px 12px; font-size:14px; line-height:1.5; box-shadow:0 1px 2px #08271905; }
+.employer-inquiry-form textarea { min-height:92px; }
+.inquiry-form-footer { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.inquiry-form-footer small { color:#617169; font-size:11px; }
+.employer-inquiry-submit { min-height:44px; border-radius:8px; padding:6px 8px 6px 16px; font-size:14px; }
+.employer-inquiry-submit span { width:30px; height:30px; }
+.employer-inquiry-submit:disabled { opacity:.65; cursor:wait; transform:none; }
+.inquiry-feedback { margin:0; font-size:14px; line-height:1.6; }
+.inquiry-feedback:empty { display:none; }
+.inquiry-feedback-error { color:#9c2626; }
+.inquiry-feedback-success { color:#086247; }
+.employer-page .employer-whatsapp { min-height:0; border-radius:16px; --contact-card-padding:24px; padding-bottom:26px; }
+.employer-page .employer-whatsapp .employer-handshake-animation { aspect-ratio:16/9; margin-bottom:22px; }
+.employer-page .employer-whatsapp h2 { font-size:28px; }
+.employer-page .employer-whatsapp>p:not(.section-kicker) { font-size:14px; margin-top:14px; }
+.employer-page .employer-whatsapp>a { margin-top:20px; min-height:46px; }
+@media(max-width:900px) {
+ .employer-page .employer-hero-grid { grid-template-columns:1fr; gap:34px; }
+ .employer-page .employer-certificate { width:min(520px,100%); margin:0; }
+ .employer-values-layout { grid-template-columns:1fr; gap:24px; }
+ .employer-page .employer-inquiry-grid { grid-template-columns:1fr; }
+ .employer-page .employer-whatsapp .employer-handshake-animation { max-height:180px; }
+}
+@media(max-width:620px) {
+ .employer-page .employer-hero { padding:126px 0 40px; }
+ .employer-page .content-section,.employer-page .employer-partnership { padding:36px 0; }
+ .employer-page .employer-principles { grid-template-columns:1fr; }
+ .employer-page .employer-partnership-head { flex-direction:column; gap:18px; }
+ .employer-page .employer-inquiry { padding:32px 0; }
+ .employer-page .employer-inquiry-grid { width:calc(100% - 32px); }
+ .employer-inquiry-form { padding:20px; }
+ .employer-inquiry-form input,.employer-inquiry-form textarea { font-size:16px; }
+ .inquiry-form-footer { align-items:flex-start; flex-direction:column; gap:10px; }
+ .employer-page .employer-proof-visual { min-height:280px; }
+}
+@media(prefers-reduced-motion:reduce) { .employer-page * { scroll-behavior:auto; } .employer-value-detail summary>span,.employer-page .employer-certificate-crop { transition:none; } }
+
+
+.employer-page [data-reveal] { opacity:1!important; transform:none!important; transition:none!important; }

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/browser";
+import { createRecoveryClient } from "@/lib/supabase/browser";
 import { AuthField } from "@/components/AuthField";
 import { DotGridBackground } from "@/components/DotGridBackground";
+import { RECOVERY_MARKER_KEY, verifyRecoveryLink, updateRecoveryPassword, type RecoveryMarker } from "@/lib/password-recovery";
 
 type Phase = "checking" | "ready" | "invalid" | "done";
 
@@ -16,53 +17,32 @@ export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
-  // The emailed link lands here with a one-time code. The Supabase client
-  // exchanges it for a recovery session automatically; we wait for that to
-  // settle before offering the form so an expired link never shows it.
+  const recoveryClient = useRef<ReturnType<typeof createRecoveryClient>>(null);
+  const initialization = useRef<Promise<RecoveryMarker> | null>(null);
+  const saving = useRef(false);
   useEffect(() => {
-    const supabase = createClient();
-    if (!supabase) {
+    let active = true;
+    if (!initialization.current) {
+      const client = createRecoveryClient();
+      recoveryClient.current = client;
+      let marker: RecoveryMarker | null = null;
+      try { marker = JSON.parse(sessionStorage.getItem(RECOVERY_MARKER_KEY) || "null"); } catch { /* No stored recovery context. */ }
+      const href = window.location.href;
+      // Remove credentials/errors from the address bar and outgoing referrers.
+      window.history.replaceState(null, "", "/reset-password");
+      initialization.current = client ? verifyRecoveryLink(client, href, marker) : Promise.reject(new Error("Authentication is not configured. Contact your administrator."));
+    }
+    initialization.current.then(marker => {
+      if (!active) return;
+      try { sessionStorage.setItem(RECOVERY_MARKER_KEY, JSON.stringify(marker)); } catch { /* Refresh will require another link. */ }
+      setPhase("ready");
+    }).catch(error => {
+      if (!active) return;
+      try { sessionStorage.removeItem(RECOVERY_MARKER_KEY); } catch { /* No storage available. */ }
+      setError(error instanceof Error ? error.message : "This reset link could not be verified. Request a new link.");
       setPhase("invalid");
-      return;
-    }
-
-    let settled = false;
-    const settle = (next: Phase) => {
-      if (!settled) {
-        settled = true;
-        setPhase(next);
-      }
-    };
-
-    const url = new URL(window.location.href);
-    const hasCode =
-      url.searchParams.has("code") || url.hash.includes("access_token");
-    if (url.searchParams.has("error") || url.hash.includes("error")) {
-      settle("invalid");
-    }
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
-        settle("ready");
-      }
     });
-
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) settle("ready");
-      else if (!hasCode) settle("invalid");
-    });
-
-    const failTimer = setTimeout(
-      () => settle("invalid"),
-      hasCode ? 8000 : 3000,
-    );
-
-    return () => {
-      subscription.unsubscribe();
-      clearTimeout(failTimer);
-    };
+    return () => { active = false; };
   }, []);
 
   const rules = [
@@ -75,34 +55,22 @@ export default function ResetPasswordPage() {
 
   async function savePassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
-
-    if (!strongEnough) {
-      setError("Choose a password that meets all three requirements below.");
-      return;
-    }
-    if (password !== confirm) {
-      setError("The two passwords do not match.");
-      return;
-    }
-
-    const supabase = createClient();
-    if (!supabase) {
-      setError("Supabase is not connected. Add the project keys and reload.");
-      return;
-    }
-
-    setBusy(true);
-    setError("");
-    const { error: updateError } = await supabase.auth.updateUser({ password });
-    setBusy(false);
-
-    if (updateError) {
-      setError(updateError.message);
-      return;
-    }
-
-    setPhase("done");
+    if (busy || saving.current || phase !== "ready") return;
+    if (!strongEnough) { setError("Choose a password that meets all three requirements below."); return; }
+    if (password !== confirm) { setError("The two passwords do not match."); return; }
+    const supabase = recoveryClient.current;
+    if (!supabase) { setError("Authentication is not configured. Contact your administrator."); return; }
+    saving.current = true; setBusy(true); setError("");
+    try {
+      await updateRecoveryPassword(supabase, password);
+      setPassword(""); setConfirm("");
+      try { sessionStorage.removeItem(RECOVERY_MARKER_KEY); } catch { /* No storage available. */ }
+      setPhase("done");
+    } catch (updateError) {
+      const authError = updateError as { code?: string; status?: number };
+      if (["session_not_found", "refresh_token_not_found", "refresh_token_already_used"].includes(authError?.code || "") || authError?.status === 401 || authError?.status === 403) setPhase("invalid");
+      setError(updateError instanceof Error ? updateError.message : "We could not update your password. Check your connection and try again.");
+    } finally { saving.current = false; setBusy(false); }
   }
 
   return (
@@ -124,13 +92,13 @@ export default function ResetPasswordPage() {
 
         {phase === "invalid" && (
           <>
-            <h1>This link has expired</h1>
+            <h1>Reset link unavailable</h1>
             <p className="auth-sub">
-              Password reset links are single-use and short-lived. Request a
-              fresh one and open it on this device.
+              {error || "Request a fresh reset link and open the newest email in the browser that requested it."}
             </p>
             <div className="auth-links">
-              <a href="/login">&larr; Back to sign in</a>
+              <a href="/login?view=forgot">Request a new reset link</a>
+              <a href="/login">Back to sign in</a>
             </div>
           </>
         )}
@@ -188,18 +156,17 @@ export default function ResetPasswordPage() {
           <>
             <h1>Password updated</h1>
             <p className="auth-sub">
-              You&rsquo;re signed in with your new password. Anyone else using
-              the old one is locked out from now on.
+              Your password has been updated. Sign in again using your new password.
             </p>
             <button
               className="primary-button auth-submit"
               type="button"
               onClick={() => {
-                router.replace("/");
+                router.replace("/login");
                 router.refresh();
               }}
             >
-              Continue to dashboard
+              Back to sign in
             </button>
           </>
         )}

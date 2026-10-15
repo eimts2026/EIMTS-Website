@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { PageHero } from "../../components/ui/PageHero";
+import { InquiryForm } from "../../components/ui/InquiryForm";
 
 const BranchMap = dynamic(
   () => import("./BranchMap").then((module) => module.BranchMap),
@@ -93,25 +94,8 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* Right Column: Send an Inquiry Form (Width expanded in globals.css)   */}
-        {/* To integrate backend/API: change action URL or handle submit event   */}
-        <form className="contact-route-form" action="mailto:info@emeraldisle.lk" method="post" encType="text/plain">
-          <div>
-            <p className="section-kicker">Send an inquiry</p>
-            <h2>How can we help?</h2>
-          </div>
-          <div className="form-row">
-            <label><span>Name</span><input required name="name" autoComplete="name" /></label>
-            <label><span>Email</span><input required type="email" name="email" autoComplete="email" /></label>
-          </div>
-          <div className="form-row">
-            <label><span>Subject</span><input required name="subject" /></label>
-            <label><span>Phone</span><input name="phone" type="tel" autoComplete="tel" /></label>
-          </div>
-          <label><span>Comment</span><textarea required name="comment" rows={7} /></label>
-          <button className="primary-button" type="submit">Send message</button>
-          <p>Or email <a href="mailto:info@emeraldisle.lk">info@emeraldisle.lk</a></p>
-        </form>
+        {/* Protected inquiry submission with confirmed-delivery feedback. */}
+        <InquiryForm kind="contact" />
       </div>
     </section>
 

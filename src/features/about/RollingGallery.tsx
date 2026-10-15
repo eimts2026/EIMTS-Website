@@ -64,22 +64,34 @@ export default function RollingGallery({
   }, []);
 
   useEffect(() => {
+    if (!autoplay || reduceMotion) return;
     let frameId = 0;
     let previousTime = performance.now();
-
+    let onScreen = false;
     const animate = (time: number) => {
-      const elapsed = time - previousTime;
+      frameId = 0;
+      if (!onScreen || document.hidden) return;
+      const elapsed = Math.min(time - previousTime, 50);
       previousTime = time;
-      const hoverPaused = pauseOnHover && hoveringRef.current;
-
-      if (autoplay && !hoverPaused && !draggingRef.current && !viewingRef.current && !reduceMotion) {
+      if (!(pauseOnHover && hoveringRef.current) && !draggingRef.current && !viewingRef.current) {
         applyRotation(rotationRef.current - elapsed * 0.012);
       }
       frameId = requestAnimationFrame(animate);
     };
-
-    frameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frameId);
+    const resume = () => {
+      if (onScreen && !document.hidden && !frameId) {
+        previousTime = performance.now();
+        frameId = requestAnimationFrame(animate);
+      }
+    };
+    const observer = new IntersectionObserver(entries => {
+      onScreen = entries.some(entry => entry.isIntersecting);
+      if (!onScreen) {cancelAnimationFrame(frameId); frameId = 0;}
+      else resume();
+    });
+    if (trackRef.current) observer.observe(trackRef.current.parentElement ?? trackRef.current);
+    document.addEventListener("visibilitychange", resume);
+    return () => {cancelAnimationFrame(frameId); observer.disconnect(); document.removeEventListener("visibilitychange", resume);};
   }, [applyRotation, autoplay, pauseOnHover, reduceMotion]);
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {

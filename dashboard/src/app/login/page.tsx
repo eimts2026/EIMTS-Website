@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/browser";
 import { AuthField } from "@/components/AuthField";
 import { DotGridBackground } from "@/components/DotGridBackground";
 import { safeNext } from "@/lib/auth-policy";
+import { resetRequestFeedback } from "@/lib/password-recovery";
 
 const MAX_ATTEMPTS = 5;
 const LOCK_SECONDS = 30;
@@ -20,6 +21,25 @@ export default function LoginPage() {
   const [sentTo, setSentTo] = useState("");
   const [lockRemaining, setLockRemaining] = useState(0);
   const attemptsRef = useRef(0);
+  const resetPending = useRef(false);
+  const [resetAvailableAt, setResetAvailableAt] = useState(0);
+  const [resetRemaining, setResetRemaining] = useState(0);
+
+  useEffect(() => {
+    try { setResetAvailableAt(Number(sessionStorage.getItem("ei-reset-available-at")) || 0); } catch { /* Storage may be blocked. */ }
+    if (new URLSearchParams(window.location.search).get("view") === "forgot") setView("forgot");
+  }, []);
+  useEffect(() => {
+    const update = () => setResetRemaining(Math.max(0, Math.ceil((resetAvailableAt - Date.now()) / 1000)));
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, [resetAvailableAt]);
+  function resetCooldown(seconds: number) {
+    const until = Date.now() + seconds * 1000;
+    setResetAvailableAt(until);
+    try { sessionStorage.setItem("ei-reset-available-at", String(until)); } catch { /* In-memory cooldown still works. */ }
+  }
 
   // Anyone with a live session has no business on the login screen.
   useEffect(() => {
@@ -92,7 +112,7 @@ export default function LoginPage() {
 
   async function sendReset(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    if (busy || resetPending.current || resetRemaining > 0) return;
 
     const supabase = createClient();
     if (!supabase) {
@@ -104,23 +124,22 @@ export default function LoginPage() {
     const email = String(form.get("email") || "").trim().toLowerCase();
     if (!email) return;
 
+    resetPending.current = true;
     setBusy(true);
     setError("");
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(
-      email,
-      { redirectTo: `${window.location.origin}/reset-password` },
-    );
-    setBusy(false);
-
-    if (resetError) {
-      setError(
-        "The reset email could not be sent right now. Wait a minute and try again.",
-      );
-      return;
-    }
-
-    setSentTo(email);
-    switchView("sent");
+    try {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
+      if (resetError) throw resetError;
+      resetCooldown(60);
+      setSentTo(email);
+      switchView("sent");
+    } catch (resetError) {
+      const feedback = resetRequestFeedback(resetError);
+      setError(feedback.message);
+      if (feedback.cooldown) resetCooldown(feedback.cooldown);
+      const diagnostic = resetError as { code?: string; status?: number };
+      console.warn("Password reset request failed", { code: diagnostic?.code || "network_error", status: diagnostic?.status });
+    } finally { resetPending.current = false; setBusy(false); }
   }
 
   return (
@@ -199,13 +218,14 @@ export default function LoginPage() {
               <button
                 className={`primary-button auth-submit${busy ? " is-pending" : ""}`}
                 type="submit"
-                disabled={busy}
+                disabled={busy || resetRemaining > 0}
               >
-                {busy ? "Sending…" : "Send reset link"}
+                {busy ? "Sending…" : resetRemaining > 0 ? `Resend available in ${resetRemaining}s` : "Send reset link"}
               </button>
               <p className="auth-message" aria-live="polite" role="alert">
                 {error}
               </p>
+              <p className="auth-sub">Still unable to reset? Contact your dashboard administrator. They can check email delivery or send a recovery email from Supabase Auth.</p>
             </form>
             <div className="auth-links">
               <button type="button" onClick={() => switchView("sign-in")}>
@@ -220,8 +240,7 @@ export default function LoginPage() {
             <h1>Check your inbox</h1>
             <p className="auth-sub">
               If <strong>{sentTo}</strong> matches a staff account, a password
-              reset link is on its way. Open it on this device — it expires
-              after about an hour.
+              reset link has been requested. Check spam and junk folders, and open the newest email in this browser. Links are single-use.
             </p>
             <div className="auth-links">
               <button type="button" onClick={() => switchView("sign-in")}>
@@ -229,8 +248,8 @@ export default function LoginPage() {
               </button>
               <span>
                 Nothing arrived?{" "}
-                <button type="button" onClick={() => switchView("forgot")}>
-                  Send it again
+                <button type="button" disabled={resetRemaining > 0} onClick={() => switchView("forgot")}>
+                  {resetRemaining > 0 ? `Resend available in ${resetRemaining}s` : "Send it again"}
                 </button>
               </span>
             </div>

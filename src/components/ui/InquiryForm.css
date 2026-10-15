@@ -1,0 +1,37 @@
+.secure-inquiry-card { min-width:0; perspective:1400px; }
+.inquiry-flip-inner { display:grid; transform-style:preserve-3d; transition:transform .65s cubic-bezier(.22,.7,.2,1); }
+.inquiry-flip-inner.is-flipped { transform:rotateY(180deg); }
+.inquiry-flip-front,.inquiry-flip-back { grid-area:1/1; min-width:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:16px; overflow:hidden; }
+.secure-inquiry-form { margin:0; padding:28px; border:1px solid #d9e3dd; border-radius:16px; background:white; color:#10221a; box-shadow:0 8px 30px #08271908; }
+.secure-inquiry-heading { display:grid; gap:8px; margin-bottom:6px; }
+.secure-inquiry-heading .section-kicker { margin:0; color:#08795d; }
+.secure-inquiry-heading h2 { margin:0; font:600 clamp(28px,3vw,38px)/1.08 var(--font-sans); letter-spacing:-.035em; max-width:22ch; }
+.secure-inquiry-heading>p:last-child { margin:0; font-size:14px; line-height:1.6; color:#52635c; }
+.secure-inquiry-form label { display:block; font-size:13px; font-weight:600; }
+.secure-inquiry-form input,.secure-inquiry-form textarea { width:100%; min-height:44px; border:1px solid #cbd5cf; border-radius:7px; padding:10px 12px; font:400 14px/1.5 var(--font-sans); background:#fff; color:#10221a; transition:border-color .2s,box-shadow .2s; }
+.secure-inquiry-form textarea { min-height:92px; resize:vertical; }
+.secure-inquiry-form input::placeholder,.secure-inquiry-form textarea::placeholder { color:#65766d; opacity:1; }
+.secure-inquiry-form input:focus,.secure-inquiry-form textarea:focus { outline:none; border-color:#08795d; box-shadow:0 0 0 3px #08795d29; }
+.secure-inquiry-form input:disabled,.secure-inquiry-form textarea:disabled { opacity:.65; }
+.inquiry-field-hint { color:#617169; font-size:11px; font-weight:400; margin-left:4px; }
+.inquiry-form-footer { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.inquiry-form-footer small { color:#617169; font-size:11px; }
+.secure-inquiry-submit { display:inline-flex; align-items:center; justify-content:space-between; gap:24px; min-height:44px; padding:6px 8px 6px 16px; border:0; border-radius:8px; background:#f3b84b; color:#10221a; font:700 14px/1.4 var(--font-sans); cursor:pointer; }
+.secure-inquiry-submit>span { display:grid; place-items:center; width:30px; height:30px; border-radius:50%; background:#03271f; color:#f3b84b; }
+.secure-inquiry-submit:disabled { opacity:.55; cursor:not-allowed; }
+.secure-inquiry-submit:focus-visible,.inquiry-flip-back button:focus-visible { outline:3px solid #08795d; outline-offset:4px; }
+.secure-inquiry-error:empty { display:none; }
+.form-honeypot { position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); pointer-events:none; }
+.inquiry-flip-back { transform:rotateY(180deg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:32px; background:#063f31; color:#fff; text-align:center; border:1px solid #063f31; }
+.inquiry-flip-back h2 { margin:0; color:white; font-size:36px; }
+.inquiry-flip-back p { margin:0; max-width:38ch; line-height:1.6; }
+.inquiry-flip-back small { color:#c3d5cb; }
+.inquiry-flip-back button { margin-top:8px; padding:12px 20px; border:1px solid #ffffff70; background:transparent; border-radius:8px; color:white; cursor:pointer; }
+.inquiry-success-mark { display:grid; place-items:center; width:72px; height:72px; border-radius:50%; background:#f3b84b; color:#03271f; font-size:36px; }
+.inquiry-email-alternative { margin:0; font-size:13px; color:#52635c; }
+.inquiry-email-alternative a { color:#08795d; text-decoration:underline; }
+.secure-inquiry-card :is(h2,p)[data-reveal] { opacity:1!important; transform:none!important; transition:none!important; }
+@media(max-width:620px) { .secure-inquiry-form { padding:20px; } .secure-inquiry-form input,.secure-inquiry-form textarea { font-size:16px; } .inquiry-form-footer { flex-direction:column; align-items:stretch; gap:10px; } }
+@media(prefers-reduced-motion:reduce) { .inquiry-flip-inner { transition:none; } }
+
+.secure-inquiry-error { margin:0; font-size:13px; line-height:1.6; color:#9c2626; }

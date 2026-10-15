@@ -13,7 +13,7 @@ export const metadata = pageMetadata(
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const [hero, jobs] = await Promise.all([getHeroContent(), getPublishedJobs()]);
-  const urgentJobs = jobs.filter((job) => job.urgent && job.slug).slice(0, 6);
+  const [hero, jobs] = await Promise.all([getHeroContent(), getPublishedJobs({ urgentOnly: true, limit: 6 })]);
+  const urgentJobs = jobs;
   return <HomePage hero={hero} urgentJobs={urgentJobs} />;
 }

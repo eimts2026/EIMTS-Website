@@ -1,12 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
-import { sendApplicationEmail } from "@/lib/email";
+import { sendApplicationEmail, isEmailConfigured } from "@/lib/email";
 
-const allowedTypes = new Set([
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-]);
+import { ApplicationInputError, readApplicationForm, validateApplication } from "@/lib/application-input";
 
 function failure(message: string, status = 400) {
   return NextResponse.json({ message }, { status });
@@ -22,56 +18,17 @@ export async function POST(request: Request) {
     );
   }
 
-  const declaredLength = Number(request.headers.get("content-length") || 0);
-  if (declaredLength > 6 * 1024 * 1024) {
-    return failure("Your application is too large.", 413);
-  }
-  const formData = await request.formData();
-  const jobId = String(formData.get("job_id") || "");
-  const fullName = String(formData.get("name") || "").trim();
-  const age = Number(formData.get("age"));
-  const email = String(formData.get("email") || "").trim();
-  const phone = String(formData.get("phone") || "").trim();
-  const cv = formData.get("cv");
+  if (!isEmailConfigured()) return failure("Applications are temporarily unavailable. Please email your CV to cv@emeraldisle.lk.", 503);
 
-  if (
-    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-      jobId,
-    )
-  ) {
-    return failure("This vacancy is not yet accepting online applications.");
+  let input: ReturnType<typeof validateApplication>;
+  try {
+    input = validateApplication(await readApplicationForm(request));
+  } catch (error) {
+    return error instanceof ApplicationInputError
+      ? failure(error.message, error.status)
+      : failure("Your application could not be read. Please try again.");
   }
-  if (!fullName || !email || !Number.isInteger(age) || age < 18 || age > 99) {
-    return failure("Please complete all required application details.");
-  }
-  if (!(cv instanceof File) || !cv.size) {
-    return failure("Please attach your CV.");
-  }
-  if (cv.size > 5 * 1024 * 1024) {
-    return failure("Your CV must be 5 MB or smaller.");
-  }
-  if (!allowedTypes.has(cv.type)) {
-    return failure("Please upload a PDF, DOC or DOCX CV.");
-  }
-
-  const supabase = createClient(url, publishableKey, {
-    auth: { persistSession: false },
-  });
-
-  // The vacancy is resolved from the database rather than the submitted form,
-  // so the stored application and the recruitment email always name the real
-  // job. Visitors only ever see published, unexpired vacancies, so a missing
-  // row also means the vacancy closed between opening the page and applying —
-  // catching it here avoids uploading a CV the insert would then reject.
-  const { data: job } = await supabase
-    .from("jobs")
-    .select("title")
-    .eq("id", jobId)
-    .maybeSingle();
-
-  if (!job) {
-    return failure("This vacancy is no longer accepting online applications.");
-  }
+  const { jobId, fullName, age, email, phone, cv } = input;
 
   const extension = cv.type === "application/pdf"
     ? "pdf"
@@ -88,63 +45,45 @@ export async function POST(request: Request) {
   if (!isPdf && !isOffice) {
     return failure("The CV contents do not match the selected file type.");
   }
-  const cvPath = `${jobId}/${crypto.randomUUID()}.${extension}`;
-  const bytes = await cv.arrayBuffer();
-  const { error: uploadError } = await supabase.storage
-    .from("candidate-cvs")
-    .upload(cvPath, bytes, {
-      contentType: cv.type,
-      upsert: false,
-    });
 
-  if (uploadError) {
-    return failure(
-      "We could not upload your CV. Please try again or email cv@emeraldisle.lk.",
-      500,
-    );
+  const supabase = createClient(url, publishableKey, {
+    auth: { persistSession: false },
+  });
+
+  // Resolve trusted vacancy details from the database.
+  const { data: job } = await supabase
+    .from("jobs")
+    .select("title,category")
+    .eq("id", jobId)
+    .eq("status", "published")
+    .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
+    .maybeSingle();
+
+  if (!job) {
+    return failure("This vacancy is no longer accepting online applications.");
   }
 
-  const { error: applicationError } = await supabase
-    .from("applications")
-    .insert({
-      job_id: jobId,
-      full_name: fullName,
-      age,
-      email,
-      phone: phone || null,
-      cv_path: cvPath,
-    });
-
-  if (applicationError) {
-    await supabase.storage.from("candidate-cvs").remove([cvPath]);
-    return failure(
-      "We could not save your application. Please email cv@emeraldisle.lk.",
-      500,
-    );
-  }
-
-  // Forward the application to the recruitment inboxes with the CV attached.
-  // The application is already saved above, so an email failure must not
-  // fail the candidate's submission — it is logged for follow-up instead.
   try {
     const result = await sendApplicationEmail({
       jobTitle: job.title,
+      category: job.category || "General recruitment",
       fullName,
       age,
       email,
-      phone: phone || null,
-      cvFileName: cv.name,
+      phone,
+      cvFileName: `candidate-cv.${extension}`,
       cvContentType: cv.type,
-      cvBytes: bytes,
+      cvBytes: await cv.arrayBuffer(),
     });
     if (!result.sent) {
-      console.warn("Application email skipped:", result.reason);
+      return failure("We could not send your application. Please try again or email cv@emeraldisle.lk.", 503);
     }
   } catch (error) {
-    console.error("Application email failed:", error);
+    console.error("Application email failed", { code: (error as { code?: string }).code || "delivery_failed" });
+    return failure("We could not send your application. Please try again or email cv@emeraldisle.lk.", 502);
   }
 
   return NextResponse.json({
-    message: "Application submitted successfully.",
+    message: "Your application and CV have been sent to cv@emeraldisle.lk.",
   });
 }

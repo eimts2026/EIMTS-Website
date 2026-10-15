@@ -22,9 +22,9 @@ export function FloatingSocialLinks() {
   const [onDark, setOnDark] = useState(false);
   const emiRef = useRef<HTMLAnchorElement>(null);
   useEffect(() => {
-    let frame = 0;
+    let sampleTimer = 0;
     const sample = () => {
-      frame = 0;
+      sampleTimer = 0;
       const link = emiRef.current;
       if (!link) return;
       const rect = link.getBoundingClientRect();
@@ -42,13 +42,13 @@ export function FloatingSocialLinks() {
       }
       setOnDark(false);
     };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(sample); };
+    const schedule = () => { if (!sampleTimer) sampleTimer = window.setTimeout(sample, 80); };
     sample();
     const initialSample = window.setTimeout(schedule, 350);
     window.addEventListener("load", schedule);
     window.addEventListener("scroll", schedule, {passive:true});
     window.addEventListener("resize", schedule);
-    return () => {clearTimeout(initialSample);cancelAnimationFrame(frame);window.removeEventListener("load",schedule);window.removeEventListener("scroll",schedule);window.removeEventListener("resize",schedule);};
+    return () => {clearTimeout(initialSample);clearTimeout(sampleTimer);window.removeEventListener("load",schedule);window.removeEventListener("scroll",schedule);window.removeEventListener("resize",schedule);};
   }, []);
   const dockRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);

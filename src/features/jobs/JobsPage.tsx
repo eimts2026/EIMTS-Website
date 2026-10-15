@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { JobApplicationForm } from "@/components/jobs/JobApplicationForm";
 import { countryFlagPath } from "@/lib/country-flags";
 
 export type Job = {
@@ -221,7 +222,6 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
   const [pageSize, setPageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
-  const [applicationMessage, setApplicationMessage] = useState("");
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -246,8 +246,8 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
   );
 
   const filteredJobs = useMemo(() => {
+    const term = active.title.trim().toLowerCase();
     const filtered = jobs.filter((job) => {
-      const term = active.title.trim().toLowerCase();
       const matchesTerm = !term || [job.title, job.category, job.location].some((value) => value.toLowerCase().includes(term));
       return matchesTerm
         && (!active.location || job.location === active.location)
@@ -306,25 +306,6 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
     setCurrentPage(page);
     const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     requestAnimationFrame(() => document.querySelector(".jobs-results-toolbar")?.scrollIntoView({ behavior, block: "start" }));
-  }
-
-  async function submitApplication(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const cv = formData.get("cv");
-    if (!(cv instanceof File) || !cv.size) return setApplicationMessage("Please attach your CV.");
-    if (cv.size > 5 * 1024 * 1024) return setApplicationMessage("Your CV must be 5 MB or smaller.");
-    setApplicationMessage("Sending your application...");
-    try {
-      const response = await fetch("/api/applications", { method: "POST", body: formData });
-      const result = await response.json() as { message?: string };
-      if (!response.ok) throw new Error(result.message || "We could not send your application.");
-      form.reset();
-      setApplicationMessage("Thank you - your application has been sent to our recruitment team.");
-    } catch (error) {
-      setApplicationMessage(error instanceof Error ? error.message : "We could not send your application. Please try again.");
-    }
   }
 
   return <main id="main" className="jobs-shell">
@@ -440,21 +421,7 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
             </dl>
           </div>
           <p className="job-detail-note">Apply directly below. Please include an up-to-date CV so our recruitment team can review your application for this vacancy.</p>
-          <form className="job-application-form" onSubmit={submitApplication} encType="multipart/form-data">
-            <input type="hidden" name="job_id" value={selectedJob.id} />
-            <input type="hidden" name="job_title" value={selectedJob.title} />
-            <h3>Apply for this vacancy</h3>
-            <div className="job-application-grid">
-              <label><span>Full name</span><input required name="name" autoComplete="name" /></label>
-              <label><span>Age</span><input required name="age" type="number" min="18" max="99" inputMode="numeric" /></label>
-              <label><span>Email address</span><input required name="email" type="email" autoComplete="email" /></label>
-              <label><span>Phone number <em>(optional)</em></span><input name="phone" type="tel" autoComplete="tel" /></label>
-              <label><span>Job category</span><input required name="category" defaultValue={selectedJob.category} /></label>
-              <label className="cv-upload"><span>CV (PDF, DOC or DOCX - max 5 MB)</span><input required name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" /></label>
-            </div>
-            <button className="job-detail-apply" type="submit">Send application</button>
-            {applicationMessage && <p className="job-application-feedback" role="status">{applicationMessage}</p>}
-          </form>
+          <JobApplicationForm key={selectedJob.id} jobId={selectedJob.id} className="job-application-form" />
         </div>
       </div>}
     </dialog>
