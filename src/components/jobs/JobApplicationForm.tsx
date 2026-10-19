@@ -4,9 +4,12 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { APPLICATION_ACCEPT, MAX_CV_BYTES } from "@/lib/application-input";
 import "./JobApplicationForm.css";
+import { BotProtection } from "@/components/ui/BotProtection";
 
 export function JobApplicationForm({ jobId, className }: { jobId: string; className?: string }) {
   const submitting = useRef(false);
+  const [botToken, setBotToken] = useState("");
+  const [botReset, setBotReset] = useState(0);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -20,6 +23,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting.current || sent) return;
+    if (!botToken) { setMessage("Please complete the spam protection check."); return; }
     const form = event.currentTarget;
     const formData = new FormData(form);
     const cv = formData.get("cv");
@@ -29,7 +33,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
       return;
     }
     if (cv.size > MAX_CV_BYTES) {
-      setMessage("Your CV must be 10 MB or smaller.");
+      setMessage("Your CV must be 3 MB or smaller. For a larger CV, email cv@emeraldisle.lk.");
       return;
     }
 
@@ -41,6 +45,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
       const response = await fetch("/api/applications", {
         method: "POST",
         body: formData,
+        headers: { "x-turnstile-token": botToken },
       });
       const result = await response.json().catch(() => ({ message: response.status === 413 ? "This upload exceeds the server limit. Please email your CV to cv@emeraldisle.lk." : "We could not send your application. Please try again." })) as { message?: string };
       if (!response.ok) throw new Error(result.message || "We could not submit your application.");
@@ -56,6 +61,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
     } finally {
       submitting.current = false;
       setBusy(false);
+      setBotReset(value => value + 1);
     }
   }
 
@@ -82,7 +88,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
         <input name="phone" type="tel" autoComplete="tel" maxLength={40} required />
       </label>
       <label>
-        CV (PDF, DOC or DOCX · maximum 10 MB)
+        CV (PDF, DOC or DOCX · maximum 3 MB)
         <input
           name="cv"
           type="file"
@@ -91,7 +97,9 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
           disabled={busy}
         />
       </label>
-      <button type="submit" disabled={busy} aria-busy={busy}>
+      <p className="application-upload-note">Larger CV? Email <a href="mailto:cv@emeraldisle.lk">cv@emeraldisle.lk</a> with the vacancy title.</p>
+      <BotProtection action="application" resetKey={botReset} onToken={setBotToken} />
+      <button type="submit" disabled={busy || !botToken} aria-busy={busy}>
         {busy && <svg data-submit-spinner viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /></svg>}
         <span>{busy ? "Submitting…" : "Apply for this vacancy"}</span>
         {!busy && <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>}

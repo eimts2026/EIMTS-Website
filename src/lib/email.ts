@@ -34,6 +34,7 @@ export async function sendApplicationEmail(application: ApplicationEmail) {
     },
   });
 
+  try {
   const template = applicationEmailTemplate(application);
   const result = await transporter.sendMail({
     from:
@@ -56,4 +57,5 @@ export async function sendApplicationEmail(application: ApplicationEmail) {
     throw new Error("Recruitment mailbox did not accept the application.");
   }
   return { sent: true as const };
+  } finally { transporter.close(); }
 }

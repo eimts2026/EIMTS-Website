@@ -1,6 +1,7 @@
 "use server";
 
 import type { ProjectImageRecord } from "@eimts/database";
+import { revalidatePublicJobs } from "@/lib/revalidate-public-jobs";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { colomboDayEnd, colomboDayStart } from "@/lib/dates";
@@ -103,6 +104,7 @@ export async function createJob(formData: FormData) {
   }
   if (error) throw new Error(error.message);
 
+  await revalidatePublicJobs();
   revalidatePath("/");
   redirect("/");
 }
@@ -115,6 +117,7 @@ export async function updateJob(id: string, formData: FormData) {
     .eq("id", id);
   if (error) throw new Error(error.message);
 
+  await revalidatePublicJobs();
   revalidatePath("/");
   redirect("/");
 }
@@ -129,6 +132,7 @@ export async function updateJobStatus(id: string, status: string) {
     })
     .eq("id", id);
   if (error) throw new Error(error.message);
+  await revalidatePublicJobs();
   revalidatePath("/");
 }
 
@@ -164,6 +168,7 @@ export async function deleteJob(id: string): Promise<{ error: string } | null> {
     };
   }
   if (!data?.length) return { error: "This vacancy was not found or could not be deleted." };
+  await revalidatePublicJobs();
   revalidatePath("/");
   return null;
 }

@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, useTransition, type FormEvent, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { emptyJobFilters, jobSearchParams, type JobFilters, type JobSearch, type JobSort } from "@/lib/job-search-params";
+import type { JobSearchResult } from "@/lib/job-search";
 import { JobApplicationForm } from "@/components/jobs/JobApplicationForm";
 import { countryFlagPath } from "@/lib/country-flags";
 
@@ -19,19 +22,11 @@ export type Job = {
   imagePosition: string;
 };
 
-type Filters = { title: string; location: string; category: string };
-type SortOption = "default" | "title-asc" | "location-asc";
+type Filters = JobFilters;
+type SortOption = JobSort;
 
-const emptyFilters: Filters = { title: "", location: "", category: "" };
+const emptyFilters = emptyJobFilters;
 
-function uniqueOptions(values: string[], allLabel: string) {
-  return [
-    { value: "", label: allLabel },
-    ...[...new Set(values)]
-      .sort((a, b) => a.localeCompare(b))
-      .map((value) => ({ value, label: value })),
-  ];
-}
 const sortOptions = [
   { value: "default", label: "Sort by: Recommended" },
   { value: "title-asc", label: "Job title: A to Z" },
@@ -195,79 +190,36 @@ function SelectMenu({ label, name, value, options, onChange, icon, className = "
     </div>}
   </div>;
 }
-function queryFilters(): Filters {
-  if (typeof window === "undefined") return emptyFilters;
-  const params = new URLSearchParams(window.location.search);
-  return {
-    title: params.get("filter-title") || "",
-    location: params.get("filter-location") || "",
-    category: params.get("filter-category") || "",
-  };
-}
-
-function updateQuery(filters: Filters) {
-  const params = new URLSearchParams();
-  if (filters.title) params.set("filter-title", filters.title);
-  if (filters.location) params.set("filter-location", filters.location);
-  if (filters.category) params.set("filter-category", filters.category);
-  const search = params.size ? "?" + params.toString() : "";
-  window.history.replaceState({}, "", window.location.pathname + search);
-}
-
-export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) {
-  const jobs = initialJobs;
-  const [draft, setDraft] = useState<Filters>(emptyFilters);
-  const [active, setActive] = useState<Filters>(emptyFilters);
-  const [sort, setSort] = useState<SortOption>("default");
-  const [pageSize, setPageSize] = useState(6);
-  const [currentPage, setCurrentPage] = useState(1);
+export default function JobsPage({ initialResult, search, loadError = "" }: { initialResult: JobSearchResult; search: JobSearch; loadError?: string }) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [draft, setDraft] = useState<Filters>(search);
+  const previous = useRef(new Map<string,string>());
+  const previousSearch = useRef(jobSearchParams(search).toString());
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
-
+  const jobs = initialResult.items;
+  const visibleJobs = jobs;
+  const sort = search.sort;
+  const pageSize = search.pageSize;
+  const locationOptions = [{value:"",label:"All locations"}, ...initialResult.locations.map(facet => ({value:facet.value,label:facet.value+" ("+facet.count+")"}))];
+  const categoryOptions = [{value:"",label:"All categories"}, ...initialResult.categories.map(facet => ({value:facet.value,label:facet.value+" ("+facet.count+")"}))];
+  if (search.location && !locationOptions.some(option => option.value === search.location)) locationOptions.push({value:search.location,label:search.location+" (0)"});
+  if (search.category && !categoryOptions.some(option => option.value === search.category)) categoryOptions.push({value:search.category,label:search.category+" (0)"});
+  const popularSearches = initialResult.categories.slice(0,4).map(facet => facet.value);
+  useEffect(() => { setDraft({title:search.title,location:search.location,category:search.category}); },[search.title,search.location,search.category]);
   useEffect(() => {
-    const filters = queryFilters();
-    if (filters.title || filters.location || filters.category) {
-      setDraft(filters);
-      setActive(filters);
+    const key = jobSearchParams(search).toString();
+    if (previousSearch.current !== key) {
+      previousSearch.current = key;
+      const frame = requestAnimationFrame(() => document.querySelector(".jobs-results-toolbar")?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }));
+      return () => cancelAnimationFrame(frame);
     }
-  }, []);
-
-  const locationOptions = useMemo(
-    () => uniqueOptions(jobs.map((job) => job.location), "All locations"),
-    [jobs],
-  );
-  const categoryOptions = useMemo(
-    () => uniqueOptions(jobs.map((job) => job.category), "All categories"),
-    [jobs],
-  );
-  const popularSearches = useMemo(
-    () => [...new Set(jobs.map((job) => job.category))].slice(0, 4),
-    [jobs],
-  );
-
-  const filteredJobs = useMemo(() => {
-    const term = active.title.trim().toLowerCase();
-    const filtered = jobs.filter((job) => {
-      const matchesTerm = !term || [job.title, job.category, job.location].some((value) => value.toLowerCase().includes(term));
-      return matchesTerm
-        && (!active.location || job.location === active.location)
-        && (!active.category || job.category === active.category);
-    });
-
-    if (sort === "title-asc") return [...filtered].sort((a, b) => a.title.localeCompare(b.title));
-    if (sort === "location-asc") return [...filtered].sort((a, b) => a.location.localeCompare(b.location));
-    return filtered;
-  }, [jobs, active, sort]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredJobs.length / pageSize));
-  const visibleJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const resultStart = filteredJobs.length ? (currentPage - 1) * pageSize + 1 : 0;
-  const resultEnd = Math.min(currentPage * pageSize, filteredJobs.length);
-
-  useEffect(() => {
-    if (currentPage > totalPages) setCurrentPage(totalPages);
-  }, [currentPage, totalPages]);
-
+  }, [search]);
+  function navigate(next: JobSearch) {
+    const query = jobSearchParams(next).toString();
+    startTransition(() => router.push("/foreign-job-vacancies/" + (query ? "?"+query : ""), {scroll:false}));
+  }
   useEffect(() => {
     if (!selectedJob) return;
     const previousOverflow = document.body.style.overflow;
@@ -282,32 +234,16 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
     if (!selectedJob && dialog.open) dialog.close();
   }, [selectedJob]);
 
-  function commitFilters(filters: Filters) {
-    setDraft(filters);
-    setActive(filters);
-    setCurrentPage(1);
-    updateQuery(filters);
+  function commitFilters(filters: Filters) { previous.current.clear(); navigate({...search,...filters,cursor:""}); }
+  function applyFilters(event: FormEvent<HTMLFormElement>) { event.preventDefault(); commitFilters(draft); }
+  function clearFilters() { commitFilters(emptyFilters); }
+  function choosePopularSearch(term: string) { commitFilters({...emptyFilters,title:term}); }
+  function nextPage() {
+    if (!initialResult.nextCursor || pending) return;
+    previous.current.set(initialResult.nextCursor,search.cursor);
+    navigate({...search,cursor:initialResult.nextCursor});
   }
-
-  function applyFilters(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    commitFilters(draft);
-  }
-
-  function clearFilters() {
-    commitFilters(emptyFilters);
-  }
-
-  function choosePopularSearch(term: string) {
-    commitFilters({ ...emptyFilters, title: term });
-  }
-
-  function goToPage(page: number) {
-    setCurrentPage(page);
-    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-    requestAnimationFrame(() => document.querySelector(".jobs-results-toolbar")?.scrollIntoView({ behavior, block: "start" }));
-  }
-
+  function previousPage() { navigate({...search,cursor:previous.current.get(search.cursor) || ""}); }
   return <main id="main" className="jobs-shell">
     <section className="jobs-search-hero" aria-labelledby="jobs-page-title">
       <div className="container">
@@ -317,11 +253,11 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
           <p>Search current international vacancies and apply directly for the role that suits you.</p>
         </div>
 
-        <form className="jobs-filter jobs-filter-modern" onSubmit={applyFilters}>
+        <form aria-busy={pending} className="jobs-filter jobs-filter-modern" onSubmit={applyFilters}>
           <label>
             <span className="sr-only">Job title or keyword</span>
             <i><SearchIcon /></i>
-            <input name="filter-title" type="search" placeholder="Job title or keyword" value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} />
+            <input name="filter-title" type="search" maxLength={100} placeholder="Job title or keyword" value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} />
           </label>
           <SelectMenu
             className="job-filter-select"
@@ -341,7 +277,7 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
             icon={<CategoryIcon />}
             onChange={(category) => setDraft({ ...draft, category })}
           />
-          <button type="submit">Find jobs <span aria-hidden="true">-&gt;</span></button>
+          <button type="submit" disabled={pending}>Find jobs <span aria-hidden="true">-&gt;</span></button>
         </form>
 
         {popularSearches.length > 0 && <div className="jobs-popular" aria-label="Popular job searches">
@@ -357,7 +293,7 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
           <div>
             <p className="section-kicker">Current openings</p>
             <h2 id="jobs-results-title">Opportunities ready for you</h2>
-            <p aria-live="polite">Showing {resultStart} to {resultEnd} of {filteredJobs.length} {filteredJobs.length === 1 ? "vacancy" : "vacancies"}</p>
+            <p aria-live="polite">{pending ? "Loading vacancies…" : `${initialResult.total} ${initialResult.total === 1 ? "vacancy" : "vacancies"} · ${visibleJobs.length} on this page`}</p>
           </div>
           <div className="jobs-results-controls">
             <SelectMenu
@@ -365,25 +301,25 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
               label="Sort jobs"
               value={sort}
               options={sortOptions}
-              onChange={(nextSort) => { setSort(nextSort as SortOption); setCurrentPage(1); }}
+              onChange={(nextSort) => { previous.current.clear(); navigate({...search,sort:nextSort as SortOption,cursor:""}); }}
             />
             <SelectMenu
               className="job-toolbar-select job-page-size-select"
               label="Jobs per page"
               value={String(pageSize)}
               options={pageSizeOptions}
-              onChange={(nextPageSize) => { setPageSize(Number(nextPageSize)); setCurrentPage(1); }}
+              onChange={(nextPageSize) => { previous.current.clear(); navigate({...search,pageSize:Number(nextPageSize) as 6 | 12,cursor:""}); }}
             />
           </div>
         </div>
 
-        {visibleJobs.length ? <div className="job-directory-grid">
+        {loadError ? <div className="jobs-empty" role="alert"><h3>Vacancies could not be loaded</h3><p>{loadError}</p><button type="button" onClick={() => router.refresh()}>Try again</button></div> : visibleJobs.length ? <div className="job-directory-grid" aria-busy={pending}>
           {visibleJobs.map((job) => <article className="job-listing-card" key={job.id}>
             {job.slug
               ? <a className="job-card-open" href={`/foreign-job-vacancies/${job.slug}/`} aria-label={"View details for " + job.title}><JobCardContent job={job} /></a>
               : <button className="job-card-open" type="button" onClick={() => setSelectedJob(job)} aria-label={"View details for " + job.title}><JobCardContent job={job} /></button>}
           </article>)}
-        </div> : jobs.length ? <div className="jobs-empty">
+        </div> : (search.title || search.location || search.category || search.cursor) ? <div className="jobs-empty">
           <span aria-hidden="true"><SearchIcon /></span>
           <h3>No exact matches yet</h3>
           <p>Try a broader keyword or clear the filters to see every current vacancy.</p>
@@ -395,10 +331,9 @@ export default function JobsPage({ initialJobs = [] }: { initialJobs?: Job[] }) 
           <a className="jobs-empty-contact" href="/contact/">Contact our team</a>
         </div>}
 
-        {filteredJobs.length > pageSize && <nav className="jobs-pagination" aria-label="Job results pages">
-          <button type="button" disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>&lt;- Previous</button>
-          <span>Page {currentPage} of {totalPages}</span>
-          <button type="button" disabled={currentPage === totalPages} onClick={() => goToPage(currentPage + 1)}>Next -&gt;</button>
+        {(search.cursor || initialResult.nextCursor) && <nav className="jobs-pagination" aria-label="Job results pages">
+          <button type="button" disabled={!search.cursor || pending} onClick={previousPage}>{previous.current.has(search.cursor) ? "← Previous" : "← First page"}</button>
+          <button type="button" disabled={!initialResult.nextCursor || pending} onClick={nextPage}>Next →</button>
         </nav>}
       </div>
     </section>

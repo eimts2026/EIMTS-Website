@@ -1,6 +1,7 @@
 import JobsPage from "@/features/jobs/JobsPage";
 import { PromoPopup } from "@/components/ui/PromoPopup";
-import { getPublishedJobs } from "@/lib/jobs";
+import { searchPublicJobs, type JobSearchResult } from "@/lib/job-search";
+import { parseJobSearch } from "@/lib/job-search-params";
 import { getActivePopup } from "@/lib/popups";
 import { pageMetadata } from "@/lib/site";
 
@@ -10,19 +11,22 @@ export const metadata = pageMetadata(
   "/foreign-job-vacancies",
 );
 
-// Always fetch fresh data so newly published jobs and popups appear
-// immediately on the live website.
+// The page is dynamic for URL filters and fresh promotions; public jobs use
+// a shared data cache, invalidated after dashboard changes.
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
-  const [jobs, popup] = await Promise.all([
-    getPublishedJobs(),
+export default async function Page({searchParams}: {searchParams: Promise<Record<string,string | string[] | undefined>>}) {
+  const values = await searchParams;
+  const params = new URLSearchParams();
+  for(const [key,value] of Object.entries(values)) if(typeof value === "string") params.set(key,value);
+  let loadError = "";
+  let search;
+  try { search = parseJobSearch(params); }
+  catch(error) { loadError = (error as Error).message; search = parseJobSearch(new URLSearchParams()); }
+  const empty: JobSearchResult = {items:[],total:0,nextCursor:null,locations:[],categories:[]};
+  const [result,popup] = await Promise.all([
+    loadError ? Promise.resolve(empty) : searchPublicJobs(search).catch(error => { loadError = (error as Error).message; return empty; }),
     getActivePopup(),
   ]);
-  return (
-    <>
-      <JobsPage initialJobs={jobs} />
-      <PromoPopup popup={popup} />
-    </>
-  );
+  return <><JobsPage initialResult={result} search={search} loadError={loadError} /><PromoPopup popup={popup} /></>;
 }

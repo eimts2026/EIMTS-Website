@@ -1,5 +1,11 @@
 @import "./multipage.css";
 
+@font-face{font-family:"Raleway";src:url("/fonts/raleway/raleway-latin-normal.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap}
+@font-face{font-family:"Raleway";src:url("/fonts/raleway/raleway-latin-italic.woff2") format("woff2");font-style:italic;font-weight:100 900;font-display:swap}
+/* Arial metrics matched to the local Raleway variable font. */
+@font-face{font-family:"Raleway Fallback";src:local("Arial");ascent-override:92.39%;descent-override:23%;line-gap-override:0%;size-adjust:101.74%}
+
+
 .brand{background:transparent!important;border-radius:0!important;padding:0!important}.brand img{width:214px!important}.footer-brand img{background:transparent!important;border-radius:0!important;padding:0!important}
 
 :root{--font-sans:"Roboto Flex",Arial,sans-serif;--g900:#03480c;--g800:#046307;--g700:#03882c;--g600:#1a8c4c;--g100:#eaf6ed;--cream:#f7f8f2;--white:#fff;--ink:#202124;--muted:#657067;--line:#dbe5dc;--gold:#f9ab00;--shadow:0 24px 60px rgba(3,72,12,.12)}

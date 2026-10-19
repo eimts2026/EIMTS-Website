@@ -1,63 +1,13 @@
 "use client";
+import dynamic from "next/dynamic";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  divIcon,
-  latLngBounds,
-  type Map as LeafletMap,
-} from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 
 import "./BranchMap.css";
 
-import { branches, type Branch } from "./branches";
+import { branches } from "./branches";
 
 
-
-function markerIcon(isActive: boolean) {
-  return divIcon({
-    className: "branch-marker-icon",
-    html: `<span class="branch-marker${isActive ? " is-active" : ""}" aria-hidden="true">
-      <svg viewBox="0 0 48 60" focusable="false">
-        <path d="M24 2C11.85 2 2 11.85 2 24c0 15.72 18.48 32.22 20.58 34.04a2.17 2.17 0 0 0 2.84 0C27.52 56.22 46 39.72 46 24 46 11.85 36.15 2 24 2Z" />
-        <circle cx="24" cy="24" r="8" />
-      </svg>
-    </span>`,
-    iconSize: [48, 60],
-    iconAnchor: [24, 58],
-    popupAnchor: [0, -54],
-  });
-}
-
-function MapInit({ branch }: { branch: Branch | null }) {
-  const map = useMap();
-
-  useEffect(() => {
-    const invalidate = () => {
-      map.invalidateSize();
-    };
-
-    invalidate();
-    const timer1 = setTimeout(invalidate, 100);
-    const timer2 = setTimeout(invalidate, 500);
-
-    window.addEventListener("resize", invalidate);
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      window.removeEventListener("resize", invalidate);
-    };
-  }, [map]);
-
-  useEffect(() => {
-    if (branch) {
-      map.flyTo(branch.position, branch.approximate ? 12 : 14, { duration: 0.75, animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches });
-    }
-  }, [branch, map]);
-
-  return null;
-}
 
 function DirectionsIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5 5 5-5 5M19 10H9a4 4 0 0 0-4 4v5" /></svg>;
@@ -67,10 +17,24 @@ function PhoneIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3h3l1.5 5-2.1 1.3a15 15 0 0 0 5.7 5.7l1.3-2.1 5 1.5v3c0 2-1.6 3.6-3.6 3.6A14.4 14.4 0 0 1 3 6.6C3 4.6 4.6 3 6.6 3Z" /></svg>;
 }
 
+const LeafletCanvas = dynamic(() => import("./BranchLeafletMap"), {ssr:false, loading: () => <p className="branch-map-loading" role="status">Loading interactive map…</p>});
+
 export function BranchMap() {
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [resetVersion, setResetVersion] = useState(0);
+  useEffect(() => {
+    const node = canvasRef.current;
+    if (!node) return;
+    const fromHash = () => { if (window.location.hash.startsWith("#branch-map")) setMapReady(true); };
+    fromHash();
+    const observer = new IntersectionObserver(entries => { if(entries.some(entry => entry.isIntersecting)) {setMapReady(true); observer.disconnect();} }, {rootMargin:"300px"});
+    observer.observe(node);
+    window.addEventListener("hashchange", fromHash);
+    return () => { observer.disconnect(); window.removeEventListener("hashchange", fromHash); };
+  }, []);
   const [region, setRegion] = useState<"local" | "international">("local");
   const visibleBranches = useMemo(() => branches.filter((branch) => branch.region === region), [region]);
-  const branchBounds = useMemo(() => latLngBounds(visibleBranches.map((branch) => branch.position)), [visibleBranches]);
   useEffect(() => {
     const selectFromHash = () => {
       const hash = window.location.hash;
@@ -85,7 +49,6 @@ export function BranchMap() {
     return () => window.removeEventListener("hashchange", selectFromHash);
   }, []);
   const [selectedBranchId, setSelectedBranchId] = useState<string | null>(null);
-  const mapRef = useRef<LeafletMap | null>(null);
   const selectedBranch = useMemo(
     () => branches.find((branch) => branch.id === selectedBranchId) ?? null,
     [selectedBranchId],
@@ -93,7 +56,8 @@ export function BranchMap() {
 
   const showAllBranches = () => {
     setSelectedBranchId(null);
-    mapRef.current?.fitBounds(branchBounds, { padding: [44, 44] });
+    setMapReady(true);
+    setResetVersion(value => value + 1);
   };
 
   useEffect(() => {
@@ -111,7 +75,7 @@ export function BranchMap() {
         <div>
           <p className="section-kicker">Our international network</p>
           <h2 id="branch-map-title">Meet us closer to home.</h2>
-          <p>Find our teams in Sri Lanka, Nepal and the UAE. Select a branch to explore its location or call the team.</p>
+          <p>Explore our offices in Sri Lanka, Nepal and the UAE. Select a branch for contact details.</p>
         </div>
         <div className="branch-map-metric" aria-label={`${visibleBranches.length} branch locations`}>
           <strong>{String(visibleBranches.length).padStart(2, "0")}</strong>
@@ -127,40 +91,8 @@ export function BranchMap() {
         </button>)}
       </div>
       <div className="branch-map-shell" id="branch-region-panel" role="tabpanel" aria-labelledby={`branch-map-${region}`}>
-        <div className="branch-map-canvas">
-          <MapContainer
-            key={region}
-            ref={mapRef}
-            className="branch-map"
-            bounds={branchBounds}
-            boundsOptions={{ padding: [44, 44] }}
-            minZoom={2}
-            maxZoom={17}
-            scrollWheelZoom={false}
-            zoomControl
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <MapInit branch={selectedBranch} />
-            {visibleBranches.map((branch) => <Marker
-              key={branch.id}
-              position={branch.position}
-              icon={markerIcon(branch.id === selectedBranchId)}
-              title={`${branch.name}, ${branch.city}`}
-              eventHandlers={{ click: () => setSelectedBranchId(branch.id) }}
-            >
-              <Popup>
-                <div className="branch-map-popup">
-                  <strong>{branch.name}</strong>
-                  <span>{branch.address}</span>
-                  {branch.approximate && <span>Approximate area — call for the exact office location.</span>}
-                  <a href={branch.phoneHref}>{branch.phone}</a>
-                </div>
-              </Popup>
-            </Marker>)}
-          </MapContainer>
+        <div className="branch-map-canvas" ref={canvasRef}>
+          {mapReady ? <LeafletCanvas region={region} visibleBranches={visibleBranches} selectedBranchId={selectedBranchId} setSelectedBranchId={setSelectedBranchId} resetVersion={resetVersion} /> : <button type="button" className="branch-map-loading" onClick={() => setMapReady(true)}>Load interactive map</button>}
           <div className="branch-map-country-label" aria-hidden="true">
             <span>{selectedBranch?.city ?? (region === "local" ? "Sri Lanka" : "Nepal · UAE")}</span>
             <small>{selectedBranch?.approximate ? "Approximate area location" : "Our branch network"}</small>

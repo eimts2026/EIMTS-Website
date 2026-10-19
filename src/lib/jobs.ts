@@ -1,3 +1,6 @@
+import "server-only";
+import { cache } from "react";
+import { publicCache } from "./public-cache";
 import { createClient } from "@supabase/supabase-js";
 import type { Job } from "@/features/jobs/JobsPage";
 import { formatJobSalary } from "@/lib/salary";
@@ -22,7 +25,7 @@ export type PublicJobDetail = {
   expires_at: string | null;
 };
 
-type PublishedJobRow = {
+export type PublishedJobRow = {
   salary_amount: number | null;
   salary_lkr: number | null;
   currency: string;
@@ -39,7 +42,7 @@ type PublishedJobRow = {
   expires_at: string | null;
 };
 
-export async function getPublishedJobs(options: { urgentOnly?: boolean; limit?: number } = {}): Promise<Job[]> {
+async function loadPublishedJobs(options: { urgentOnly?: boolean; limit?: number } = {}): Promise<Job[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -57,18 +60,19 @@ export async function getPublishedJobs(options: { urgentOnly?: boolean; limit?: 
     .eq("status", "published")
     .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
     .order("urgent", { ascending: false })
-    .order("published_at", { ascending: false });
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .order("id", { ascending: false });
 
   if (options.urgentOnly) query = query.eq("urgent", true).not("slug", "is", null).neq("slug", "");
-  if (options.limit) query = query.limit(options.limit);
+  query = query.limit(Math.min(Math.max(options.limit || 6, 1), 12));
   const { data, error } = await query;
 
-  if (error || !data) {
-    console.error("Could not load published jobs", error?.message);
-    return [];
-  }
+  if (error || !data) throw new Error("Could not load published jobs");
 
-  return (data as PublishedJobRow[]).map((job) => ({
+  return (data as PublishedJobRow[]).map(mapPublishedJob);
+}
+
+export function mapPublishedJob(job: PublishedJobRow): Job { return {
     id: job.id,
     slug: job.slug,
     title: job.title,
@@ -81,10 +85,9 @@ export async function getPublishedJobs(options: { urgentOnly?: boolean; limit?: 
     urgent: job.urgent,
     image: job.image_url || "/assets/blog-global-careers.webp",
     imagePosition: job.image_position || "50% 50%",
-  }));
-}
+  }; }
 
-export async function getPublishedJobBySlug(
+const loadPublishedJobBySlug = publicCache("job-detail", async function getPublishedJobBySlug(
   slug: string,
 ): Promise<PublicJobDetail | null> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -103,9 +106,13 @@ export async function getPublishedJobBySlug(
     .eq("status", "published")
     .maybeSingle();
 
-  if (error || !data) return null;
-  return data as PublicJobDetail;
-}
+  if (error) throw new Error("Could not load vacancy details");
+  return data as PublicJobDetail | null;
+});
+
+export const getPublishedJobBySlug = cache(loadPublishedJobBySlug);
+
+export const getPublishedJobs = publicCache("urgent-jobs", loadPublishedJobs);
 
 export async function getPublishedJobSlugs(): Promise<
   Array<{ slug: string; updated_at: string }>

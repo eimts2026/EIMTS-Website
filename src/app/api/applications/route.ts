@@ -1,3 +1,5 @@
+import { limitSubmission } from "@/lib/submission-service";
+import { verifyBotProtection, SubmissionError } from "@/lib/bot-protection";
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { sendApplicationEmail, isEmailConfigured } from "@/lib/email";
@@ -9,6 +11,9 @@ function failure(message: string, status = 400) {
 }
 
 export async function POST(request: Request) {
+  try { await verifyBotProtection(request, "application"); } catch (error) {
+    return error instanceof SubmissionError ? failure(error.message, error.status) : failure("Verification unavailable.", 503);
+  }
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !publishableKey) {
@@ -29,6 +34,9 @@ export async function POST(request: Request) {
       : failure("Your application could not be read. Please try again.");
   }
   const { jobId, fullName, age, email, phone, cv } = input;
+  try { await limitSubmission(request, email, "application"); } catch (error) {
+    return error instanceof SubmissionError ? failure(error.message, error.status) : failure("Submissions unavailable.",503);
+  }
 
   const extension = cv.type === "application/pdf"
     ? "pdf"

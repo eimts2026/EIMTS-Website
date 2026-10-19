@@ -18,7 +18,7 @@ export default function CertificateSlider() {
       <div className="certificate-loop" role="region" aria-label="Company certificates; hover or focus to pause" tabIndex={0}>
         <div className="certificate-track">
           {[0, 1].map(copy => <div className="certificate-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
-            {certificates.map(([file, title, width, height]) => <a className="certificate-slide" key={file} href={`/assets/certificates/${file}.webp`} target="_blank" rel="noreferrer" tabIndex={copy === 1 ? -1 : undefined} aria-label={`${title} — open full-size document in a new tab`}><div className="certificate-image"><img src={`/assets/certificates/${file}.webp`} alt={copy === 1 ? "" : title} width={width} height={height} decoding="async" /></div><span>{title}<span aria-hidden="true">↗</span></span></a>)}
+            {certificates.map(([file, title, width, height]) => <a className="certificate-slide" key={file} href={`/assets/certificates/${file}.webp`} target="_blank" rel="noreferrer" tabIndex={copy === 1 ? -1 : undefined} aria-label={`${title} — open full-size document in a new tab`}><div className="certificate-image"><img src={`/assets/certificates/previews/${file}.webp`} alt={copy === 1 ? "" : title} width={width} height={height} decoding="async" /></div><span>{title}<span aria-hidden="true">↗</span></span></a>)}
           </div>)}
         </div>
       </div>

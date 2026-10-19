@@ -9,11 +9,14 @@ export const metadata = pageMetadata(
   "/",
 );
 
-// Match Find Jobs: dashboard publishing and expiry changes appear on page load.
+// Keep occasion content dynamic; anonymous jobs use a tagged 60-second data cache.
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const [hero, jobs] = await Promise.all([getHeroContent(), getPublishedJobs({ urgentOnly: true, limit: 6 })]);
+  const [hero, jobs] = await Promise.all([getHeroContent(), getPublishedJobs({ urgentOnly: true, limit: 6 }).catch(() => {
+    console.error(JSON.stringify({ event: "homepage_jobs_unavailable" }));
+    return [];
+  })]);
   const urgentJobs = jobs;
   return <HomePage hero={hero} urgentJobs={urgentJobs} />;
 }
