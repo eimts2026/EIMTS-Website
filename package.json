@@ -19,7 +19,7 @@
     "lint": "tsc --noEmit && npm run lint --workspace=@eimts/dashboard",
     "images:projects:webp": "node scripts/convert-project-images.mjs",
     "test": "npm run build",
-    "deploy": "vercel --prod && vercel --prod --project eimts-website-dashboard"
+    "deploy": "vercel --prod && vercel --prod --project eimts-website-dash"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
