@@ -30,7 +30,7 @@ export async function handleInquiry(request: Request, contact = false) {
     input[key] = ((data[key] as string) || "").trim();
     if (input[key].length > max || (key !== "message" && /[\r\n\x00]/.test(input[key]))) return fail(`Please check the ${key} field.`);
   }
-  const required = contact ? ["name", "email", "subject", "phone", "message"] : ["name", "email", "message"];
+  const required = contact ? ["name", "email", "subject", "phone", "message"] : ["name", "email", "phone", "message"];
   if (required.some(key => !input[key])) return fail("Please complete all required fields.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)) return fail("Please enter a valid email address.");
   if (input.website) { try { if (!["http:", "https:"].includes(new URL(input.website).protocol)) throw new Error(); } catch { return fail("Please enter a website beginning with https:// or leave it empty."); } }

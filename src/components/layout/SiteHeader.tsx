@@ -59,10 +59,12 @@ export function SiteHeader() {
   const menuRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
+  const contactMenuRef = useRef<HTMLDetailsElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      if (contactMenuRef.current && !contactMenuRef.current.contains(event.target as Node)) contactMenuRef.current.open = false;
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
@@ -82,7 +84,7 @@ export function SiteHeader() {
       const currentScrollY = window.scrollY;
       const delta = currentScrollY - lastScrollY;
       const headerHasFocus = headerRef.current?.contains(document.activeElement);
-      const menuIsOpen = isOpen || isMobileMenuOpen;
+      const menuIsOpen = isOpen || isMobileMenuOpen || contactMenuRef.current?.open;
 
       if (currentScrollY <= 80 || delta < -6 || headerHasFocus || menuIsOpen) {
         setIsHidden(false);
@@ -117,6 +119,7 @@ export function SiteHeader() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && contactMenuRef.current?.open) { contactMenuRef.current.open = false; contactMenuRef.current.querySelector("summary")?.focus(); }
       if (event.key === "Escape" && isMobileMenuOpen) {
         setIsMobileMenuOpen(false);
         mobileToggleRef.current?.focus();
@@ -156,7 +159,10 @@ export function SiteHeader() {
         <a href={routes.employer}>Employer</a>
         <a href={routes.projects}>Projects</a>
         <a href={routes.blog}>Blogs</a>
-        <a href={routes.contact}>Contact Us</a>
+        <details className="contact-nav-menu" ref={contactMenuRef} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) event.currentTarget.open = false; }}>
+          <summary>Contact us <Caret /></summary>
+          <div className="contact-nav-dropdown"><a href={routes.contact}>Contact us<span>Find an office or send an inquiry</span></a><a href={routes.faq}>FAQ<span>Answers to common questions</span></a></div>
+        </details>
       </nav>
       <a className="register-pill" href="https://registration.emeraldislemanpower.com/">
         <span className="register-pill__icon-wrapper">
@@ -186,8 +192,7 @@ export function SiteHeader() {
           <a href={routes.employer}>Employers</a>
           <a href={routes.projects}>Projects</a>
           <a href={routes.blog}>Blogs</a>
-          <a href={routes.faq}>FAQ</a>
-          <a href={routes.contact}>Contact</a>
+          <details className="mobile-job-menu"><summary>Contact us <Caret /></summary><a href={routes.contact}>Contact us</a><a href={routes.faq}>FAQ</a></details>
           <a href="https://registration.emeraldislemanpower.com/">Register now</a>
         </nav>
       </div>

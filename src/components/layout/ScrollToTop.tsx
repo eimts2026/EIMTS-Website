@@ -18,10 +18,7 @@ export function ScrollToTop() {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    window.dispatchEvent(new Event("ei-scroll-top"));
   };
 
   return (

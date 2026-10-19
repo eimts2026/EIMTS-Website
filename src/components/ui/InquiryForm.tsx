@@ -36,7 +36,7 @@ export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer
     { name: "email", label: "Company email", placeholder: "name@company.com", type: "email", required: true, autoComplete: "email", maxLength: 254 },
     { name: "company", label: "Company", placeholder: "Company name", required: false, autoComplete: "organization", maxLength: 200 },
     { name: "website", label: "Company website", placeholder: "https://company.com", type: "url", required: false, autoComplete: "url", maxLength: 2048 },
-    { name: "phone", label: "Phone", placeholder: "+94", type: "tel", required: false, autoComplete: "tel", maxLength: 40 },
+    { name: "phone", label: "Phone", placeholder: "+94", type: "tel", required: true, autoComplete: "tel", maxLength: 40 },
     { name: "subject", label: "Workforce requirement", placeholder: "20 hospitality staff for Dubai", required: false, maxLength: 200 },
   ];
   const contactFields = [

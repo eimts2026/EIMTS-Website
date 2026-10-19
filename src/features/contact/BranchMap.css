@@ -248,9 +248,12 @@
 }
 
 .branch-map-panel-topline button:hover { border-color: #fff; color: #fff; }
-.branch-map-list { display: grid; gap: 12px; }
+.branch-map-list { display: grid; grid-auto-rows: max-content; align-content: start; gap: 12px; }
 
 .branch-map-card {
+  height: max-content;
+  min-height: 0;
+  flex: 0 0 auto;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .14);
   border-radius: 14px;
@@ -265,6 +268,8 @@
 }
 
 .branch-map-card-select {
+  height: auto;
+  min-height: 0;
   width: 100%;
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr) 24px;
@@ -321,6 +326,10 @@
   font-weight: 700;
   transition: background-color .2s ease, color .2s ease;
 }
+
+/* Keep both contact actions inside the card when the desktop list scrolls. */
+.branch-map-card-actions { min-height: 48px; }
+.branch-map-card-actions a { min-width: 0; white-space: nowrap; }
 
 .branch-map-card-actions a + a { border-left: 1px solid rgba(255, 255, 255, .1); }
 .branch-map-card-actions a:hover { background: rgba(255, 255, 255, .08); color: #fff; }

@@ -14,7 +14,6 @@ const socials: Array<{ name: SocialName; label: string; href: string }> = [
   { name: "youtube", label: "YouTube", href: "https://www.youtube.com/@EmeraldIsleManpower" },
   { name: "facebook", label: "Facebook", href: "https://www.facebook.com/EmeraldIsleRecruitment" },
   { name: "linkedin", label: "LinkedIn", href: "https://lk.linkedin.com/company/emeraldislerecruitment" },
-  { name: "whatsapp", label: "WhatsApp", href: "https://api.whatsapp.com/send?phone=94773876467" },
 ];
 
 export function FloatingSocialLinks() {
@@ -78,9 +77,9 @@ export function FloatingSocialLinks() {
       href="https://wa.me/94765606454?text=Hi%20EMI%2C%20I%20need%20some%20guidance."
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Ask EMI, our AI guide on WhatsApp (opens in a new tab)"
+      aria-label="Ask Emi on WhatsApp (opens in a new tab)"
     >
-      <span className="ei-whatsapp-bot-copy"><strong>Ask from EMI</strong><span>WhatsApp AI guide ↗</span></span>
+      <span className="ei-whatsapp-bot-copy"><strong>Ask From Emi</strong></span>
       <img className="ei-emi-avatar" src="/assets/emi-guide.webp" alt="EMI, your virtual recruitment guide" width="96" height="112" />
     </a>
     <aside className="ei-social-tabs" aria-label="Follow Emerald Isle">

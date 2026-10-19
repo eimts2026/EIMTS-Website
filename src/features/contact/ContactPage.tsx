@@ -10,43 +10,8 @@ const BranchMap = dynamic(
   { ssr: false },
 );
 
-// ============================================================================
-// LOCAL OFFICE DIRECTORY DATA
-// Edit, add, or remove office entries, addresses, and phone numbers here.
-// ============================================================================
-type Office = {
-  name: string;
-  address: string;
-  phone: string;
-  phoneHref: string;
-};
-
-const offices: Office[] = [
-  {
-    name: "Head Office",
-    address: "198 Galle Road, Dehiwala–Mount Lavinia 10370, Colombo",
-    phone: "+94 11 433 5444",
-    phoneHref: "tel:+94114335444",
-  },
-  {
-    name: "Kurunegala",
-    address: "No. 72/1, 2nd Floor, Colombo Road, Kurunegala",
-    phone: "+94 77 189 1890",
-    phoneHref: "tel:+94771891890",
-  },
-  {
-    name: "Batticaloa",
-    address: "186 1/1, Fathima Building, Trinco Road, Batticaloa",
-    phone: "+94 65 222 8448",
-    phoneHref: "tel:+94652228448",
-  },
-  {
-    name: "Kandy",
-    address: "420/1 Kehelwala Rd, Kiribathkumbura 20442, Kandy",
-    phone: "+94 11 433 5444",
-    phoneHref: "tel:+94114335444",
-  },
-];
+import { branches } from "./branches";
+import "./ContactPage.css";
 
 export default function ContactPage() {
   useEffect(() => {
@@ -64,7 +29,7 @@ export default function ContactPage() {
     }
   }, []);
 
-  return <main id="main">
+  return <main id="main" className="contact-page">
     {/* ====================================================================== */}
     {/* PAGE HERO HEADER                                                       */}
     {/* ====================================================================== */}
@@ -79,19 +44,19 @@ export default function ContactPage() {
     {/* ====================================================================== */}
     <section className="content-section alt">
       <div className="container contact-details">
-        {/* Left Column: Local Offices List */}
+        {/* Left Column: Office directory */}
         <div>
           <p className="section-kicker">Our offices</p>
           <h2>Speak with a local team</h2>
-          <div className="contact-panel">
-            {offices.map((office) => (
-              <article className="contact-card" key={office.name}>
-                <h2>{office.name}</h2>
-                <p>{office.address}</p>
-                <a href={office.phoneHref}>{office.phone}</a>
-              </article>
-            ))}
-          </div>
+          <p className="contact-intro">Visit a team in Sri Lanka or reach our international offices. Choose a location below for contact details.</p>
+          {(["local", "international"] as const).map((region) => <section className="contact-office-group" key={region} aria-labelledby={`offices-${region}`}>
+            <header><h3 id={`offices-${region}`}>{region === "local" ? "Sri Lanka" : "International"}</h3><a className="contact-map-link" href={`#branch-map-${region}`}>Explore map</a></header>
+            <div className="contact-panel">
+              {branches.filter((office) => office.region === region).map((office) => <article className="contact-card" key={office.id}>
+                <h4>{office.name}</h4><p>{office.address}</p><a href={office.phoneHref}>{office.phone}</a>
+              </article>)}
+            </div>
+          </section>)}
         </div>
 
         {/* Protected inquiry submission with confirmed-delivery feedback. */}
@@ -100,7 +65,7 @@ export default function ContactPage() {
     </section>
 
     {/* ====================================================================== */}
-    {/* INTERACTIVE SRI LANKA BRANCH MAP WITH PINS & MOBILE TOUCH SLIDER       */}
+    {/* INTERACTIVE INTERNATIONAL BRANCH MAP WITH PINS & MOBILE TOUCH SLIDER       */}
     {/* Map settings and pins defined in ./BranchMap.tsx                      */}
     {/* ====================================================================== */}
     <BranchMap />
