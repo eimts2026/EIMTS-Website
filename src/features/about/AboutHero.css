@@ -36,3 +36,29 @@
   .about-showcase-story{margin-top:20px}
   .about-showcase-foot{bottom:20px;padding-top:14px}
 }
+/* Keep the longer recognition caption readable and the photograph unobscured on phones. */
+.about-showcase.ei-hero h1{font-size:clamp(2.5rem,4.7vw,4.4rem);max-width:800px;line-height:1.06}
+.about-showcase-copy{min-height:340px}
+.about-showcase-indicators button,.about-showcase-pause{pointer-events:auto;cursor:pointer;min-height:44px;border:0;color:#fff;background:transparent}
+.about-showcase-indicators button{display:grid;place-items:center;min-width:44px;padding:8px}
+.about-showcase-indicators button.is-active{background:transparent}
+.about-showcase-indicators button.is-active span{background:var(--ei-amber)}
+.about-showcase-pause{padding:8px 12px;border:1px solid #ffffff60;border-radius:24px;font:inherit}
+.about-showcase-pause:hover,.about-showcase-indicators button:hover{background:#ffffff18}
+.about-showcase-foot button:focus-visible{outline:3px solid var(--ei-amber);outline-offset:3px}
+@media(max-width:620px){
+  .about-showcase.ei-hero{display:block;min-height:0;padding-top:86px}
+  .about-showcase .about-showcase-media.ei-image-trigger{position:relative;inset:auto;display:block;width:100%;height:auto;aspect-ratio:2560/1834;border-radius:0}
+  .about-showcase-media img{object-fit:contain;object-position:center}
+  .about-showcase-media.ei-image-trigger .ei-image-expand{top:auto;bottom:16px;right:16px}
+  .about-showcase-shade{display:none}
+  .about-showcase-content{padding-top:28px;padding-bottom:24px}
+  .about-showcase.ei-hero h1{font-size:clamp(2rem,8.5vw,3rem);line-height:1.08}
+  .about-showcase-copy{min-height:300px}
+  .about-showcase-content .ei-kicker{font-size:12px;letter-spacing:.02em;text-transform:none;margin-bottom:20px}
+  .about-showcase-foot{position:relative;bottom:auto;flex-wrap:wrap;padding:14px 0 22px;gap:8px 12px}
+  .about-showcase-foot>span:first-child{width:100%}
+  .about-showcase-indicators{margin-left:0;margin-right:auto}
+  .about-showcase-count{margin-left:auto}
+}
+@media(prefers-reduced-motion:reduce){.about-showcase-indicators button span{transition:none}}

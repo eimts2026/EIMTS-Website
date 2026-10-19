@@ -5,9 +5,12 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { FloatingSocialLinks } from "@/components/layout/FloatingSocialLinks";
 import { ScrollReveal } from "@/components/layout/ScrollReveal";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import "lenis/dist/lenis.css";
 import { siteName, siteUrl } from "@/lib/site";
 import "@/styles/globals.css";
 import "@/styles/employer-tailwind.css";
+import "@/styles/ui-refinements.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -43,6 +46,7 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to main content
         </a>
+        <SmoothScroll />
         <SiteHeader />
         {children}
         <SiteFooter />

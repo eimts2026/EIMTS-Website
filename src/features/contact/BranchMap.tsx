@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   divIcon,
   latLngBounds,
-  type LatLngExpression,
   type Map as LeafletMap,
 } from "leaflet";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
@@ -12,67 +11,9 @@ import "leaflet/dist/leaflet.css";
 
 import "./BranchMap.css";
 
-// ============================================================================
-// SRI LANKA BRANCH MAP LOCATIONS & PINS
-// To add/edit map pins: Add an object with id, name, address, phone, Google Maps URL,
-// and GPS coordinates [latitude, longitude].
-// ============================================================================
-type Branch = {
-  id: string;
-  name: string;
-  city: string;
-  address: string;
-  phone: string;
-  phoneHref: string;
-  mapsUrl: string;
-  position: LatLngExpression;
-};
+import { branches, type Branch } from "./branches";
 
-const branches: Branch[] = [
-  {
-    id: "head-office",
-    name: "Head office",
-    city: "Dehiwala–Mount Lavinia",
-    address: "198 Galle Road, Dehiwala–Mount Lavinia 10370, Colombo",
-    phone: "+94 11 433 5444",
-    phoneHref: "tel:+94114335444",
-    mapsUrl: "https://share.google/jSW5rtcxaXVn9qE5k",
-    position: [6.8425904, 79.866525],
-  },
-  {
-    id: "kurunegala",
-    name: "Kurunegala branch",
-    city: "Kurunegala",
-    address: "No. 72/1, 2nd Floor, Colombo Road, Kurunegala",
-    phone: "+94 77 189 1890",
-    phoneHref: "tel:+94771891890",
-    mapsUrl: "https://share.google/DZbPHs5QIjT5bJpsa",
-    position: [7.4870464, 80.364908],
-  },
-  {
-    id: "batticaloa",
-    name: "Batticaloa branch",
-    city: "Batticaloa",
-    address: "186 1/1, Fathima Building, Trinco Road, Batticaloa",
-    phone: "+94 65 222 8448",
-    phoneHref: "tel:+94652228448",
-    mapsUrl: "https://share.google/W6UfxPkag34xZ8KzM",
-    position: [7.7356027, 81.6941956],
-  },
-  {
-    id: "kandy",
-    name: "Kandy branch",
-    city: "Kiribathkumbura",
-    address: "420/1 Kehelwala Rd, Kiribathkumbura 20442",
-    phone: "+94 11 433 5444",
-    phoneHref: "tel:+94114335444",
-    mapsUrl: "https://maps.google.com/?q=420/1+Kehelwala+Rd,+Kiribathkumbura+20442",
-    position: [7.2718, 80.5794],
-  },
-];
 
-const branchBounds = latLngBounds(branches.map((branch) => branch.position));
-const sriLankaBounds = latLngBounds([5.72, 79.35], [10.18, 82.15]);
 
 function markerIcon(isActive: boolean) {
   return divIcon({
@@ -111,7 +52,7 @@ function MapInit({ branch }: { branch: Branch | null }) {
 
   useEffect(() => {
     if (branch) {
-      map.flyTo(branch.position, 14, { duration: 0.75 });
+      map.flyTo(branch.position, branch.approximate ? 12 : 14, { duration: 0.75, animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches });
     }
   }, [branch, map]);
 
@@ -127,6 +68,22 @@ function PhoneIcon() {
 }
 
 export function BranchMap() {
+  const [region, setRegion] = useState<"local" | "international">("local");
+  const visibleBranches = useMemo(() => branches.filter((branch) => branch.region === region), [region]);
+  const branchBounds = useMemo(() => latLngBounds(visibleBranches.map((branch) => branch.position)), [visibleBranches]);
+  useEffect(() => {
+    const selectFromHash = () => {
+      const hash = window.location.hash;
+      if (hash === "#branch-map-local" || hash === "#branch-map-international") {
+        setRegion(hash.endsWith("international") ? "international" : "local");
+        setSelectedBranchId(null);
+
+      }
+    };
+    selectFromHash();
+    window.addEventListener("hashchange", selectFromHash);
+    return () => window.removeEventListener("hashchange", selectFromHash);
+  }, []);
   const [selectedBranchId, setSelectedBranchId] = useState<string | null>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const selectedBranch = useMemo(
@@ -143,7 +100,7 @@ export function BranchMap() {
     if (selectedBranchId) {
       const cardEl = document.querySelector(`.branch-map-card[data-id="${selectedBranchId}"]`);
       if (cardEl) {
-        cardEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        cardEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "nearest", inline: "center" });
       }
     }
   }, [selectedBranchId]);
@@ -152,26 +109,32 @@ export function BranchMap() {
     <div className="container">
       <header className="branch-map-heading">
         <div>
-          <p className="section-kicker">Our Sri Lanka network</p>
+          <p className="section-kicker">Our international network</p>
           <h2 id="branch-map-title">Meet us closer to home.</h2>
-          <p>Select an office to focus the map, call the local team or open turn-by-turn directions.</p>
+          <p>Find our teams in Sri Lanka, Nepal and the UAE. Select a branch to explore its location or call the team.</p>
         </div>
-        <div className="branch-map-metric" aria-label={`${branches.length} Sri Lanka locations`}>
-          <strong>{String(branches.length).padStart(2, "0")}</strong>
-          <span>locations<br />across Sri Lanka</span>
+        <div className="branch-map-metric" aria-label={`${visibleBranches.length} branch locations`}>
+          <strong>{String(visibleBranches.length).padStart(2, "0")}</strong>
+          <span>{region === "local" ? <>offices<br />in Sri Lanka</> : <>offices<br />overseas</>}</span>
         </div>
       </header>
 
-      <div className="branch-map-shell">
+      <div className="branch-region-tabs" role="tablist" aria-label="Branch region">
+        {(["local", "international"] as const).map((item) => <button key={item} id={`branch-map-${item}`} type="button" role="tab" aria-selected={region === item} aria-controls="branch-region-panel" tabIndex={region === item ? 0 : -1}
+          onClick={() => { setRegion(item); setSelectedBranchId(null); }}
+          onKeyDown={(event) => { if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) { event.preventDefault(); const next = event.key === "Home" ? "local" : event.key === "End" ? "international" : region === "local" ? "international" : "local"; setRegion(next); setSelectedBranchId(null); document.getElementById(`branch-map-${next}`)?.focus(); } }}>
+          {item === "local" ? "Sri Lanka" : "International"}<span>{item === "local" ? "4 offices" : "Nepal & UAE"}</span>
+        </button>)}
+      </div>
+      <div className="branch-map-shell" id="branch-region-panel" role="tabpanel" aria-labelledby={`branch-map-${region}`}>
         <div className="branch-map-canvas">
           <MapContainer
+            key={region}
             ref={mapRef}
             className="branch-map"
             bounds={branchBounds}
             boundsOptions={{ padding: [44, 44] }}
-            maxBounds={sriLankaBounds}
-            maxBoundsViscosity={1}
-            minZoom={7}
+            minZoom={2}
             maxZoom={17}
             scrollWheelZoom={false}
             zoomControl
@@ -181,7 +144,7 @@ export function BranchMap() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <MapInit branch={selectedBranch} />
-            {branches.map((branch) => <Marker
+            {visibleBranches.map((branch) => <Marker
               key={branch.id}
               position={branch.position}
               icon={markerIcon(branch.id === selectedBranchId)}
@@ -192,25 +155,26 @@ export function BranchMap() {
                 <div className="branch-map-popup">
                   <strong>{branch.name}</strong>
                   <span>{branch.address}</span>
+                  {branch.approximate && <span>Approximate area — call for the exact office location.</span>}
                   <a href={branch.phoneHref}>{branch.phone}</a>
                 </div>
               </Popup>
             </Marker>)}
           </MapContainer>
           <div className="branch-map-country-label" aria-hidden="true">
-            <span>Sri Lanka</span>
-            <small>Island-wide branch locator</small>
+            <span>{selectedBranch?.city ?? (region === "local" ? "Sri Lanka" : "Nepal · UAE")}</span>
+            <small>{selectedBranch?.approximate ? "Approximate area location" : "Our branch network"}</small>
           </div>
         </div>
 
-        <aside className="branch-map-panel" aria-label="Sri Lanka branch locations">
+        <aside className="branch-map-panel" aria-label="Branch locations">
           <div className="branch-map-panel-topline">
             <p>Choose a branch</p>
             <button type="button" onClick={showAllBranches}>View all</button>
           </div>
 
-          <div className="branch-map-list">
-            {branches.map((branch, index) => {
+          <div className="branch-map-list" data-lenis-prevent>
+            {visibleBranches.map((branch, index) => {
               const isSelected = branch.id === selectedBranchId;
               const directionsUrl = branch.mapsUrl;
 
@@ -226,12 +190,13 @@ export function BranchMap() {
                     <strong>{branch.name}</strong>
                     <small>{branch.city}</small>
                     <span>{branch.address}</span>
+                    {branch.approximate && <small>Approximate area · call for exact location</small>}
                   </span>
                   <span className="branch-map-card-arrow" aria-hidden="true">↗</span>
                 </button>
                 <div className="branch-map-card-actions">
                   <a href={branch.phoneHref}><PhoneIcon />{branch.phone}</a>
-                  <a href={directionsUrl} target="_blank" rel="noreferrer"><DirectionsIcon />Directions</a>
+                  <a href={directionsUrl} target="_blank" rel="noreferrer"><DirectionsIcon />{branch.approximate ? "View area" : "Directions"}</a>
                 </div>
               </article>;
             })}
