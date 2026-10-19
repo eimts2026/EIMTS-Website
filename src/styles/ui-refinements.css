@@ -29,3 +29,21 @@ main .content-section,main .hf-section,main .ei-about-story,main .ei-management,
 main .page-hero:not(.page-hero--full-height){min-height:420px;padding-top:145px;padding-bottom:48px}
 main .ei-about-contact,main .ei-final-cta{padding-top:56px;padding-bottom:56px}
 @media(max-width:760px){main .content-section,main .hf-section,main .ei-about-story,main .ei-management,main .ei-leadership-messages,main .ei-award-showcase,main .ei-about-strengths,main .ei-recognition,main .branch-map-section,main .ei-about-contact,main .ei-final-cta{padding-top:40px;padding-bottom:40px}main .page-hero:not(.page-hero--full-height){min-height:360px;padding-top:125px;padding-bottom:36px}}
+/* One typographic system across public routes. */
+:root{--font-sans:"Raleway","Raleway Fallback",Arial,sans-serif;--font-body:"Raleway","Raleway Fallback",Arial,sans-serif;--font-accent:"Raleway","Raleway Fallback",Arial,sans-serif;--font-numeric:"Raleway","Raleway Fallback",Arial,sans-serif}
+body{font-family:var(--font-body)}
+:is(h1,h2,h3,h4,h5,h6){font-family:var(--font-sans)}
+:is(.top-nav,.global-mobile-menu,.section-kicker,.hf-eyebrow,.recruit-hero-top){font-family:var(--font-accent)}
+:is(.branch-map-metric strong,.recruit-license,.ei-about-license-list dd){font-family:var(--font-numeric)}
+/* Section changes are carried by colour and content; no dividing rules. */
+main>section,main>div>section,.global-footer-lead,.recruit-hero-top,.recruit-hero-foot{border-top:0!important;border-bottom:0!important}
+.contact-office-group>header,.contact-page .contact-card{border-bottom:0!important}
+.contact-office-group+.contact-office-group{margin-top:44px}
+.ei-about-credentials,.ei-award-showcase,.company-certificates{border-top:0!important;border-bottom:0!important}
+/* A restrained shared reveal for visual material. */
+.ei-motion-ready [data-reveal="image"],.ei-motion-ready [data-reveal="block"]{opacity:0;transform:translateY(18px) scale(.99);transition:opacity .75s var(--ei-ease),transform .75s var(--ei-ease)}
+.ei-motion-ready [data-reveal="image"].is-visible,.ei-motion-ready [data-reveal="block"].is-visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.ei-motion-ready [data-reveal="image"],.ei-motion-ready [data-reveal="block"]{opacity:1;transform:none;transition:none}}
+
+
+.bot-protection{width:100%;min-width:0;grid-column:1/-1}.bot-protection p{font-size:13px;line-height:1.5;color:inherit}

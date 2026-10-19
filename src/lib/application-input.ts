@@ -1,5 +1,5 @@
-export const MAX_CV_BYTES = 10 * 1024 * 1024;
-export const MAX_APPLICATION_BYTES = 11 * 1024 * 1024;
+export const MAX_CV_BYTES = 3 * 1024 * 1024;
+export const MAX_APPLICATION_BYTES = 4 * 1024 * 1024;
 export const APPLICATION_ACCEPT = ".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 export class ApplicationInputError extends Error {
@@ -73,7 +73,7 @@ export function validateApplication(form: FormData) {
   if (form.getAll("cv").length !== 1 || !(cv instanceof File) || !cv.size) {
     throw new ApplicationInputError("Please attach your CV.");
   }
-  if (cv.size > MAX_CV_BYTES) throw new ApplicationInputError("Your CV must be 10 MB or smaller.");
+  if (cv.size > MAX_CV_BYTES) throw new ApplicationInputError("Your CV must be 3 MB or smaller. For a larger CV, email cv@emeraldisle.lk.");
   if (!["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(cv.type)) {
     throw new ApplicationInputError("Please upload a PDF, DOC or DOCX CV.");
   }

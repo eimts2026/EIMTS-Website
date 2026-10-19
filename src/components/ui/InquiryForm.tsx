@@ -1,8 +1,12 @@
 "use client";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import "./InquiryForm.css";
+import { BotProtection } from "./BotProtection";
 export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer" | "contact"; headingId?: string }) {
   const id = useId();
+  const [botToken, setBotToken] = useState("");
+  const [botReset, setBotReset] = useState(0);
+  const submissionId = useRef<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const confirmation = useRef<HTMLDivElement>(null);
   const submitting = useRef(false);
@@ -20,16 +24,19 @@ export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting.current) return;
+    if (!botToken) { setStatus("error"); setFeedback("Please complete the spam protection check."); return; }
+    submissionId.current ??= crypto.randomUUID();
     const form = event.currentTarget;
     const payload = Object.fromEntries(new FormData(form));
     submitting.current = true; setStatus("sending"); setFeedback("");
     try {
-      const response = await fetch(`/api/${contact ? "contact" : "employer"}-inquiry`, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } });
+      const response = await fetch(`/api/${contact ? "contact" : "employer"}-inquiry`, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "application/json", "x-turnstile-token": botToken, "Idempotency-Key": submissionId.current } });
       const result = await response.json();
+      if (response.status === 409) submissionId.current = null;
       if (!response.ok) throw new Error(result.message || "We could not send your inquiry. Please try again.");
-      form.reset(); setFeedback(result.message); setStatus("success");
+      form.reset(); submissionId.current = null; setFeedback(result.message); setStatus("success");
     } catch (error) { setStatus("error"); setFeedback(error instanceof Error ? error.message : "Connection interrupted. Please try again."); }
-    finally { submitting.current = false; }
+    finally { submitting.current = false; setBotReset(value => value + 1); }
   }
   const employerFields = [
     { name: "name", label: "Your name", placeholder: "Full name", required: true, autoComplete: "name", maxLength: 150 },
@@ -54,13 +61,14 @@ export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">{(contact ? contactFields : employerFields).map(({ label, ...field }) => <div className="flex flex-col gap-2" key={field.name}><label htmlFor={`${id}-${field.name}`}>{label} <span className="inquiry-field-hint">{field.required ? "*" : "Optional"}</span></label><input {...field} id={`${id}-${field.name}`} disabled={status === "sending"} /></div>)}</div>
           <div className="flex flex-col gap-2"><label htmlFor={`${id}-message`}>{contact ? "Comment" : "How can we help?"} <span className="inquiry-field-hint">*</span></label><textarea id={`${id}-message`} required name="message" maxLength={4000} rows={3} disabled={status === "sending"} placeholder={contact ? "Tell us what you need help with." : "Locations, target dates, roles and anything else we should know."} /></div>
           <div className="form-honeypot" aria-hidden="true"><label>Leave this empty<input name="fax" tabIndex={-1} autoComplete="off" /></label></div>
-          <div className="inquiry-form-footer"><button className="secure-inquiry-submit" type="submit" disabled={status === "sending"}>{status === "sending" ? "Sending inquiry…" : "Send inquiry"}<span aria-hidden="true">↗</span></button><small>{contact ? "All fields are required." : "Fields marked * are required."}</small></div>
+          <BotProtection action={kind} resetKey={botReset} onToken={setBotToken} />
+          <div className="inquiry-form-footer"><button className="secure-inquiry-submit" type="submit" disabled={status === "sending" || !botToken}>{status === "sending" ? "Sending inquiry…" : "Send inquiry"}<span aria-hidden="true">↗</span></button><small>{contact ? "All fields are required." : "Fields marked * are required."}</small></div>
           <p className="secure-inquiry-error" role="alert">{status === "error" ? feedback : ""}</p>
           {contact && <p className="inquiry-email-alternative">Or email <a href="mailto:info@emeraldisle.lk">info@emeraldisle.lk</a></p>}
         </form>
       </div>
       <div ref={confirmation} className="inquiry-flip-back" inert={!success} aria-hidden={!success} tabIndex={-1} role="status" aria-live="polite">
-        <span className="inquiry-success-mark" aria-hidden="true">✓</span><h2>Inquiry sent.</h2><p>{success ? feedback : "Our team will be in touch."}</p><small>Thank you for Reaching Emerald isle Manpower.</small><button type="button" onClick={returnToForm}>Back to form</button>
+        <span className="inquiry-success-mark" aria-hidden="true">✓</span><h2>Inquiry received.</h2><p>{success ? feedback : "Our team will be in touch."}</p><small>Thank you for Reaching Emerald isle Manpower.</small><button type="button" onClick={returnToForm}>Back to form</button>
       </div>
     </div>
   </div>;

@@ -41,3 +41,6 @@ yarn-error.log*
 # Local tool caches
 /.tmp/npm-cache/
 /supabase/.temp/
+
+# Isolated performance verification build
+/.next-performance/

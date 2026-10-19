@@ -1,3 +1,4 @@
+import { preload } from "react-dom";
 import type { HeroContent } from "../../lib/hero";
 import Link from "../../components/ui/Link";
 import type { Job } from "../jobs/JobsPage";
@@ -16,21 +17,17 @@ const testimonials = [
 const jobsUrl = "/foreign-job-vacancies/";
 const aboutUrl = "/about-us-emerald-isle-manpower/";
 export default function Home({ hero, urgentJobs = [] }: { hero: HeroContent; urgentJobs?: Job[] }) {
+  preload("/assets/emerald-journey-hero.webp", { as: "image", fetchPriority: "high" });
   const occasion = hero.takeover ? hero.slides[0] : null;
   return <main id="main" className="home-foundation">
     <section className="recruit-hero" aria-labelledby="home-title"><div className="hf-shell">
       <div className="recruit-hero-top"><span>Emerald Isle Manpower &amp; Travel Services</span><span>From Sri Lanka. Since 1995.</span></div>
       <div className="recruit-hero-grid"><div className="recruit-hero-copy">
-        <p className="recruit-hero-kicker">People make the difference.</p>
-        <h1 id="home-title">{occasion ? occasion.title : <>Good people.<br />Global<br />possibilities.</>}</h1>
-        <p className="recruit-hero-lead">{occasion ? occasion.copy : "Your ambition deserves a wider world. We bring Sri Lankan talent and overseas employers together, with responsible recruitment every step of the way."}</p>
-        <div className="recruit-hero-actions"><Link className="hf-button" href={jobsUrl}>Find your next role <span aria-hidden="true">↗</span></Link><Link className="hf-link" href="/client-recruitment-solutions/">Build your team <span aria-hidden="true">↗</span></Link></div>
-      </div><div className="recruit-hero-art" aria-label="From local talent to global opportunity">
-        <div className="recruit-seal"><span>Recruitment with responsibility</span><strong>Since<br /><b>1995</b></strong><span>Sri Lanka → the world</span></div>
-        <svg className="recruit-route-art" viewBox="0 0 460 480" aria-hidden="true"><circle cx="230" cy="240" r="186" /><circle cx="230" cy="240" r="145" /><path d="M50 370C145 425 385 340 392 150S150 40 85 135" /><circle className="recruit-route-point" cx="50" cy="370" r="7" /><circle className="recruit-route-point" cx="392" cy="150" r="7" /><path className="recruit-route-arrow" d="m365 154 27-4-7 27" /></svg>
-        <span className="recruit-origin">Local talent</span><span className="recruit-destination">Global opportunity</span>
-        <p className="recruit-hero-art-note">The right connection<br />changes everything.</p>
-      </div></div>
+        <p className="recruit-hero-kicker">Opportunity begins with a person.</p>
+        <h1 id="home-title">{occasion ? occasion.title : <>From here,<br /><span>to anywhere.</span></>}</h1>
+        <p className="recruit-hero-lead">{occasion ? occasion.copy : "A new role can change more than a career. We connect Sri Lankan talent with global employers, guiding every step with care."}</p>
+        <div className="recruit-hero-actions"><Link className="hf-button" href={jobsUrl}>Explore opportunities <span aria-hidden="true">↗</span></Link><Link className="hf-link" href="/client-recruitment-solutions/">Find your people <span aria-hidden="true">↗</span></Link></div>
+      </div><div className="recruit-hero-art" aria-hidden="true" /></div>
       <div className="recruit-hero-foot"><span className="recruit-license"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 3v6c0 5-8 11-8 11S4 16 4 11V5Z"/><path d="m8 11 3 3 5-6"/></svg>SLBFE licensed · No. 1162</span><span>Recruitment / Documentation / Deployment support</span><a href="#urgent-title">Explore current opportunities ↓</a></div>
     </div></section>
     <section className="hf-section hf-jobs" aria-labelledby="urgent-title"><div className="hf-shell">

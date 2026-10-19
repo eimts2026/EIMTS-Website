@@ -1,14 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import dynamic from "next/dynamic";
+import { BranchMap } from "./BranchMap";
 import { PageHero } from "../../components/ui/PageHero";
 import { InquiryForm } from "../../components/ui/InquiryForm";
-
-const BranchMap = dynamic(
-  () => import("./BranchMap").then((module) => module.BranchMap),
-  { ssr: false },
-);
 
 import { branches } from "./branches";
 import "./ContactPage.css";
@@ -48,7 +43,7 @@ export default function ContactPage() {
         <div>
           <p className="section-kicker">Our offices</p>
           <h2>Speak with a local team</h2>
-          <p className="contact-intro">Visit a team in Sri Lanka or reach our international offices. Choose a location below for contact details.</p>
+          <p className="contact-intro">Visit a team in Sri Lanka or explore our international network. Choose a location below for available details.</p>
           {(["local", "international"] as const).map((region) => <section className="contact-office-group" key={region} aria-labelledby={`offices-${region}`}>
             <header><h3 id={`offices-${region}`}>{region === "local" ? "Sri Lanka" : "International"}</h3><a className="contact-map-link" href={`#branch-map-${region}`}>Explore map</a></header>
             <div className="contact-panel">

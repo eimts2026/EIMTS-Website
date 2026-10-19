@@ -24,6 +24,7 @@ try {
 }
 
 const nextConfig: NextConfig = {
+  distDir: process.env.EIMTS_BUILD_DIR || ".next",
   trailingSlash: true,
   images: {
     formats: ["image/avif", "image/webp"],

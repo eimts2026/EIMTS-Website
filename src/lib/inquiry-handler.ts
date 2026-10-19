@@ -1,10 +1,12 @@
-import nodemailer from "nodemailer";
+import { verifyBotProtection, SubmissionError } from "./bot-protection";
+import { limitSubmission } from "./submission-service";
+import { queueInquiry } from "./inquiry-queue";
 import { NextResponse } from "next/server";
 const fail = (message: string, status = 400) => NextResponse.json({ message }, { status });
 
 export async function handleInquiry(request: Request, contact = false) {
-  const origin = request.headers.get("origin");
-  if (!origin || origin !== new URL(request.url).origin) return fail("Please submit from our website.", 403);
+  try { await verifyBotProtection(request, contact ? "contact" : "employer"); }
+  catch (error) { return error instanceof SubmissionError ? fail(error.message, error.status) : fail("Verification unavailable.", 503); }
   if (!request.headers.get("content-type")?.includes("application/json")) return fail("Unsupported form format.", 415);
   const reader = request.body?.getReader();
   if (!reader) return fail("Please complete the inquiry form.");
@@ -35,14 +37,9 @@ export async function handleInquiry(request: Request, contact = false) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)) return fail("Please enter a valid email address.");
   if (input.website) { try { if (!["http:", "https:"].includes(new URL(input.website).protocol)) throw new Error(); } catch { return fail("Please enter a website beginning with https:// or leave it empty."); } }
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASSWORD) return fail("Online inquiries are temporarily unavailable. Please contact our team by email or phone.", 503);
-  const recipients = contact ? ["info@emeraldisle.lk"] : ["bd@emeraldisle.lk", "admin@emerldisle.lk"];
-  const port = Number(process.env.SMTP_PORT || 465);
-  const transport = nodemailer.createTransport({ host: process.env.SMTP_HOST, port, secure: port === 465, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }, connectionTimeout: 10000, socketTimeout: 20000 });
   try {
-    const result = await transport.sendMail({ from: process.env.APPLICATIONS_EMAIL_FROM || process.env.SMTP_USER, to: recipients, replyTo: input.email,
-      subject: `${contact ? "Contact" : "Employer"} inquiry: ${input.subject || "Hiring needs"}`, text: Object.entries(input).map(([key, value]) => `${key}: ${value || "Not provided"}`).join("\n\n") });
-    if (result.rejected?.length || result.accepted?.length !== recipients.length) return fail("Delivery could not be confirmed for every inbox. Please contact our team before resubmitting.", 502);
-    return NextResponse.json({ message: "Your inquiry has been sent. Our team will be in touch." });
-  } catch { return fail("We could not send your inquiry. Please try again or contact our team by email.", 502); }
-  finally { transport.close(); }
+    await limitSubmission(request, input.email, "inquiry");
+    const reference = await queueInquiry(request, contact ? "contact" : "employer", input);
+    return NextResponse.json({ message: "Your inquiry has been received. Our team will be in touch.", reference }, {status: 202});
+  } catch(error) { return error instanceof SubmissionError ? fail(error.message,error.status) : fail("Your inquiry could not be saved. Please try again.",503); }
 }

@@ -8,6 +8,7 @@ import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import "lenis/dist/lenis.css";
 import { siteName, siteUrl } from "@/lib/site";
+import { Analytics } from "@vercel/analytics/next";
 import "@/styles/globals.css";
 import "@/styles/employer-tailwind.css";
 import "@/styles/ui-refinements.css";
@@ -31,6 +32,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-GB" suppressHydrationWarning>
+      <head><link rel="preload" href="/fonts/raleway/raleway-latin-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" /></head>
       <body>
         {/* Runs before first paint so reveal targets start hidden instead of
             flashing visible then re-animating. Without JS it never runs and
@@ -53,6 +55,7 @@ export default function RootLayout({
         <FloatingSocialLinks />
         <ScrollReveal />
         <ScrollToTop />
+        <Analytics />
       </body>
     </html>
   );

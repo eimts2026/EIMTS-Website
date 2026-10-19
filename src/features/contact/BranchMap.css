@@ -448,3 +448,5 @@
   body:has(.branch-map-section) .floating-social-links { display: none; }
   body:has(.branch-map-section) .scroll-to-top { display: none; }
 }
+
+.branch-map-loading{position:absolute;inset:0;display:grid;place-items:center;width:100%;height:100%;margin:0;padding:24px;background:#edf3ed;border:0;color:#133e30;font:inherit;cursor:pointer}
