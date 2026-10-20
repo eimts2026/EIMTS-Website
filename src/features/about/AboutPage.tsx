@@ -2,6 +2,7 @@ import Link from "../../components/ui/Link";
 import AboutHero from "./AboutHero";
 import CertificateSlider from "./CertificateSlider";
 import RollingGallery, { type RollingGalleryItem } from "./RollingGallery";
+import BootstrapIcon from "../../components/ui/BootstrapIcon";
 import "./AboutPage.css";
 
 // ============================================================================
@@ -9,12 +10,8 @@ import "./AboutPage.css";
 // Edit executive names, roles, initials, and portrait image paths here.
 // Image files stored in: /public/assets/leadership/
 // ============================================================================
-type Leader = {
-  name: string;
-  role: string;
-  initials: string;
-  image?: string;
-};
+
+type Leader = { name: string; role: string; initials: string; image?: string };
 
 const leaders: Leader[] = [
   { name: "Hemantha Sapumohotti", role: "Chief Executive Officer", initials: "HS", image: "/assets/leadership/hemantha.webp" },
@@ -82,16 +79,13 @@ export default function AboutPage() {
           <p>Experienced leadership, shared standards and a commitment to responsible recruitment.</p>
         </div>
         <div className="ei-leader-list">
-          {leaders.map((leader) => <article className="ei-leader-card" key={leader.name} tabIndex={0} aria-label={`${leader.name}, ${leader.role}`}>
+          {leaders.map((leader) => <article className="ei-leader-card" key={leader.name} aria-label={`${leader.name}, ${leader.role}`}>
             <div className="ei-leader-portrait">
               {leader.image
                 ? <img src={leader.image} alt="" width="640" height="800" loading="lazy" />
                 : <span className="ei-leader-placeholder" aria-hidden="true">{leader.initials}</span>}
             </div>
-            <div className="ei-leader-details">
-              <h3>{leader.name}</h3>
-              <p>{leader.role}</p>
-            </div>
+            <div className="ei-leader-details"><h3>{leader.name}</h3><p>{leader.role}</p></div>
           </article>)}
         </div>
       </div>
@@ -100,10 +94,10 @@ export default function AboutPage() {
       <div className="container ei-about-strengths-grid">
         <div><h2 id="strengths-title">Why employers and candidates choose Emerald Isle.</h2><p>Recruitment that starts with understanding people and follows through on the details.</p></div>
         <div className="ei-about-strengths-list">
-          <article><h3>Specialists who understand your industry</h3><p>Dedicated teams combine labour-market research with a clear understanding of each employer’s requirements.</p></article>
-          <article><h3>Careful screening. A considered match.</h3><p>We look at skills, experience and ambitions to connect candidates with roles that fit and employers with capable people.</p></article>
-          <article><h3>Guidance through the recruitment journey</h3><p>From the first conversation to documentation and deployment support, our team helps candidates understand their next steps.</p></article>
-          <article><h3>Local knowledge. International reach.</h3><p>Our Sri Lankan roots and overseas network bring people and employers together across borders.</p></article>
+          <article><span className="ei-strength-icon ei-strength-icon--briefcase" aria-hidden="true" /><div><h3>Specialists who understand your industry</h3><p>Dedicated teams combine labour-market research with a clear understanding of each employer’s requirements.</p></div></article>
+          <article><span className="ei-strength-icon ei-strength-icon--person-check" aria-hidden="true" /><div><h3>Careful screening. A considered match.</h3><p>We look at skills, experience and ambitions to connect candidates with roles that fit and employers with capable people.</p></div></article>
+          <article><span className="ei-strength-icon ei-strength-icon--compass" aria-hidden="true" /><div><h3>Guidance through the recruitment journey</h3><p>From the first conversation to documentation and deployment support, our team helps candidates understand their next steps.</p></div></article>
+          <article><span className="ei-strength-icon ei-strength-icon--globe" aria-hidden="true" /><div><h3>Local knowledge. International reach.</h3><p>Our Sri Lankan roots and overseas network bring people and employers together across borders.</p></div></article>
         </div>
       </div>
     </section>
@@ -131,7 +125,7 @@ export default function AboutPage() {
                 <h3>{milestone.name}</h3>
                 <p>{milestone.detail}</p>
               </div>
-              <span className="ei-recognition-arrow" aria-hidden="true">↗</span>
+              <span className="ei-recognition-arrow" aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span>
             </article>)}
           </div>
         </div>

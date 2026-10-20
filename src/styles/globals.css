@@ -1024,8 +1024,8 @@ body{overflow-x:hidden;background:var(--ei-neutral);color:var(--ei-ink)}
 .top-nav{gap:clamp(16px,1.65vw,27px)}
 .top-nav>a,.nav-group>a{letter-spacing:.025em}
 .footer-contact-link{color:var(--ei-amber)!important;font-weight:700}
-.footer-contact-link:after{content:" \2192";display:inline-block;margin-left:5px;transition:transform .2s var(--ei-ease)}
-@media(hover:hover){.footer-contact-link:hover:after{transform:translateX(4px)}}
+.footer-contact-link svg{display:inline-block;width:14px;height:14px;margin-left:5px;vertical-align:-2px;transition:transform .2s var(--ei-ease)}
+@media(hover:hover){.footer-contact-link:hover svg{transform:translateX(4px)}}
 @media(min-width:1041px) and (max-width:1180px){
   .nav-shell{grid-template-columns:180px minmax(0,1fr) 154px;gap:16px}
   .global-brand img{width:176px}
@@ -2244,8 +2244,19 @@ input,select,textarea,button{max-inline-size:100%}
 @media(max-width:620px){
   .global-mobile-menu>nav{position:absolute;top:calc(100% + 16px);right:-6px;left:auto;width:calc(100vw - 40px);max-width:calc(100vw - 40px);max-height:calc(100dvh - 112px);overscroll-behavior:contain}
   .global-mobile-menu .mobile-job-menu>a{justify-content:flex-start!important;text-align:left}
+  .global-mobile-menu .mobile-contact-menu[open]{padding-bottom:8px;background:rgba(8,121,93,.08)}
+  .global-mobile-menu .mobile-contact-menu[open]>a{display:flex!important;min-height:46px;padding:10px 16px!important;color:#0b3815!important;opacity:1!important;visibility:visible!important;justify-content:flex-start!important;text-align:left!important}
+  .global-mobile-menu .mobile-contact-menu[open]>a:focus-visible{outline:2px solid var(--ei-amber);outline-offset:-2px}
 }
 @media(prefers-reduced-motion:reduce){.global-mobile-menu>nav,.mobile-nav-toggle,.menu-lines,.menu-lines:before,.menu-lines:after{transition:none!important}}
+
+/* Reusable touch rail: native scrolling is stable across touch, mouse, keyboard, and reduced-motion settings. */
+.horizontal-drag-rail{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab;touch-action:pan-y;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.horizontal-drag-rail::-webkit-scrollbar{display:none}
+.horizontal-drag-rail:focus-visible{outline:2px solid var(--ei-amber);outline-offset:6px;border-radius:12px}
+.horizontal-drag-rail:active{cursor:grabbing}
+.horizontal-drag-rail__track{display:flex;width:max-content;gap:20px;padding:6px 2px 20px}
+@media(prefers-reduced-motion:reduce){.horizontal-drag-rail{scroll-behavior:auto}}
 
 /* All client quotes repeat as two identical tracks for a seamless loop. */
 .ei-testimonial-loop{overflow:hidden;padding:8px 0 24px;touch-action:pan-y}

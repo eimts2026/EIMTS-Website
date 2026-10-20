@@ -1,14 +1,13 @@
 /* Shared public-site actions. Keep navigation and inline links visually lighter. */
 html.lenis,html.lenis body{height:auto}
 html.lenis{scroll-behavior:auto!important}
-.contact-nav-menu{position:relative}
-.contact-nav-menu>summary{list-style:none;display:flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;font:inherit;color:inherit}
-.contact-nav-menu>summary::-webkit-details-marker{display:none}
-.contact-nav-dropdown{position:absolute;right:0;top:calc(100% + 12px);width:290px;padding:10px;border:1px solid #d3dfd6;border-radius:18px;background:#fff;color:#10221a;box-shadow:0 16px 38px #03271f24}
-.top-nav .contact-nav-dropdown a{display:block;padding:14px 16px;border-radius:10px;color:#10221a;min-height:44px;font-size:15px;text-transform:none;letter-spacing:0}
-.contact-nav-dropdown a:hover,.contact-nav-dropdown a:focus-visible{background:#edf3ed;color:#063f31}
-.contact-nav-dropdown a span{display:block;margin-top:5px;font-size:12px;font-weight:400;color:#52635c}
-.contact-nav-menu summary:focus-visible{outline:3px solid #f3b84b;outline-offset:5px;border-radius:5px}
+.contact-nav-group{position:relative}
+.contact-nav-dropdown{position:absolute;z-index:1010;right:-18px;top:100%;width:290px;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#03271f;color:#fff;box-shadow:0 24px 48px rgba(0,20,15,.28);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(10px);transition:opacity .25s var(--ei-ease),transform .25s var(--ei-ease),visibility .25s}
+.contact-nav-group.is-open .contact-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+.top-nav .contact-nav-dropdown a{display:block;min-height:44px;padding:13px 15px;border-radius:10px;color:#fff;font-size:14px;text-transform:none;letter-spacing:0;white-space:normal;transition:background .2s,color .2s}
+.top-nav .contact-nav-dropdown a:hover,.top-nav .contact-nav-dropdown a:focus-visible{background:rgba(255,255,255,.09);color:var(--ei-amber)}
+.contact-nav-dropdown a span{display:block;margin-top:5px;color:#c7d5cf;font-size:12px;font-weight:400;line-height:1.4}
+.contact-nav-group .nav-group-trigger:focus-visible{outline:3px solid var(--ei-amber);outline-offset:5px;border-radius:5px}
 .global-footer-brand address{font-style:normal;margin-top:16px;max-width:28ch;line-height:1.65}
 .global-footer-brand address a{font-size:14px}
 :is(.ei-button,.primary-button,.secure-inquiry-submit,.hf-button,.jobs-filter button,.jobs-empty button){border-radius:999px;min-height:48px;font-weight:650;cursor:pointer;transition:background-color .2s,color .2s,box-shadow .2s}
@@ -47,3 +46,11 @@ main>section,main>div>section,.global-footer-lead,.recruit-hero-top,.recruit-her
 
 
 .bot-protection{width:100%;min-width:0;grid-column:1/-1}.bot-protection p{font-size:13px;line-height:1.5;color:inherit}
+
+/* Public scroll actions use an inline icon instead of browser-dependent glyphs. */
+.ei-scroll-cta,.about-showcase-story.ei-scroll-cta{display:inline-flex;align-items:center;justify-content:space-between;gap:24px;min-height:52px;padding:5px 6px 5px 20px;border:1px solid currentColor;border-radius:999px;text-decoration:none;font-size:14px;font-weight:650;line-height:1.2;transition:background-color .25s ease,color .25s ease,transform .25s ease}
+.ei-scroll-cta>span:last-child{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:50%;background:var(--ei-amber);color:#102a22;transition:transform .25s ease,background-color .25s ease}
+.ei-scroll-cta svg{display:block;width:16px;height:16px}
+.ei-scroll-cta:focus-visible{outline:3px solid var(--ei-amber);outline-offset:4px}
+@media(hover:hover) and (pointer:fine){.ei-scroll-cta:hover{transform:translateY(-2px)}.ei-scroll-cta:hover>span:last-child{transform:translateY(2px)}}
+@media(prefers-reduced-motion:reduce){.ei-scroll-cta,.ei-scroll-cta>span:last-child{transition:none!important}}

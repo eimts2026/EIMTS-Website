@@ -2,6 +2,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import "./InquiryForm.css";
 import { BotProtection } from "./BotProtection";
+import BootstrapIcon from "./BootstrapIcon";
 export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer" | "contact"; headingId?: string }) {
   const id = useId();
   const [botToken, setBotToken] = useState("");
@@ -62,7 +63,7 @@ export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer
           <div className="flex flex-col gap-2"><label htmlFor={`${id}-message`}>{contact ? "Comment" : "How can we help?"} <span className="inquiry-field-hint">*</span></label><textarea id={`${id}-message`} required name="message" maxLength={4000} rows={3} disabled={status === "sending"} placeholder={contact ? "Tell us what you need help with." : "Locations, target dates, roles and anything else we should know."} /></div>
           <div className="form-honeypot" aria-hidden="true"><label>Leave this empty<input name="fax" tabIndex={-1} autoComplete="off" /></label></div>
           <BotProtection action={kind} resetKey={botReset} onToken={setBotToken} />
-          <div className="inquiry-form-footer"><button className="secure-inquiry-submit" type="submit" disabled={status === "sending" || !botToken}>{status === "sending" ? "Sending inquiry…" : "Send inquiry"}<span aria-hidden="true">↗</span></button><small>{contact ? "All fields are required." : "Fields marked * are required."}</small></div>
+          <div className="inquiry-form-footer"><button className="secure-inquiry-submit" type="submit" disabled={status === "sending" || !botToken}>{status === "sending" ? "Sending inquiry…" : "Send inquiry"}<span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></button><small>{contact ? "All fields are required." : "Fields marked * are required."}</small></div>
           <p className="secure-inquiry-error" role="alert">{status === "error" ? feedback : ""}</p>
           {contact && <p className="inquiry-email-alternative">Or email <a href="mailto:info@emeraldisle.lk">info@emeraldisle.lk</a></p>}
         </form>

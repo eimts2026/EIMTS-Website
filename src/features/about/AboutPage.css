@@ -255,23 +255,20 @@
   .ei-about-hero-foot a span { transition: none; }
 }
 .ei-leader-list {
-  display: flex;
-  gap: clamp(20px, 2.2vw, 28px);
-  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
   padding: 8px 0 24px;
 }
 
 .ei-leader-card {
   position: relative;
-  flex: 1 1 0;
   min-width: 0;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: 8px;
   background: var(--ei-green);
   isolation: isolate;
-  outline: none;
-  transition: transform 0.35s var(--ei-ease);
 }
 
 .ei-leader-portrait {
@@ -307,10 +304,7 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: 20px;
-  background: rgba(3, 39, 31, 0.94);
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.28s var(--ei-ease), transform 0.35s var(--ei-ease);
+  background: linear-gradient(180deg, transparent 40%, rgba(3, 39, 31, 0.94) 100%);
 }
 
 .ei-leader-details h3 {
@@ -328,26 +322,18 @@
   line-height: 1.35;
 }
 
-.ei-leader-card:hover,
-.ei-leader-card:focus-visible {
-  transform: translateY(-4px);
-}
-
-.ei-leader-card:hover .ei-leader-details,
-.ei-leader-card:focus .ei-leader-details {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 .ei-leader-card:hover .ei-leader-portrait img,
-.ei-leader-card:focus .ei-leader-portrait img {
+.ei-leader-card:focus-within .ei-leader-portrait img {
   transform: scale(1.035);
   filter: saturate(1);
 }
 
-.ei-leader-card:focus-visible {
-  outline: 3px solid var(--ei-amber);
-  outline-offset: 3px;
+@media (max-width: 1100px) {
+  .ei-leader-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 740px) {
+  .ei-leader-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .ei-leadership-voices {
@@ -623,18 +609,6 @@
   pointer-events: none;
 }
 @media (max-width: 900px) {
-  .ei-leader-list {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
-    scrollbar-color: #89a098 transparent;
-  }
-
-  .ei-leader-card {
-    flex: 0 0 min(42vw, 260px);
-    scroll-snap-align: start;
-  }
-
   .ei-leadership-voices-head { grid-template-columns: 1fr; gap: 20px; }
 
   .ei-leadership-message,
@@ -656,9 +630,9 @@
 }
 
 @media (max-width: 620px) {
-  .ei-leader-list { gap: 16px; padding-bottom: 20px; }
+  .ei-leader-list { grid-template-columns: 1fr; gap: 18px; }
 
-  .ei-leader-card { flex-basis: min(76vw, 278px); }
+  .ei-leader-card { width: min(100%, 420px); justify-self: center; }
 
   .ei-leadership-voices { padding: 68px 0; }
 
@@ -957,8 +931,13 @@
 .ei-about-strengths-grid{display:grid;grid-template-columns:1fr 1fr;gap:8vw}
 .ei-about-strengths h2,.ei-about-contact h2{font-size:clamp(2.4rem,4vw,4rem);line-height:1.08;margin:0 0 24px;color:var(--ei-green)}
 .ei-about-strengths p{color:var(--ei-muted);font-size:17px}
-.ei-about-strengths-list article{padding:24px 0;border-top:1px solid #ced8d1}
+.ei-about-strengths-list article{display:grid;grid-template-columns:42px minmax(0,1fr);gap:20px;align-items:start;padding:24px 0;border-top:1px solid #ced8d1}
 .ei-about-strengths-list article:first-child{padding-top:0;border-top:0}
+.ei-strength-icon{display:block;width:38px;height:38px;margin-top:2px;background-color:var(--ei-green);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain}
+.ei-strength-icon--briefcase{-webkit-mask-image:url('/assets/icons/bootstrap/briefcase.svg');mask-image:url('/assets/icons/bootstrap/briefcase.svg')}
+.ei-strength-icon--person-check{-webkit-mask-image:url('/assets/icons/bootstrap/person-check.svg');mask-image:url('/assets/icons/bootstrap/person-check.svg')}
+.ei-strength-icon--compass{-webkit-mask-image:url('/assets/icons/bootstrap/compass.svg');mask-image:url('/assets/icons/bootstrap/compass.svg')}
+.ei-strength-icon--globe{-webkit-mask-image:url('/assets/icons/bootstrap/globe2.svg');mask-image:url('/assets/icons/bootstrap/globe2.svg')}
 .ei-about-strengths-list h3{font-size:23px;line-height:1.25;margin:0 0 12px;color:var(--ei-ink)}
 .ei-about-strengths-list p{margin:0}
 .ei-about-contact{padding:80px 0;background:var(--ei-deep);color:#fff}
@@ -968,6 +947,7 @@
 .ei-about-contact .ei-button{flex-shrink:0;padding:16px 26px}
 @media(max-width:900px){.ei-about-strengths-grid{grid-template-columns:1fr;gap:32px}.ei-about-credentials-head,.ei-about-contact>.container{align-items:flex-start;flex-direction:column}.ei-about-license-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}
 @media(max-width:620px){.ei-about-license-list{grid-template-columns:1fr;gap:24px}.ei-about-license-list>div{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}.ei-about-license-list dd{margin:0}.ei-about-license-list dt{max-width:18ch}.ei-about-strengths,.ei-about-contact{padding:64px 0}.ei-about-credentials-head{gap:12px}.ei-about-credentials-head p{font-size:16px}}
+@media(max-width:620px){.ei-about-strengths-list article{grid-template-columns:32px minmax(0,1fr);gap:14px}.ei-strength-icon{width:30px;height:30px}.ei-about-strengths-list h3{font-size:20px}}
 .ei-about-page #about-story{scroll-margin-top:110px}
 .company-certificates{margin-top:40px;color:#fff}
 .certificate-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
@@ -977,17 +957,9 @@
 .certificate-controls{display:flex;gap:10px;flex-shrink:0}
 .certificate-controls button{width:48px;height:48px;border:1px solid rgba(243,184,75,.5);border-radius:50%;background:transparent;color:var(--ei-amber);cursor:pointer;font-size:23px;transition:background .2s,color .2s}
 .certificate-controls button:hover{background:var(--ei-amber);color:var(--ei-deep)}
-.certificate-loop{overflow:hidden;padding:4px 0 18px}
-.certificate-track{display:flex;width:max-content;animation:certificate-drift 95s linear infinite}
-.certificate-group{display:flex;gap:24px;padding-right:24px;flex-shrink:0}
-.certificate-slide{display:block;flex:0 0 340px;width:340px;min-width:0}
-.certificate-loop:hover .certificate-track,.certificate-loop:focus-within .certificate-track{animation-play-state:paused}
-@keyframes certificate-drift{to{transform:translateX(-50%)}}
-.certificate-image{height:400px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:18px;display:flex;align-items:center;justify-content:center;transition:border-color .2s}
-.certificate-slide:hover .certificate-image{border-color:var(--ei-amber)}
+.certificate-loop{padding:4px 0 18px}.certificate-loop .horizontal-drag-rail__track{gap:24px}.certificate-slide{display:block;flex:0 0 340px;width:340px;min-width:0;scroll-snap-align:start;scroll-snap-stop:always}.certificate-image{height:400px;background:rgba(255,255,255,.045);border:0;border-radius:12px;padding:18px;display:flex;align-items:center;justify-content:center;transition:transform .25s var(--ei-ease),background .25s ease}.certificate-slide:hover .certificate-image{background:rgba(255,255,255,.09);transform:translateY(-3px)}
 .certificate-image img{width:100%;height:100%;object-fit:contain}
 .certificate-slide>span{display:flex;justify-content:space-between;gap:12px;padding:16px 0;font-weight:600;color:#fff}
 .certificate-slide>span>span{color:var(--ei-amber)}
 @media(prefers-reduced-motion:reduce){.certificate-controls button,.certificate-image{transition:none}}
 @media(max-width:620px){.company-certificates{margin-top:28px}.certificate-heading{align-items:start;flex-direction:column;gap:18px}.certificate-slide{flex-basis:280px;width:280px}.certificate-image{height:360px}}
-@media(prefers-reduced-motion:reduce){.certificate-loop{overflow-x:auto}.certificate-track{animation:none}.certificate-group[aria-hidden=true]{display:none}}
