@@ -1,6 +1,8 @@
 import Link from "../../components/ui/Link";
 import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
 import { EmployerMotion } from "./EmployerMotion";
+import EmployerLicenseViewer from "./EmployerLicenseViewer";
+import BootstrapIcon from "../../components/ui/BootstrapIcon";
 import "./EmployerPage.css";
 
 const values = [
@@ -40,19 +42,13 @@ export default function EmployerPage() {
           <p className="employer-hero-lede">As the only SLBFE <strong>Five Star Award-winning recruitment company in Sri Lanka</strong>, we have proudly served clients across the GCC, Europe, Africa and Asia since 1995, providing tailored staffing solutions under <strong>License No. 1162</strong>.</p>
           <div className="employer-hero-actions">
             <Link className="ei-button ei-button-bright" href="#employer-inquiry">Discuss your hiring needs <span className="ei-button__icon-wrapper" aria-hidden="true"><svg viewBox="0 0 14 15" fill="none" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" className="ei-button__icon-svg ei-button__icon-svg--copy" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link>
-            <a href="#employer-proof">See how we work <span aria-hidden="true">↓</span></a>
+            <a className="ei-scroll-cta" href="#employer-proof">See how we work <span aria-hidden="true"><BootstrapIcon name="arrow-down" /></span></a>
           </div>
           <div className="employer-hero-regions" aria-label="Regions served">
             <span>GCC</span><span>Europe</span><span>Africa</span><span>Asia</span>
           </div>
         </div>
-        <figure className="employer-certificate">
-          <a className="employer-certificate-crop" href="/assets/slbfe-license-reference.png" target="_blank" rel="noreferrer" aria-label="View the full SLBFE certificate image in a new tab">
-            <img src="/assets/slbfe-license-reference.png" alt="Sri Lanka Bureau of Foreign Employment licence No. 1162 issued to Emerald Isle Manpower and Travel Services" width="1603" height="637" fetchPriority="high" />
-          </a>
-          <figcaption><span>View full credential ↗</span><strong>SLBFE License No. 1162</strong></figcaption>
-          <div className="employer-certificate-seal" aria-hidden="true"><strong>5</strong><span>Star<br />Award</span></div>
-        </figure>
+        <EmployerLicenseViewer />
       </div>
     </section>
     <section className="content-section employer-proof" id="employer-proof"><div className="container split-layout"><div className="split-copy"><p className="section-kicker">Licensed recruitment partner</p><h2>Recruit flexibly. Grow with confidence.</h2><p>Since 1995, Emerald Isle has helped employers build dependable international teams across the GCC, Europe, Africa and Asia.</p><p>Our specialists cover hospitality, sales, finance, administration, HR, engineering, construction, automotive and transport—with compliance considered from the first brief.</p><div className="employer-proof-license"><strong>SLBFE 1162</strong><span>Licensed and accountable</span></div></div><div className="employer-proof-visual"><div className="employer-proof-image"><img src="/assets/candidate-service.webp" alt="Candidate and employer discussing an international recruitment opportunity" /></div><div className="metric-card"><strong>30+ years</strong><span>of responsible recruitment</span></div></div></div></section>
@@ -68,7 +64,7 @@ export default function EmployerPage() {
           <p className="section-kicker">Prefer a quick conversation?</p>
           <h2>Continue on WhatsApp.</h2>
           <p>Connect directly with our employer solutions team for a faster first conversation about your staffing requirements.</p>
-          <a href="https://api.whatsapp.com/send?phone=94773876467" target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden="true">↗</span></a>
+          <a href="https://api.whatsapp.com/send?phone=94773876467" target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></a>
           <small>Available during Sri Lanka business hours</small>
         </aside>
       </div>

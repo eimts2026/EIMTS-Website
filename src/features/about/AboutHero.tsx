@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import "./AboutHero.css";
 import ImageViewer from "./ImageViewer";
+import BootstrapIcon from "../../components/ui/BootstrapIcon";
 
 const slides = [
   { image: "award-hero-2.webp", title: "Receiving recognition from former President Mahinda Rajapaksa.", copy: "A milestone in Emerald Isle’s journey of connecting Sri Lankan talent with global opportunity.", alt: "Emerald Isle receiving a gold star trophy at an award presentation", height: 1834 },
@@ -39,7 +40,7 @@ export default function AboutHero() {
         <h1 id="about-hero-title">{slides[active].title}</h1>
         <p>{slides[active].copy}</p>
       </div>
-      <a className="about-showcase-story" href="#about-story">Discover our story <span aria-hidden="true">↓</span></a>
+      <a className="about-showcase-story ei-scroll-cta" href="#about-story">Discover our story <span aria-hidden="true"><BootstrapIcon name="arrow-down" /></span></a>
     </div>
     <div className="container about-showcase-foot">
       <span>Our people. Our milestones.</span>

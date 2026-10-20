@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "../../components/ui/Link";
 import ProjectShowcase from "../../components/ui/3d-interactive-timeline";
 import type { PublicProject } from "../../lib/projects";
+import BootstrapIcon from "../../components/ui/BootstrapIcon";
 
 export default function ProjectsPage({ projects }: { projects: PublicProject[] }) {
   const photoCount = projects.reduce(
@@ -42,7 +43,7 @@ export default function ProjectsPage({ projects }: { projects: PublicProject[] }
                 <span className="projects-hero-client">
                   {project.client}
                   <span className="projects-hero-cue" aria-hidden="true">
-                    See the photos ↓
+                    See the photos <BootstrapIcon name="arrow-down" />
                   </span>
                 </span>
               </a>

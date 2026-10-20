@@ -47,16 +47,16 @@
 .about-showcase-pause:hover,.about-showcase-indicators button:hover{background:#ffffff18}
 .about-showcase-foot button:focus-visible{outline:3px solid var(--ei-amber);outline-offset:3px}
 @media(max-width:620px){
-  .about-showcase.ei-hero{display:block;min-height:0;padding-top:86px}
-  .about-showcase .about-showcase-media.ei-image-trigger{position:relative;inset:auto;display:block;width:100%;height:auto;aspect-ratio:2560/1834;border-radius:0}
-  .about-showcase-media img{object-fit:contain;object-position:center}
+  .about-showcase.ei-hero{display:grid;grid-template-rows:auto 1fr auto;align-items:stretch;min-height:0;padding-top:82px}
+  .about-showcase .about-showcase-media.ei-image-trigger{position:relative;inset:auto;display:block;width:100%;height:auto;aspect-ratio:16/10;border-radius:0;background:#102a22;overflow:hidden}
+  .about-showcase-media img{object-fit:cover;object-position:center 35%}
   .about-showcase-media.ei-image-trigger .ei-image-expand{top:auto;bottom:16px;right:16px}
   .about-showcase-shade{display:none}
-  .about-showcase-content{padding-top:28px;padding-bottom:24px}
+  .about-showcase-content{align-self:start;padding-top:24px;padding-bottom:16px}
   .about-showcase.ei-hero h1{font-size:clamp(2rem,8.5vw,3rem);line-height:1.08}
-  .about-showcase-copy{min-height:300px}
+  .about-showcase-copy{min-height:0}
   .about-showcase-content .ei-kicker{font-size:12px;letter-spacing:.02em;text-transform:none;margin-bottom:20px}
-  .about-showcase-foot{position:relative;bottom:auto;flex-wrap:wrap;padding:14px 0 22px;gap:8px 12px}
+  .about-showcase-foot{position:relative;bottom:auto;flex-wrap:wrap;padding:12px 0 18px;gap:8px 12px}
   .about-showcase-foot>span:first-child{width:100%}
   .about-showcase-indicators{margin-left:0;margin-right:auto}
   .about-showcase-count{margin-left:auto}

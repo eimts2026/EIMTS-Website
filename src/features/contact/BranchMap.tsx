@@ -1,5 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
+import BootstrapIcon from "../../components/ui/BootstrapIcon";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -124,7 +125,7 @@ export function BranchMap() {
                     <span>{branch.address}</span>
                     {branch.approximate && <small>Approximate area · call for exact location</small>}
                   </span>
-                  <span className="branch-map-card-arrow" aria-hidden="true">↗</span>
+                  <span className="branch-map-card-arrow" aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span>
                 </button>
                 <div className="branch-map-card-actions">
                   <a href={branch.phoneHref}><PhoneIcon />{branch.phone}</a>

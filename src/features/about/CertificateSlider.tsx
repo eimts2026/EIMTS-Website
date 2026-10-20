@@ -1,5 +1,8 @@
 "use client";
 
+import HorizontalDragRail from "../../components/ui/HorizontalDragRail";
+import BootstrapIcon from "../../components/ui/BootstrapIcon";
+
 const certificates = [
   ["batticoloa-license", "Batticaloa agency licence", 1600, 1135],
   ["certified-training-partner", "Certified training partner", 794, 1122],
@@ -15,12 +18,8 @@ const certificates = [
 export default function CertificateSlider() {
   return <div className="company-certificates">
       <div className="certificate-heading"><div><p className="section-kicker">Our credentials</p><h2 id="certificate-title">Company License &amp; registration</h2><p>Explore our licence, training credentials and award certificates. Select a document to view it at full size.</p></div></div>
-      <div className="certificate-loop" role="region" aria-label="Company certificates; hover or focus to pause" tabIndex={0}>
-        <div className="certificate-track">
-          {[0, 1].map(copy => <div className="certificate-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
-            {certificates.map(([file, title, width, height]) => <a className="certificate-slide" key={file} href={`/assets/certificates/${file}.webp`} target="_blank" rel="noreferrer" tabIndex={copy === 1 ? -1 : undefined} aria-label={`${title} — open full-size document in a new tab`}><div className="certificate-image"><img src={`/assets/certificates/previews/${file}.webp`} alt={copy === 1 ? "" : title} width={width} height={height} decoding="async" /></div><span>{title}<span aria-hidden="true">↗</span></span></a>)}
-          </div>)}
-        </div>
-      </div>
+      <HorizontalDragRail className="certificate-loop" label="Company licences and registrations. Drag, swipe, or scroll to browse.">
+        {certificates.map(([file, title, width, height]) => <a className="certificate-slide" key={file} href={`/assets/certificates/${file}.webp`} target="_blank" rel="noreferrer" aria-label={`${title} — open full-size document in a new tab`}><div className="certificate-image"><img src={`/assets/certificates/previews/${file}.webp`} alt={title} width={width} height={height} decoding="async" /></div><span>{title}<span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></span></a>)}
+      </HorizontalDragRail>
   </div>;
 }

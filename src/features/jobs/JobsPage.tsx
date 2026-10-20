@@ -333,7 +333,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
 
         {(search.cursor || initialResult.nextCursor) && <nav className="jobs-pagination" aria-label="Job results pages">
           <button type="button" disabled={!search.cursor || pending} onClick={previousPage}>{previous.current.has(search.cursor) ? "← Previous" : "← First page"}</button>
-          <button type="button" disabled={!initialResult.nextCursor || pending} onClick={nextPage}>Next →</button>
+          <button type="button" disabled={!initialResult.nextCursor || pending} onClick={nextPage}>Next</button>
         </nav>}
       </div>
     </section>

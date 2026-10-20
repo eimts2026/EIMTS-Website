@@ -3,6 +3,7 @@ import "./BlogPage.css";
 import Link from "next/link";
 import { articles } from "@/lib/articles";
 import { siteName, siteUrl } from "@/lib/site";
+import BootstrapIcon from "../../components/ui/BootstrapIcon";
 
 export default function BlogPage() {
   const featured = articles.find(
@@ -43,7 +44,7 @@ export default function BlogPage() {
           <div className="journal-hero-copy">
             <p className="eyebrow">Career and recruitment insights</p>
             <h1 id="journal-title">Navigate the world of work with clarity.</h1>
-            <p>Practical guidance for candidates, employers and professionals building careers across borders.</p><a className="journal-browse" href="#latest-journal-title">Explore all articles <span aria-hidden="true">↓</span></a>
+            <p>Practical guidance for candidates, employers and professionals building careers across borders.</p><a className="journal-browse ei-scroll-cta" href="#latest-journal-title">Explore all articles <span aria-hidden="true"><BootstrapIcon name="arrow-down" /></span></a>
           </div>
 
           <Link className="journal-feature" href={`/${featured.slug}/`} aria-label={`Read ${featured.title}`}>
@@ -64,7 +65,7 @@ export default function BlogPage() {
                 <span>{featured.readTime}</span>
               </span>
               <h2 className="journal-feature-title">{featured.title}</h2>
-              <span className="journal-feature-excerpt">{featured.excerpt}</span><span className="journal-author">By {featured.author}</span><span className="journal-feature-link">Read the field note <span aria-hidden="true">{"↗"}</span></span>
+              <span className="journal-feature-excerpt">{featured.excerpt}</span><span className="journal-author">By {featured.author}</span><span className="journal-feature-link">Read the field note <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></span>
             </span>
           </Link>
         </div>
@@ -103,7 +104,7 @@ export default function BlogPage() {
                   </span>
                   <h2 className="journal-card-title">{article.title}</h2>
                   <span className="journal-card-excerpt">{article.excerpt}</span>
-                  <span className="journal-author">By {article.author}</span><span className="journal-card-read">Read more <span aria-hidden="true">{"↗"}</span></span>
+                  <span className="journal-author">By {article.author}</span><span className="journal-card-read">Read more <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></span>
                 </span>
               </Link>
             </article>
