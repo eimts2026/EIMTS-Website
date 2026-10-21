@@ -54,6 +54,13 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
       assert.deepEqual(mails[0].to, ['info@emeraldislemanpower.com']);
       assert.deepEqual(mails[0].cc, kind === 'employer' ? ['admin@emeraldisle.lk', 'it@emeraldisle.lk'] : ['admin@emeraldisle.lk']);
       assert.equal(mails[0].replyTo, 'person@example.com');
+      if (kind === 'contact') {
+        assert.equal(mails[0].subject, '[GENERAL CONTACT] Test | person@example.com');
+        assert.match(mails[0].text, /^email: person@example\.com/m);
+        assert.doesNotMatch(mails[0].text, /^(website|subject):/m);
+      } else {
+        assert.equal(mails[0].subject, '[CLIENT INQUIRY] Test | person@example.com');
+      }
       assert.ok(updates.some(value => value.status === 'sent'));
     }
     throwSmtp = true; updates = [];

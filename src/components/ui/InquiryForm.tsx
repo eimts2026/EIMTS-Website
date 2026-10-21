@@ -57,7 +57,6 @@ export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer
   const contactFields = [
     { name: "name", label: "Name", placeholder: "Full name", required: true, autoComplete: "name", maxLength: 150 },
     { name: "email", label: "Email", placeholder: "you@example.com", type: "email", required: true, autoComplete: "email", maxLength: 254 },
-    { name: "subject", label: "Subject", placeholder: "What would you like to discuss?", required: true, maxLength: 200 },
     { name: "phone", label: "Phone", placeholder: "+94", type: "tel", required: true, autoComplete: "tel", maxLength: 40 },
   ];
   const success = status === "success";

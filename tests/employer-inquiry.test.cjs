@@ -25,6 +25,7 @@ mod.require = name => Object.hasOwn(mocks, name) ? mocks[name] : original(name);
 mod._compile(ts.transpileModule(fs.readFileSync(filename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, filename);
 const { handleInquiry } = mod.exports;
 const base = { name: 'Test employer', email: 'employer@example.com', phone: '+94 77 123 4567', message: 'Test inquiry' };
+const contactBase = { name: 'Test contact', email: 'visitor@example.com', phone: '+94 77 123 4567', message: 'Contact message' };
 const request = data => new Request('https://example.com/api/employer-inquiry', { method: 'POST', headers: { origin: 'https://example.com', 'content-type': 'application/json', 'Idempotency-Key': 'a33e947f-36f7-4e89-8d4d-f64e1fc7f38c' }, body: JSON.stringify(data) });
 
 test('employer inquiries are queued and delivery is attempted immediately', async () => {
@@ -53,4 +54,16 @@ test('accepted form submission remains queued if immediate mail processing fails
     assert.equal((await response.json()).delivery, 'queued');
     assert.equal(queued.length, 1);
   } finally { deliveryFailure = false; keys.forEach((key, i) => previous[i] === undefined ? delete process.env[key] : process.env[key] = previous[i]); }
+});
+
+test('contact inquiries omit website and subject and do not require a subject', async () => {
+  const keys = ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASSWORD']; const previous = keys.map(key => process.env[key]);
+  keys.forEach(key => process.env[key] = 'test-only');
+  queued = []; deliveryAttempts = 0; deliveryFailure = false;
+  try {
+    const response = await handleInquiry(request({ ...contactBase, subject: 'ignored', website: 'https://ignored.example' }), true);
+    assert.equal(response.status, 202);
+    assert.deepEqual(queued[0].input, contactBase);
+    assert.equal(queued[0].kind, 'contact');
+  } finally { keys.forEach((key, i) => previous[i] === undefined ? delete process.env[key] : process.env[key] = previous[i]); }
 });

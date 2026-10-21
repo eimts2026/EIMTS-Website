@@ -24,7 +24,11 @@ export async function processInquiryQueue({ cleanup = false }: { cleanup?: boole
       const recipients = [...to, ...cc];
       let accepted = false;
       try {
-        const result = await transport.sendMail({ from: process.env.APPLICATIONS_EMAIL_FROM || process.env.SMTP_USER, to, cc, replyTo: input.email, messageId: `<inquiry-${job.id}@emeraldislemanpower.com>`, subject: `${job.kind === "contact" ? "Contact" : "Employer"} inquiry: ${input.subject || "Hiring needs"}`, text: Object.entries(input).map(([key,value]) => `${key}: ${value || "Not provided"}`).join("\n\n") });
+        const isContact = job.kind === "contact";
+        const subject = isContact
+          ? `[GENERAL CONTACT] ${input.name} | ${input.email}`
+          : `[CLIENT INQUIRY] ${input.company || input.name} | ${input.email}`;
+        const result = await transport.sendMail({ from: process.env.APPLICATIONS_EMAIL_FROM || process.env.SMTP_USER, to, cc, replyTo: input.email, messageId: `<inquiry-${job.id}@emeraldislemanpower.com>`, subject, text: Object.entries(input).sort(([a], [b]) => isContact ? (a === "email" ? -1 : b === "email" ? 1 : 0) : 0).map(([key,value]) => `${key}: ${value || "Not provided"}`).join("\n\n") });
         const acceptedRecipients = new Set((result.accepted || []).map((address) => String(address).trim().toLowerCase()));
         const rejectedRecipients = new Set((result.rejected || []).map((address) => String(address).trim().toLowerCase()));
         const missingRecipients = recipients.filter((address) => !acceptedRecipients.has(address.toLowerCase()) || rejectedRecipients.has(address.toLowerCase()));
