@@ -44,23 +44,37 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
   };
   try {
     keys.forEach(key => process.env[key] = 'test-only');
+    const { inquiryEmailTemplate } = load('src/lib/inquiry-email-template.ts', {});
     const { processInquiryQueue } = load('src/lib/inquiry-delivery.ts', {
       'server-only': {}, nodemailer, './submission-service': { submissionDatabase: () => db },
+      './inquiry-email-template': { inquiryEmailTemplate },
     });
     for (const kind of ['employer', 'contact']) {
       mails = []; updates = [];
-      jobs = [{ id: 'test-inquiry', kind, attempts: 1, payload: { name: 'Test', email: 'person@example.com', message: 'Test inquiry' } }];
+      const payload = kind === 'employer'
+        ? { name: 'Test', email: 'person@example.com', phone: '+94 77 123 4567', company: 'Acme & Co', website: 'https://example.com', subject: '20 hospitality staff', message: 'First line\nSecond line' }
+        : { name: 'Test', email: 'person@example.com', phone: '+94 77 123 4567', message: 'First line\nSecond line' };
+      jobs = [{ id: 'test-inquiry', kind, attempts: 1, payload }];
       assert.deepEqual(await processInquiryQueue(), { claimed: 1, sent: 1, deferred: 0, sentIds: ['test-inquiry'], deferredIds: [], attentionIds: [] });
       assert.deepEqual(mails[0].to, ['info@emeraldislemanpower.com']);
-      assert.deepEqual(mails[0].cc, kind === 'employer' ? ['admin@emeraldisle.lk', 'it@emeraldisle.lk'] : ['admin@emeraldisle.lk']);
+      assert.deepEqual(mails[0].cc, kind === 'employer' ? ['support@emeraldislemanpower.com', 'recruitment@emeraldisle.lk'] : ['admin@emeraldisle.lk']);
       assert.equal(mails[0].replyTo, 'person@example.com');
       if (kind === 'contact') {
         assert.equal(mails[0].subject, '[GENERAL CONTACT] Test | person@example.com');
-        assert.match(mails[0].text, /^email: person@example\.com/m);
-        assert.doesNotMatch(mails[0].text, /^(website|subject):/m);
+        assert.match(mails[0].html, /New general contact message/);
+        assert.doesNotMatch(mails[0].html, />Website<|WORKFORCE REQUIREMENT/);
+        assert.doesNotMatch(mails[0].text, /Website:|Workforce requirement:/);
       } else {
-        assert.equal(mails[0].subject, '[CLIENT INQUIRY] Test | person@example.com');
+        assert.equal(mails[0].subject, '[CLIENT INQUIRY] Acme & Co | person@example.com');
+        assert.match(mails[0].html, /Acme &amp; Co/);
+        assert.match(mails[0].html, /href="https:\/\/example\.com\/"/);
+        assert.match(mails[0].html, /20 hospitality staff/);
+        assert.match(mails[0].text, /Workforce requirement: 20 hospitality staff/);
       }
+      assert.match(mails[0].html, /First line<br>Second line/);
+      assert.match(mails[0].html, /href="mailto:person@example\.com"/);
+      assert.match(mails[0].text, /Name: Test\nEmail: person@example\.com\nPhone: \+94 77 123 4567/);
+      assert.match(mails[0].text, /Message:\nFirst line\nSecond line/);
       assert.ok(updates.some(value => value.status === 'sent'));
     }
     throwSmtp = true; updates = [];
@@ -87,4 +101,17 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
   } finally {
     keys.forEach((key, index) => previous[index] === undefined ? delete process.env[key] : process.env[key] = previous[index]);
   }
+});
+
+test('inquiry HTML escapes submitted content and omits missing optional details', () => {
+  const { inquiryEmailTemplate } = load('src/lib/inquiry-email-template.ts', {});
+  const { html, text } = inquiryEmailTemplate('employer', {
+    name: '<script>alert(1)</script>', email: 'sender@example.com', phone: '+94 77 123 4567',
+    company: '', website: 'javascript:alert(1)', subject: '', message: 'Hello <team> & partners',
+  });
+  assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+  assert.doesNotMatch(html, /<script>|href="javascript:/);
+  assert.match(html, /Hello &lt;team&gt; &amp; partners/);
+  assert.doesNotMatch(html, /WORKFORCE REQUIREMENT/);
+  assert.match(text, /Website: javascript:alert\(1\)/);
 });

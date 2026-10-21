@@ -1,6 +1,7 @@
 import "server-only";
 import nodemailer from "nodemailer";
 import { submissionDatabase } from "./submission-service";
+import { inquiryEmailTemplate } from "./inquiry-email-template";
 
 export async function processInquiryQueue({ cleanup = false }: { cleanup?: boolean } = {}) {
   const db = submissionDatabase();
@@ -20,7 +21,7 @@ export async function processInquiryQueue({ cleanup = false }: { cleanup?: boole
     for (const job of jobs || []) {
       const input = job.payload as Record<string, string>;
       const to = ["info@emeraldislemanpower.com"];
-      const cc = job.kind === "contact" ? ["admin@emeraldisle.lk"] : ["admin@emeraldisle.lk", "it@emeraldisle.lk"];
+      const cc = job.kind === "contact" ? ["admin@emeraldisle.lk"] : ["support@emeraldislemanpower.com", "recruitment@emeraldisle.lk"];
       const recipients = [...to, ...cc];
       let accepted = false;
       try {
@@ -28,7 +29,8 @@ export async function processInquiryQueue({ cleanup = false }: { cleanup?: boole
         const subject = isContact
           ? `[GENERAL CONTACT] ${input.name} | ${input.email}`
           : `[CLIENT INQUIRY] ${input.company || input.name} | ${input.email}`;
-        const result = await transport.sendMail({ from: process.env.APPLICATIONS_EMAIL_FROM || process.env.SMTP_USER, to, cc, replyTo: input.email, messageId: `<inquiry-${job.id}@emeraldislemanpower.com>`, subject, text: Object.entries(input).sort(([a], [b]) => isContact ? (a === "email" ? -1 : b === "email" ? 1 : 0) : 0).map(([key,value]) => `${key}: ${value || "Not provided"}`).join("\n\n") });
+        const { html, text } = inquiryEmailTemplate(isContact ? "contact" : "employer", input);
+        const result = await transport.sendMail({ from: process.env.APPLICATIONS_EMAIL_FROM || process.env.SMTP_USER, to, cc, replyTo: input.email, messageId: `<inquiry-${job.id}@emeraldislemanpower.com>`, subject, html, text });
         const acceptedRecipients = new Set((result.accepted || []).map((address) => String(address).trim().toLowerCase()));
         const rejectedRecipients = new Set((result.rejected || []).map((address) => String(address).trim().toLowerCase()));
         const missingRecipients = recipients.filter((address) => !acceptedRecipients.has(address.toLowerCase()) || rejectedRecipients.has(address.toLowerCase()));
