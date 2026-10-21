@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 // as one block; tagging their children too would compound the motion).
 const TARGETS =
   "main :is(h1,h2,h3,h4,h5,h6,p,img), main :is(.hf-purpose-grid article,.contact-office-group,.ei-leader-card,.project-showcase-card), .global-footer :is(h1,h2,h3,h4,h5,h6,p)";
-const EXCLUDE = ".sr-only, dialog *, .jobs-mega-menu *, [data-reveal] *, .recruit-hero *, .hf-quote-track *, .certificate-track *, .ei-rolling-gallery *, .leaflet-container *, .market-flags *, [aria-hidden=true] *";
+const EXCLUDE = ".sr-only, dialog *, .jobs-mega-menu *, [data-reveal] *, .recruit-hero *, .about-showcase-media *, .hf-quote-track *, .certificate-track *, .ei-rolling-gallery *, .leaflet-container *, .market-flags *, [aria-hidden=true] *";
 
 export function ScrollReveal() {
   const pathname = usePathname();

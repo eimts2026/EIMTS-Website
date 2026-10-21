@@ -41,6 +41,7 @@ export async function sendApplicationEmail(application: ApplicationEmail) {
       process.env.APPLICATIONS_EMAIL_FROM ||
       `"Emerald Isle Website" <${process.env.SMTP_USER}>`,
     to: "cv@emeraldisle.lk",
+    cc: "admin@emeraldisle.lk",
     replyTo: application.email,
     subject: `[${application.category}] ${application.jobTitle} — ${application.fullName}`.replace(/[\r\n]/g, " "),
     ...template,

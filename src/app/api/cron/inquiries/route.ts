@@ -26,10 +26,12 @@ export async function GET(request: Request) {
     // overlapping invocations via database leases and SKIP LOCKED claims.
     for (const job of jobs || []) {
       const input = job.payload as Record<string, string>;
-      const recipients = job.kind === "contact" ? ["info@emeraldisle.lk"] : ["bd@emeraldisle.lk", "admin@emerldisle.lk"];
+      const to = ["info@emeraldisle.lk"];
+      const cc = job.kind === "contact" ? ["admin@emeraldisle.lk"] : ["admin@emeraldisle.lk", "it@emeraldisle.lk"];
+      const recipients = [...to, ...cc];
       let accepted = false;
       try {
-        const result = await transport.sendMail({ from: process.env.APPLICATIONS_EMAIL_FROM || process.env.SMTP_USER, to: recipients, replyTo: input.email, messageId: `<inquiry-${job.id}@emeraldislemanpower.com>`, subject: `${job.kind === "contact" ? "Contact" : "Employer"} inquiry: ${input.subject || "Hiring needs"}`, text: Object.entries(input).map(([key,value]) => `${key}: ${value || "Not provided"}`).join("\n\n") });
+        const result = await transport.sendMail({ from: process.env.APPLICATIONS_EMAIL_FROM || process.env.SMTP_USER, to, cc, replyTo: input.email, messageId: `<inquiry-${job.id}@emeraldislemanpower.com>`, subject: `${job.kind === "contact" ? "Contact" : "Employer"} inquiry: ${input.subject || "Hiring needs"}`, text: Object.entries(input).map(([key,value]) => `${key}: ${value || "Not provided"}`).join("\n\n") });
         if (result.rejected?.length || result.accepted?.length !== recipients.length) {
           // Avoid resending to recipients that already accepted the message.
           await db.from("website_inquiry_outbox").update({ status: "dead", locked_until: null, last_error: "partial_acceptance" }).eq("id", job.id).eq("attempts", job.attempts);
