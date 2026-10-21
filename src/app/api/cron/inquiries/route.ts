@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     // overlapping invocations via database leases and SKIP LOCKED claims.
     for (const job of jobs || []) {
       const input = job.payload as Record<string, string>;
-      const to = ["info@emeraldisle.lk"];
+      const to = ["info@emeraldislemanpower.com"];
       const cc = job.kind === "contact" ? ["admin@emeraldisle.lk"] : ["admin@emeraldisle.lk", "it@emeraldisle.lk"];
       const recipients = [...to, ...cc];
       let accepted = false;

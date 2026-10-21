@@ -50,7 +50,7 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
       mails = []; updates = [];
       jobs = [{ id: 'test-inquiry', kind, attempts: 1, payload: { name: 'Test', email: 'person@example.com', message: 'Test inquiry' } }];
       assert.deepEqual(await (await GET(request())).json(), { sent: 1, deferred: 0 });
-      assert.deepEqual(mails[0].to, ['info@emeraldisle.lk']);
+      assert.deepEqual(mails[0].to, ['info@emeraldislemanpower.com']);
       assert.deepEqual(mails[0].cc, kind === 'employer' ? ['admin@emeraldisle.lk', 'it@emeraldisle.lk'] : ['admin@emeraldisle.lk']);
       assert.equal(mails[0].replyTo, 'person@example.com');
       assert.ok(updates.some(value => value.status === 'sent'));

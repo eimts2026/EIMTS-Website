@@ -2,7 +2,7 @@
 
 Employer inquiries require name, company email and message. Company name, workforce requirement, website and phone are optional. Contact inquiries require all five visible fields.
 
-Employer inquiries go to bd@emeraldisle.lk and admin@emerldisle.lk exactly as supplied. Contact inquiries go to info@emeraldisle.lk.
+Employer inquiries go to info@emeraldislemanpower.com, with admin@emeraldisle.lk and it@emeraldisle.lk copied. Contact inquiries go to info@emeraldislemanpower.com, with admin@emeraldisle.lk copied.
 
 Both forms use the existing SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD and optional APPLICATIONS_EMAIL_FROM settings. They no longer depend on Turnstile, Redis or a Supabase server secret key.
 
