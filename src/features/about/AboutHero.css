@@ -62,3 +62,17 @@
   .about-showcase-count{margin-left:auto}
 }
 @media(prefers-reduced-motion:reduce){.about-showcase-indicators button span{transition:none}}
+
+/* Keep the people outside the caption area and show the complete award photos. */
+@media(min-width:621px){
+  .about-showcase .about-showcase-media.ei-image-trigger{inset:100px 0 80px 42%;width:58%;height:auto}
+  .about-showcase-media img{object-fit:contain;object-position:center}
+  .about-showcase-shade{display:none}
+  .about-showcase-copy{max-width:34%;min-height:0}
+  .about-showcase.ei-hero h1{font-size:clamp(2rem,3.2vw,3.4rem);line-height:1.12}
+  .about-showcase-content .ei-kicker{max-width:34%}
+}
+@media(max-width:620px){
+  .about-showcase .about-showcase-media.ei-image-trigger{aspect-ratio:2560/1834}
+  .about-showcase-media img{object-fit:contain;object-position:center}
+}

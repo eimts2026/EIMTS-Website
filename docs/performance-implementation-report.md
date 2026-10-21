@@ -4,16 +4,16 @@
 
 ## What is finished
 
-| Area | What changed | What it means for visitors |
-| --- | --- | --- |
-| Job caching | Shared public job cache, dashboard invalidation, 60-second fallback | Popular pages reuse job data instead of asking the database on every visit. |
-| Job search | Database filters, accurate totals and facet counts, cursor pagination | Only 6 or 12 jobs are sent per page, even when the catalogue grows. |
-| Spam protection | Cloudflare Turnstile on contact, employer and application forms, checked on the server | Requests must pass verification before submission processing begins. |
-| Submission limits | Shared database counters | A visitor cannot bypass the limits by reaching a different server instance. |
-| Inquiry delivery | Durable queue, duplicate submission IDs, limited workers and retries | Contact/employer inquiries survive temporary SMTP problems. |
-| Candidate applications | Direct email, no CV storage, bounded upload size | Applications continue to go straight to cv@emeraldisle.lk. |
-| Typography | Raleway only, local regular/italic variable WOFF2 files | No Google Fonts stylesheet request. Only the regular file is preloaded. |
-| Contact map | Branch content renders immediately; Leaflet loads near the map | Less JavaScript and map work during initial contact-page loading. |
+| Area                   | What changed                                                                           | What it means for visitors                                                  |
+| ---------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Job caching            | Shared public job cache, dashboard invalidation, 60-second fallback                    | Popular pages reuse job data instead of asking the database on every visit. |
+| Job search             | Database filters, accurate totals and facet counts, cursor pagination                  | Only 6 or 12 jobs are sent per page, even when the catalogue grows.         |
+| Spam protection        | Cloudflare Turnstile on contact, employer and application forms, checked on the server | Requests must pass verification before submission processing begins.        |
+| Submission limits      | Shared database counters                                                               | A visitor cannot bypass the limits by reaching a different server instance. |
+| Inquiry delivery       | Durable queue, duplicate submission IDs, limited workers and retries                   | Contact/employer inquiries survive temporary SMTP problems.                 |
+| Candidate applications | Direct email, no CV storage, bounded upload size                                       | Applications continue to go straight to cv@emeraldisle.lk.                  |
+| Typography             | Raleway only, local regular/italic variable WOFF2 files                                | No Google Fonts stylesheet request. Only the regular file is preloaded.     |
+| Contact map            | Branch content renders immediately; Leaflet loads near the map                         | Less JavaScript and map work during initial contact-page loading.           |
 
 The website changes are implemented locally. The three database migrations have
 also been applied to the connected **Eimts2026's New Web Site Database** project.
@@ -101,12 +101,12 @@ sort indexes.
 4. Copy the **site key** and **secret key**.
 5. In the **website** Vercel project's Environment Variables, add:
 
-   | Variable | Value |
-   | --- | --- |
-   | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare site key; this is public |
-   | `TURNSTILE_SECRET_KEY` | Cloudflare secret; server only |
-   | `TURNSTILE_ALLOWED_HOSTNAMES` | `emeraldislemanpower.com,www.emeraldislemanpower.com` |
-   | `SUPABASE_SECRET_KEY` | Supabase server secret for the connected project |
+   | Variable                         | Value                                                 |
+   | -------------------------------- | ----------------------------------------------------- |
+   | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare site key; this is public                   |
+   | `TURNSTILE_SECRET_KEY`           | Cloudflare secret; server only                        |
+   | `TURNSTILE_ALLOWED_HOSTNAMES`    | `emeraldislemanpower.com,www.emeraldislemanpower.com` |
+   | `SUPABASE_SECRET_KEY`            | Supabase server secret for the connected project      |
 
    A legacy `SUPABASE_SERVICE_ROLE_KEY` is also supported instead of
    `SUPABASE_SECRET_KEY`. Keep it server-only; never use a `NEXT_PUBLIC_` prefix.
@@ -182,8 +182,8 @@ account plan was not verified. Check current [Vercel Cron plan limits](https://v
 The initial delivery budget is modest: at most three messages per invocation.
 Increase it only after measuring queue age and confirming SMTP provider quotas.
 
-Existing recipients are `info@emeraldisle.lk` for Contact and `bd@emeraldisle.lk`
-plus `admin@emerldisle.lk` for Employer. The second employer address uses the
+Existing recipients are `info@emeraldisle.lk` for Contact and `admin@emerldisle.lk`
+for Employer. The second employer address uses the
 existing **emerldisle** spelling; confirm this address before the inbox test.
 
 In Supabase SQL Editor, inspect queue health without displaying message contents:
@@ -231,22 +231,22 @@ controls and map loading does not hide branch contact details.
 
 ## Checks completed
 
-| Check | Result |
-| --- | --- |
-| Production website build, webpack | Passed compilation, TypeScript and all 28 prerendered pages |
-| Dashboard TypeScript | Passed |
-| Search parameter validation and server verification cases | Passed `node scripts/verify-submission-protection.mjs` |
-| Missing verification config | Form endpoints rejected submissions; no mail sent |
-| Temporary database pagination fixture | 23 visible jobs, four pages, three sorts, no duplicate or omitted IDs |
-| Direct RPC null page size | Rejected |
-| Anonymous access to private submission tables/worker RPC | Denied |
-| Shared email rate counter | Fourth attempt blocked after three allowed attempts |
-| Queue claim budget | Further claims returned zero while three leases were active |
-| Production cache | Two identical reads produced one fill; authorized invalidation forced a new fill; wrong secret rejected |
-| Mobile vacancy search | “nursing” returned one result; URL updated; no horizontal overflow at 390 px |
-| Contact map | Deferred at page top; direct international link loaded the map; keyboard switching passed |
-| Raleway | Loaded locally; one normal-font preload; no Google Fonts stylesheet request |
-| Whitespace/diff check | Passed |
+| Check                                                     | Result                                                                                                  |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Production website build, webpack                         | Passed compilation, TypeScript and all 28 prerendered pages                                             |
+| Dashboard TypeScript                                      | Passed                                                                                                  |
+| Search parameter validation and server verification cases | Passed `node scripts/verify-submission-protection.mjs`                                                  |
+| Missing verification config                               | Form endpoints rejected submissions; no mail sent                                                       |
+| Temporary database pagination fixture                     | 23 visible jobs, four pages, three sorts, no duplicate or omitted IDs                                   |
+| Direct RPC null page size                                 | Rejected                                                                                                |
+| Anonymous access to private submission tables/worker RPC  | Denied                                                                                                  |
+| Shared email rate counter                                 | Fourth attempt blocked after three allowed attempts                                                     |
+| Queue claim budget                                        | Further claims returned zero while three leases were active                                             |
+| Production cache                                          | Two identical reads produced one fill; authorized invalidation forced a new fill; wrong secret rejected |
+| Mobile vacancy search                                     | “nursing” returned one result; URL updated; no horizontal overflow at 390 px                            |
+| Contact map                                               | Deferred at page top; direct international link loaded the map; keyboard switching passed               |
+| Raleway                                                   | Loaded locally; one normal-font preload; no Google Fonts stylesheet request                             |
+| Whitespace/diff check                                     | Passed                                                                                                  |
 
 Database fixtures were temporary or rolled back. No real applicant CV or inquiry
 was submitted during verification. Actual Turnstile tokens, SMTP delivery and the
