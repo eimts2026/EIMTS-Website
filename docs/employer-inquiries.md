@@ -4,9 +4,9 @@ Employer inquiries require name, company email and message. Company name, workfo
 
 Employer inquiries go to info@emeraldislemanpower.com, with admin@emeraldisle.lk and it@emeraldisle.lk copied. Contact inquiries go to info@emeraldislemanpower.com, with admin@emeraldisle.lk copied.
 
-Both forms use the existing SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD and optional APPLICATIONS_EMAIL_FROM settings. They no longer depend on Turnstile, Redis or a Supabase server secret key.
+Both forms validate Turnstile, apply Supabase-backed rate limits, and save to the protected Supabase inquiry outbox. The request then attempts to send the queued message immediately through SMTP. Transient failures remain queued for retry by the `/api/cron/inquiries` Vercel Cron Job; permanent or partial-recipient failures are flagged for attention. The cron endpoint requires `CRON_SECRET` and the sender requires `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and optional `APPLICATIONS_EMAIL_FROM`.
 
-The card flips only after SMTP accepts all recipients, clears the form and returns after six seconds. Back to form returns immediately. Errors retain the entered data. SMTP acceptance does not prove inbox receipt.
+The success card confirms the inquiry was saved for processing. The API attempts SMTP delivery immediately and the daily Vercel Cron Job retries eligible messages. SMTP acceptance does not prove inbox receipt; confirm delivery with the mail provider's logs and the recipients' inboxes.
 
 The added bot verification, shared rate limiting, challenge replay protection, dashboard CAPTCHA changes and protected application-write migration were removed at the user's request. The migration had not been applied remotely, so no database rollback was required. Existing CV file validation and staff authentication/role checks are preserved.
 

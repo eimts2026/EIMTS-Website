@@ -1,6 +1,7 @@
 import { verifyBotProtection, SubmissionError } from "./bot-protection";
 import { limitSubmission } from "./submission-service";
 import { queueInquiry } from "./inquiry-queue";
+import { processInquiryQueue } from "./inquiry-delivery";
 import { NextResponse } from "next/server";
 const fail = (message: string, status = 400) => NextResponse.json({ message }, { status });
 
@@ -40,6 +41,15 @@ export async function handleInquiry(request: Request, contact = false) {
   try {
     await limitSubmission(request, input.email, "inquiry");
     const reference = await queueInquiry(request, contact ? "contact" : "employer", input);
-    return NextResponse.json({ message: "Your inquiry has been received. Our team will be in touch.", reference }, {status: 202});
+    let delivery = "queued";
+    try {
+      const result = await processInquiryQueue();
+      if (result.sentIds.includes(reference)) delivery = "accepted";
+      else if (result.deferredIds.includes(reference)) delivery = "retrying";
+      else if (result.attentionIds.includes(reference)) delivery = "attention";
+    } catch {
+      // Keep the saved inquiry queued; the scheduled worker will retry it.
+    }
+    return NextResponse.json({ message: "Your inquiry has been received and is being processed. Our team will be in touch.", reference, delivery }, {status: 202});
   } catch(error) { return error instanceof SubmissionError ? fail(error.message,error.status) : fail("Your inquiry could not be saved. Please try again.",503); }
 }

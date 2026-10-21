@@ -25,8 +25,10 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
   let updates = [];
   let jobs = [];
   let rejectCc = false;
+  let throwSmtp = false;
   const nodemailer = { createTransport: () => ({
     sendMail: async payload => {
+      if (throwSmtp) { const error = new Error('simulated smtp outage'); error.code = 'ECONNECTION'; throw error; }
       mails.push(payload);
       const recipients = [payload.to, payload.cc].flat();
       return { accepted: rejectCc ? [recipients[0]] : recipients, rejected: rejectCc ? recipients.slice(1) : [] };
@@ -42,21 +44,24 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
   };
   try {
     keys.forEach(key => process.env[key] = 'test-only');
-    const { GET } = load('src/app/api/cron/inquiries/route.ts', {
-      nodemailer, '@/lib/submission-service': { submissionDatabase: () => db },
+    const { processInquiryQueue } = load('src/lib/inquiry-delivery.ts', {
+      'server-only': {}, nodemailer, './submission-service': { submissionDatabase: () => db },
     });
-    const request = () => new Request('https://example.com/api/cron/inquiries', { headers: { authorization: 'Bearer test-only' } });
     for (const kind of ['employer', 'contact']) {
       mails = []; updates = [];
       jobs = [{ id: 'test-inquiry', kind, attempts: 1, payload: { name: 'Test', email: 'person@example.com', message: 'Test inquiry' } }];
-      assert.deepEqual(await (await GET(request())).json(), { sent: 1, deferred: 0 });
+      assert.deepEqual(await processInquiryQueue(), { claimed: 1, sent: 1, deferred: 0, sentIds: ['test-inquiry'], deferredIds: [], attentionIds: [] });
       assert.deepEqual(mails[0].to, ['info@emeraldislemanpower.com']);
       assert.deepEqual(mails[0].cc, kind === 'employer' ? ['admin@emeraldisle.lk', 'it@emeraldisle.lk'] : ['admin@emeraldisle.lk']);
       assert.equal(mails[0].replyTo, 'person@example.com');
       assert.ok(updates.some(value => value.status === 'sent'));
     }
+    throwSmtp = true; updates = [];
+    assert.deepEqual(await processInquiryQueue(), { claimed: 1, sent: 0, deferred: 1, sentIds: [], deferredIds: ['test-inquiry'], attentionIds: [] });
+    assert.ok(updates.some(value => value.status === 'pending' && value.last_error === 'smtp_delivery_failed:ECONNECTION'));
+    throwSmtp = false;
     rejectCc = true; updates = [];
-    assert.deepEqual(await (await GET(request())).json(), { sent: 0, deferred: 1 });
+    assert.deepEqual(await processInquiryQueue(), { claimed: 1, sent: 0, deferred: 1, sentIds: [], deferredIds: [], attentionIds: ['test-inquiry'] });
     assert.ok(updates.some(value => value.status === 'dead' && value.last_error === 'partial_acceptance'));
     rejectCc = false; mails = [];
     const { sendApplicationEmail } = load('src/lib/email.ts', {

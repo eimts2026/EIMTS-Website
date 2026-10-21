@@ -35,7 +35,14 @@ export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer
       const result = await response.json();
       if (response.status === 409) submissionId.current = null;
       if (!response.ok) throw new Error(result.message || "We could not send your inquiry. Please try again.");
-      form.reset(); submissionId.current = null; setFeedback(result.message); setStatus("success");
+      const confirmationMessage = result.delivery === "accepted"
+        ? "Your inquiry was accepted by our email service and sent to the team. We’ll be in touch."
+        : result.delivery === "retrying"
+          ? "Your inquiry was saved, but email delivery is delayed. We’re retrying it now; email info@emeraldislemanpower.com if your request is urgent."
+          : result.delivery === "attention"
+            ? "Your inquiry was saved, but email delivery needs attention. Please email info@emeraldislemanpower.com so we can respond promptly."
+            : "Your inquiry was saved and is waiting for email processing. Email info@emeraldislemanpower.com if your request is urgent.";
+      form.reset(); submissionId.current = null; setFeedback(confirmationMessage); setStatus("success");
     } catch (error) { setStatus("error"); setFeedback(error instanceof Error ? error.message : "Connection interrupted. Please try again."); }
     finally { submitting.current = false; setBotReset(value => value + 1); }
   }
