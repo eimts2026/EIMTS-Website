@@ -21,7 +21,7 @@ export async function processInquiryQueue({ cleanup = false }: { cleanup?: boole
     for (const job of jobs || []) {
       const input = job.payload as Record<string, string>;
       const to = ["info@emeraldislemanpower.com"];
-      const cc = job.kind === "contact" ? ["admin@emeraldisle.lk"] : ["support@emeraldislemanpower.com", "recruitment@emeraldisle.lk"];
+      const cc = job.kind === "contact" ? ["admin@emeraldisle.lk"] : ["recruitment@emeraldisle.lk", "linda@emeraldisle.lk"];
       const recipients = [...to, ...cc];
       let accepted = false;
       try {
