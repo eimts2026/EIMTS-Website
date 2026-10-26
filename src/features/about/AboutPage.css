@@ -963,3 +963,119 @@
 .certificate-slide>span>span{color:var(--ei-amber)}
 @media(prefers-reduced-motion:reduce){.certificate-controls button,.certificate-image{transition:none}}
 @media(max-width:620px){.company-certificates{margin-top:28px}.certificate-heading{align-items:start;flex-direction:column;gap:18px}.certificate-slide{flex-basis:280px;width:280px}.certificate-image{height:360px}}
+
+/* Portraits reveal the same details with mouse, touch, or keyboard activation. */
+.ei-leader-card .ei-leader-details {
+  opacity: 0;
+  transform: translateY(16px);
+  background: linear-gradient(180deg, transparent 12%, rgba(3, 39, 31, .97) 100%);
+  padding: 48px 20px 20px;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.ei-leader-card[data-open="true"] .ei-leader-details { opacity: 1; transform: translateY(0); }
+.ei-leader-toggle {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+  color: #fff;
+  touch-action: manipulation;
+}
+.ei-leader-toggle:focus-visible { outline: 3px solid var(--ei-amber); outline-offset: -4px; }
+.ei-leader-linkedin {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 12px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  pointer-events: auto;
+}
+.ei-leader-linkedin > span:first-child {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  background: #fff;
+  color: #063f31;
+  font-size: 17px;
+  font-weight: 750;
+}
+.ei-leader-linkedin:hover { color: var(--ei-amber); text-decoration: none; }
+.ei-leader-linkedin:hover .ei-leader-linkedin-label { text-decoration: underline; }
+.ei-leader-linkedin:focus-visible { outline: 2px solid var(--ei-amber); outline-offset: 4px; }
+.ei-leader-card[data-open="true"] .ei-leader-portrait img { transform: scale(1.035); filter: saturate(1); }
+@media (prefers-reduced-motion: reduce) {
+  .ei-leader-card .ei-leader-details, .ei-leader-card .ei-leader-portrait img { transition: none; transform: none; }
+}
+.certificate-carousel { position: relative; }
+.certificate-loop {
+  padding: 4px 0 18px;
+  border: 0;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+}
+.certificate-controls { display: flex; gap: 10px; flex-shrink: 0; }
+.certificate-controls button {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.09);
+  color: var(--ei-amber);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.certificate-controls button:hover { background: var(--ei-amber); color: var(--ei-deep); }
+.certificate-controls button:focus-visible { outline: 2px solid var(--ei-amber); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .certificate-controls button { transition: none; } }
+.certificate-arrow-back { display: inline-flex; transform: rotate(180deg); }
+.certificate-slide { overflow: visible; }
+.certificate-open {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+  cursor: zoom-in;
+}
+.certificate-open:focus-visible { outline: 3px solid var(--ei-amber); outline-offset: 4px; }
+.certificate-open .certificate-image { box-sizing: border-box; width: 100%; }
+.certificate-open-hint {
+  position: absolute;
+  right: 26px;
+  bottom: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: #03271fe8;
+  color: #fff;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.certificate-open:hover .certificate-open-hint,
+.certificate-open:focus-visible .certificate-open-hint { opacity: 1; }
+.certificate-caption { display: flex; justify-content: space-between; gap: 12px; padding: 16px 0; color: #fff; font-weight: 600; }
+.certificate-carousel .certificate-loop { scroll-snap-type: none; }
+@media (hover: none) { .certificate-open-hint { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .certificate-open-hint { transition: none; } }

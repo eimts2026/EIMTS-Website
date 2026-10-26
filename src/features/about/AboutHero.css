@@ -1,78 +1,100 @@
-.about-showcase.ei-hero{position:relative;isolation:isolate;display:flex;align-items:center;min-height:100vh;min-height:100dvh;overflow:hidden;background:#102a22;color:#fff}
-.about-showcase-media,.about-showcase-shade{position:absolute;inset:0;pointer-events:none}
-.about-showcase-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:0;transition:opacity .8s ease}
-.about-showcase-media img.is-active{opacity:1}
-.about-showcase-shade{background:linear-gradient(90deg,rgba(2,22,18,.91),rgba(2,28,22,.65) 42%,rgba(2,20,16,.12) 80%),linear-gradient(0deg,rgba(2,22,18,.7),transparent 45%)}
-.about-showcase-content{position:relative;z-index:1;padding-top:clamp(112px,16vh,160px);padding-bottom:clamp(96px,15vh,150px)}
-.about-showcase-content .ei-kicker{margin-bottom:26px;color:#d8eadf}
-.about-showcase-copy{max-width:760px;min-height:310px;animation:about-caption-in .45s ease both}
-.about-showcase.ei-hero h1{font-size:clamp(3.2rem,6.5vw,5.5rem);line-height:.98;font-family:inherit;max-width:760px;margin:0;color:#fff}
-.about-showcase-copy>p{max-width:46ch;margin:26px 0 0;color:#d7e2dd;font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.65}
-.about-showcase-story{display:inline-flex;align-items:center;gap:28px;min-height:52px;margin-top:28px;padding:5px 6px 5px 20px;border:1px solid #a6b9af;border-radius:999px;color:#fff;font-size:14px;font-weight:650;transition:background .2s}
-.about-showcase-story span{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--ei-amber);color:#102a22;transition:transform .2s}
-.about-showcase-story:hover{background:#ffffff14}.about-showcase-story:hover span{transform:translateY(2px)}
-.about-showcase-story:focus-visible{outline:2px solid var(--ei-amber);outline-offset:5px}
-.about-showcase-foot{position:absolute;z-index:1;bottom:30px;left:0;right:0;display:flex;align-items:center;gap:24px;border-top:1px solid #ffffff40;padding-top:20px;color:#d7e2dd;font-size:12px}
-.about-showcase-indicators{display:flex;gap:8px;margin-left:auto}.about-showcase-indicators span{width:32px;height:3px;background:#ffffff40;transition:background .3s}.about-showcase-indicators .is-active{background:var(--ei-amber)}
-.about-showcase-count{font-variant-numeric:tabular-nums}
-@keyframes about-caption-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:620px){.about-showcase.ei-hero{min-height:100vh;min-height:100dvh;align-items:flex-end}.about-showcase-media img{object-position:58% top}.about-showcase-shade{background:linear-gradient(0deg,rgba(2,22,18,.98),rgba(2,22,18,.83) 40%,rgba(2,22,18,.14) 78%)}.about-showcase-content{padding-top:140px;padding-bottom:100px}.about-showcase.ei-hero h1{font-size:clamp(3rem,13vw,4rem)}.about-showcase-copy{min-height:280px}.about-showcase-copy>p{margin-top:22px;font-size:16px}.about-showcase-content .ei-kicker{font-size:11px;margin-bottom:22px}.about-showcase-story{margin-top:16px}.about-showcase-foot{bottom:24px;gap:12px;font-size:11px}.about-showcase-indicators{gap:5px}.about-showcase-indicators span{width:18px}}
-@media(prefers-reduced-motion:reduce){.about-showcase-media img,.about-showcase-story,.about-showcase-story span,.about-showcase-indicators span{transition:none}.about-showcase-copy,.about-showcase.ei-hero h1{animation:none}}
-.about-showcase .about-showcase-media.ei-image-trigger{position:absolute;inset:0;height:100%;pointer-events:auto}
-.about-showcase-media.ei-image-trigger>img{pointer-events:none}
-.about-showcase-media.ei-image-trigger .ei-image-expand{right:32px;top:120px;bottom:auto;z-index:2}
-.about-showcase-content,.about-showcase-foot{pointer-events:none}
-.about-showcase-content a{pointer-events:auto}
-.about-showcase-media.ei-image-trigger:focus-visible{outline-offset:-6px}
-@media(max-width:620px){.about-showcase-media.ei-image-trigger .ei-image-expand{top:100px;right:22px}}
+.about-editorial {
+  background: #102a22;
+  color: #f4f5f0;
+  padding: clamp(140px, 12vw, 180px) 0 40px;
+}
 
-/* Fit compact viewports without hiding text at larger accessibility sizes. */
-@media(max-height:760px){
-  .about-showcase-content{padding-top:112px;padding-bottom:88px}
-  .about-showcase-copy{min-height:0}
-  .about-showcase.ei-hero h1{font-size:clamp(2.4rem,min(6.5vw,8vh),4.5rem)}
-  .about-showcase-content .ei-kicker{margin-bottom:18px}
-  .about-showcase-copy>p{margin-top:18px}
-  .about-showcase-story{margin-top:20px}
-  .about-showcase-foot{bottom:20px;padding-top:14px}
+.about-editorial-layout.container {
+  width: min(1390px, calc(100% - 160px));
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  column-gap: clamp(40px, 6vw, 112px);
+  align-items: start;
 }
-/* Keep the longer recognition caption readable and the photograph unobscured on phones. */
-.about-showcase.ei-hero h1{font-size:clamp(2.5rem,4.7vw,4.4rem);max-width:800px;line-height:1.06}
-.about-showcase-copy{min-height:340px}
-.about-showcase-indicators button,.about-showcase-pause{pointer-events:auto;cursor:pointer;min-height:44px;border:0;color:#fff;background:transparent}
-.about-showcase-indicators button{display:grid;place-items:center;min-width:44px;padding:8px}
-.about-showcase-indicators button.is-active{background:transparent}
-.about-showcase-indicators button.is-active span{background:var(--ei-amber)}
-.about-showcase-pause{padding:8px 12px;border:1px solid #ffffff60;border-radius:24px;font:inherit}
-.about-showcase-pause:hover,.about-showcase-indicators button:hover{background:#ffffff18}
-.about-showcase-foot button:focus-visible{outline:3px solid var(--ei-amber);outline-offset:3px}
-@media(max-width:620px){
-  .about-showcase.ei-hero{display:grid;grid-template-rows:auto 1fr auto;align-items:stretch;min-height:0;padding-top:82px}
-  .about-showcase .about-showcase-media.ei-image-trigger{position:relative;inset:auto;display:block;width:100%;height:auto;aspect-ratio:16/10;border-radius:0;background:#102a22;overflow:hidden}
-  .about-showcase-media img{object-fit:cover;object-position:center 35%}
-  .about-showcase-media.ei-image-trigger .ei-image-expand{top:auto;bottom:16px;right:16px}
-  .about-showcase-shade{display:none}
-  .about-showcase-content{align-self:start;padding-top:24px;padding-bottom:16px}
-  .about-showcase.ei-hero h1{font-size:clamp(2rem,8.5vw,3rem);line-height:1.08}
-  .about-showcase-copy{min-height:0}
-  .about-showcase-content .ei-kicker{font-size:12px;letter-spacing:.02em;text-transform:none;margin-bottom:20px}
-  .about-showcase-foot{position:relative;bottom:auto;flex-wrap:wrap;padding:12px 0 18px;gap:8px 12px}
-  .about-showcase-foot>span:first-child{width:100%}
-  .about-showcase-indicators{margin-left:0;margin-right:auto}
-  .about-showcase-count{margin-left:auto}
-}
-@media(prefers-reduced-motion:reduce){.about-showcase-indicators button span{transition:none}}
 
-/* Keep the people outside the caption area and show the complete award photos. */
-@media(min-width:621px){
-  .about-showcase .about-showcase-media.ei-image-trigger{inset:100px 0 80px 42%;width:58%;height:auto}
-  .about-showcase-media img{object-fit:contain;object-position:center}
-  .about-showcase-shade{display:none}
-  .about-showcase-copy{max-width:34%;min-height:0}
-  .about-showcase.ei-hero h1{font-size:clamp(2rem,3.2vw,3.4rem);line-height:1.12}
-  .about-showcase-content .ei-kicker{max-width:34%}
+.about-editorial-heading { grid-column: 1; grid-row: 1 / 3; }
+.about-editorial-label {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0 0 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #d7e2dd;
 }
-@media(max-width:620px){
-  .about-showcase .about-showcase-media.ei-image-trigger{aspect-ratio:2560/1834}
-  .about-showcase-media img{object-fit:contain;object-position:center}
+.about-editorial-label span { color: #f3b84b; }
+.about-editorial-heading h1 {
+  max-width: 18ch;
+  margin: 0;
+  font-family: inherit;
+  font-size: clamp(2.6rem, 4.25vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+  color: #f4f5f0;
+}
+.about-editorial-intro {
+  grid-column: 2;
+  margin: 44px 0 24px;
+  max-width: 38ch;
+  color: #d7e2dd;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.7;
+}
+.about-editorial-story {
+  grid-column: 2;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 52px;
+  padding: 5px 6px 5px 20px;
+  border: 1px solid #a6b9af;
+  border-radius: 999px;
+  color: #f4f5f0;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s ease;
+}
+.about-editorial-story span {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f3b84b;
+  color: #102a22;
+  transition: transform .2s ease;
+}
+.about-editorial-story:hover,
+.about-editorial-story:active { background: #ffffff14; }
+.about-editorial-story:hover span,
+.about-editorial-story:active span { transform: translateY(2px); }
+.about-editorial-story:focus-visible { outline: 2px solid #f3b84b; outline-offset: 5px; }
+.about-editorial-portrait { grid-column: 1 / -1; margin: 48px 0 0; }
+.about-editorial-portrait img { display: block; width: 100%; height: auto; border-radius: 4px; }
+.about-editorial-portrait figcaption { margin-top: 16px; font-size: 13px; color: #d7e2dd; }
+
+@media (max-width: 900px) {
+  .about-editorial-layout.container { column-gap: 32px; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+  .about-editorial-heading h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); }
+}
+
+@media (max-width: 620px) {
+  .about-editorial { padding: 118px 0 32px; }
+  .about-editorial-layout.container { width: calc(100% - 32px); grid-template-columns: minmax(0, 1fr); }
+  .about-editorial-heading { grid-column: 1; grid-row: 1; }
+  .about-editorial-label { margin-bottom: 20px; font-size: 12px; }
+  .about-editorial-heading h1 { font-size: clamp(2.25rem, 9vw, 3.5rem); }
+  .about-editorial-intro { grid-column: 1; grid-row: 2; margin: 24px 0 0; }
+  .about-editorial-portrait { grid-row: 3; margin-top: 28px; }
+  .about-editorial-portrait figcaption { margin-top: 12px; font-size: 12px; }
+  .about-editorial-story { grid-column: 1; grid-row: 4; margin-top: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-editorial-story, .about-editorial-story span { transition: none; }
 }

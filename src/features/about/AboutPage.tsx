@@ -1,5 +1,6 @@
 import Link from "../../components/ui/Link";
 import AboutHero from "./AboutHero";
+import LeaderCard, { type Leader } from "./LeaderCard";
 import CertificateSlider from "./CertificateSlider";
 import RollingGallery, { type RollingGalleryItem } from "./RollingGallery";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
@@ -11,14 +12,14 @@ import "./AboutPage.css";
 // Image files stored in: /public/assets/leadership/
 // ============================================================================
 
-type Leader = { name: string; role: string; initials: string; image?: string };
+// Personal LinkedIn profiles. Omit linkedinUrl to hide the link, as for Tara.
 
 const leaders: Leader[] = [
-  { name: "Hemantha Sapumohotti", role: "Chief Executive Officer", initials: "HS", image: "/assets/leadership/hemantha.webp" },
-  { name: "Linda Gray, MBA (UWS, Australia)", role: "Talent & Culture Director", initials: "LG", image: "/assets/leadership/linda.webp" },
+  { name: "Hemantha Sapumohotti", role: "Chief Executive Officer", initials: "HS", image: "/assets/leadership/hemantha.webp", linkedinUrl: "https://www.linkedin.com/in/hemanthasapumohotti/" },
+  { name: "Linda Gray, MBA (UWS, Australia)", role: "Talent & Culture Director", initials: "LG", image: "/assets/leadership/linda.webp", linkedinUrl: "https://www.linkedin.com/in/linda-gray-eimts/" },
   { name: "Dr. Tara Giovanna, MB, BCh, BAO (Hons)", role: "Director", initials: "TG", image: "/assets/leadership/tara.webp" },
-  { name: "Dharshini", role: "Business Development Manager", initials: "D", image: "/assets/leadership/dharshini.webp" },
-  { name: "Angeline Cooke", role: "Senior Administrative Manager", initials: "AC", image: "/assets/leadership/angeline.webp" },
+  { name: "Dharshini", role: "Business Development Manager", initials: "D", image: "/assets/leadership/dharshini.webp", linkedinUrl: "https://www.linkedin.com/in/udhaya-dharshini-7825882a9/" },
+  { name: "Angeline Cooke", role: "Senior Administrative Manager", initials: "AC", image: "/assets/leadership/angeline.webp", linkedinUrl: "https://www.linkedin.com/in/angeline-cooke/" },
 ];
 const recognitionMilestones = [
   { marker: "2016—2024", name: "Best Employer Brand", detail: "Recognised for nine consecutive years" },
@@ -79,14 +80,7 @@ export default function AboutPage() {
           <p>Experienced leadership, shared standards and a commitment to responsible recruitment.</p>
         </div>
         <div className="ei-leader-list">
-          {leaders.map((leader) => <article className="ei-leader-card" key={leader.name} aria-label={`${leader.name}, ${leader.role}`}>
-            <div className="ei-leader-portrait">
-              {leader.image
-                ? <img src={leader.image} alt="" width="640" height="800" loading="lazy" />
-                : <span className="ei-leader-placeholder" aria-hidden="true">{leader.initials}</span>}
-            </div>
-            <div className="ei-leader-details"><h3>{leader.name}</h3><p>{leader.role}</p></div>
-          </article>)}
+          {leaders.map((leader) => <LeaderCard key={leader.name} leader={leader} />)}
         </div>
       </div>
     </section>

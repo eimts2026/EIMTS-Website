@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 const routes = {
   home: "/",
@@ -62,6 +63,42 @@ export function SiteHeader() {
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
   const contactMenuRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const mobileTimeline = useRef<gsap.core.Timeline | null>(null);
+
+  useEffect(() => {
+    const root = mobileMenuRef.current;
+    if (!root) return;
+    const context = gsap.context(() => {
+      const panel = root.querySelector<HTMLElement>("nav")!;
+      const lines = root.querySelectorAll(".mobile-icon-line");
+      const items = Array.from(panel.children);
+      gsap.set(panel, { autoAlpha: 0, y: -8, clipPath: "inset(0 0 100% 0 round 18px)" });
+      gsap.set(items, { opacity: 0, y: 12 });
+      mobileTimeline.current = gsap.timeline({ paused: true, defaults: { ease: "power3.out", easeReverse: "power2.out" } })
+        .to(lines[1], { scaleX: 0, opacity: 0, duration: 0.14 }, 0)
+        .to(lines[0], { y: 6, duration: 0.16 }, 0)
+        .to(lines[2], { y: -6, duration: 0.16 }, 0)
+        .to(lines[0], { rotation: 45, duration: 0.22 }, 0.12)
+        .to(lines[2], { rotation: -45, duration: 0.22 }, 0.12)
+        .to(panel, { autoAlpha: 1, y: 0, clipPath: "inset(0 0 0% 0 round 18px)", duration: 0.36 }, 0.08)
+        .to(items, { opacity: 1, y: 0, duration: 0.24, stagger: 0.025 }, 0.18);
+    }, root);
+    return () => { context.revert(); mobileTimeline.current = null; };
+  }, []);
+
+  useEffect(() => {
+    const timeline = mobileTimeline.current;
+    if (!timeline) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotion = () => {
+      if (reducedMotion.matches) timeline.progress(isMobileMenuOpen ? 1 : 0).pause();
+      else if (isMobileMenuOpen) timeline.play();
+      else timeline.reverse();
+    };
+    updateMotion();
+    reducedMotion.addEventListener("change", updateMotion);
+    return () => reducedMotion.removeEventListener("change", updateMotion);
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -73,8 +110,8 @@ export function SiteHeader() {
         setIsMobileMenuOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -186,7 +223,7 @@ export function SiteHeader() {
       <div className={"global-mobile-menu" + (isMobileMenuOpen ? " is-open" : "")} ref={mobileMenuRef}
         onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) closeMobileMenu(); }}>
         <button type="button" className="mobile-nav-toggle" ref={mobileToggleRef} onClick={toggleMobileMenu} aria-expanded={isMobileMenuOpen} aria-controls="mobile-navigation" aria-label={isMobileMenuOpen ? "Close navigation" : "Open navigation"}>
-          <span className={"menu-lines" + (isMobileMenuOpen ? " is-active" : "")} aria-hidden="true" />
+          <span className="mobile-menu-icon" aria-hidden="true"><span className="mobile-icon-line" /><span className="mobile-icon-line" /><span className="mobile-icon-line" /></span>
         </button>
         <nav id="mobile-navigation" aria-label="Mobile navigation" inert={!isMobileMenuOpen} onClick={(event) => { if ((event.target as Element).closest("a")) closeMobileMenu(); }}>
           <p className="mobile-nav-heading">Explore Emerald Isle</p>
