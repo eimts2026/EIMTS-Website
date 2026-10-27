@@ -10,25 +10,23 @@ export type PublicPopup = {
   updated_at: string;
 };
 
-export async function getActivePopup(): Promise<PublicPopup | null> {
+export async function getActivePopups(): Promise<PublicPopup[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !publishableKey) return null;
+  if (!url || !publishableKey) return [];
 
   const supabase = createClient(url, publishableKey, {
     auth: { persistSession: false },
   });
 
-  // Row-level security already hides inactive and out-of-window popups from
-  // anonymous readers; the newest one wins when several are live.
+  // Row-level security hides inactive and out-of-window popups from anonymous
+  // readers. Return every live popup for the public carousel.
   const { data, error } = await supabase
     .from("popups")
     .select("id,title,message,image_url,link_url,link_label,updated_at")
     .not("image_url", "is", null)
-    .order("updated_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .order("updated_at", { ascending: false });
 
-  if (error || !data) return null;
-  return data as PublicPopup;
+  if (error || !data) return [];
+  return data as PublicPopup[];
 }

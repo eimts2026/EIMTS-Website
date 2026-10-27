@@ -18,7 +18,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const jobs = await getPublishedJobSlugs();
   const staticRoutes = routes.map((route, index) => ({
     url: `${siteUrl}${route}/`,
-    lastModified: new Date(),
     changeFrequency: (index === 0 ? "weekly" : "monthly") as
       | "weekly"
       | "monthly",

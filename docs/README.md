@@ -1,6 +1,6 @@
 # Emerald Isle Manpower & Travel Services (EIMTS)
 
-This repository contains the Next.js web ecosystem for Emerald Isle Manpower & Travel Services: the high-performance public marketing and job board website, a private staff content dashboard, shared database contracts, and the Supabase database schema for vacancies, popups, hero slides, and candidate applications.
+This repository contains the Next.js web ecosystem for Emerald Isle Manpower & Travel Services: the public marketing and job board website, a private staff content dashboard, shared database contracts, and the Supabase schema for vacancies, popups and hero slides. Candidate CV submissions are delivered directly by email.
 
 The platform was migrated from a static React/Vite frontend with hardcoded vacancy data and WordPress/PHP dependencies to a modern, SEO-optimised Next.js application backed by Supabase and automated email notifications.
 
@@ -21,7 +21,7 @@ EIMTS-Website/
 ├── public/                      # Static brand assets, images, and documents
 ├── dashboard/                   # Private staff content dashboard (Next.js App Router)
 │   └── src/
-│       ├── app/                 # Dashboard pages (Jobs, Hero slides, Popups, Applications, Login)
+│       ├── app/                 # Dashboard pages (Jobs, Hero slides, Popups, Login)
 │       ├── components/          # Forms, layout header, authentication & setup UI
 │       └── lib/supabase/        # Supabase SSR server and browser client setup
 ├── packages/database/           # Shared TypeScript types and database contracts (@eimts/database)
@@ -40,7 +40,7 @@ EIMTS-Website/
 - **Next.js App Router**: Fast server-side rendering (SSR), dynamic metadata, open graph tags, and automatic XML sitemaps (`sitemap.xml`) & `robots.txt`.
 - **Dynamic Vacancy System**: Server-side loading of published jobs from Supabase with fallback data ensuring the site stays resilient.
 - **Dynamic Job Pages**: Individual job detail routes under `/foreign-job-vacancies/[slug]/` with schema.org `JobPosting` structured data.
-- **Candidate Online Applications**: Secure candidate application form (`POST /api/applications`) validating applicant information, age, email, and CV file upload (PDF/Word up to 5 MB).
+- **Candidate CV Email Submission**: The validated form (`POST /api/applications`) sends the CV directly to the recruitment inbox; it does not create dashboard records or store CVs in Supabase.
 - **Automated Recruitment Email Notifications**: Automatic email delivery with CV attachment via Nodemailer/SMTP to recruitment team inboxes.
 - **Dynamic Hero Slides & Popups**: Homepage hero carousel and seasonal takeover banners managed directly via the dashboard.
 - **Interactive Visuals**: Interactive office map via Leaflet and motion effects via Framer Motion & Three.js.
@@ -51,7 +51,6 @@ EIMTS-Website/
 - **Job Management**: Create, edit, draft, publish, pause, and expire vacancy listings, with urgent/featured flags and expiry scheduling.
 - **Hero Carousel & Takeovers**: Manage hero carousel slides, sort ordering, active time windows, and full hero takeovers (e.g. for anniversaries, holidays, or major announcements).
 - **Promotional Popups**: Create and schedule modal popups with custom banners, CTAs, and active timeframes.
-- **Candidate Applications Review**: View candidate submissions, application statuses, job snapshots, and generate short-lived signed URLs to view candidate CVs.
 - **SEO-Protected**: Excluded from search engines (`noindex, nofollow`).
 
 ### 3. Database & Storage (`supabase/`)

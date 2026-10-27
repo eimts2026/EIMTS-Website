@@ -23,7 +23,7 @@ moving the helpers to a non-exposed schema requires updating dependent policies.
 | --- | --- |
 | Missing or unknown | Access-denied page |
 | viewer | Listing pages; only records permitted by existing RLS |
-| editor | Vacancy, hero and popup editing; candidate applications |
+| editor | Vacancy, hero and popup editing |
 | admin | Editor access plus project editing |
 
 Login, password reset, and access denied remain reachable without a staff role.

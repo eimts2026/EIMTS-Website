@@ -26,16 +26,16 @@ deployed to `admin.emeraldislemanpower.com`.
 | --- | --- |
 | Dashboard pages | `dashboard/src/app/` |
 | Job create/edit form | `dashboard/src/components/JobForm.tsx` |
-| Candidate application review | `dashboard/src/app/applications/` |
 | Protected publishing actions | `dashboard/src/app/actions.ts` |
 | Dashboard Supabase clients | `dashboard/src/lib/supabase/` |
 
 ## Database
 
-Supabase supplies PostgreSQL, authentication and file storage. The SQL migration
-in `supabase/migrations/` creates jobs, applications, profiles, security
-policies and storage buckets. The existing WordPress/MySQL database is not
-modified.
+Supabase supplies PostgreSQL, authentication and file storage. The migrations
+in `supabase/migrations/` create jobs, profiles, hero slides, popups, security
+policies and media buckets. Candidate CV submissions are emailed directly; the
+retired application table has been removed. The existing WordPress/MySQL
+database is not modified.
 
 Shared TypeScript database contracts live in `packages/database/`.
 

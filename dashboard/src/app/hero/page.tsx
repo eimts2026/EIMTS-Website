@@ -35,6 +35,18 @@ const stateLabels: Record<string, string> = {
   inactive: "Inactive",
 };
 
+const publicSiteOrigin = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://emeraldislemanpower.com"
+).replace(/\/$/, "");
+
+function previewImageUrl(imageUrl: string) {
+  try {
+    return new URL(imageUrl, `${publicSiteOrigin}/`).toString();
+  } catch {
+    return imageUrl;
+  }
+}
+
 export default async function HeroSlidesPage() {
   if (!isSupabaseConfigured()) return <SetupRequired />;
   const supabase = await createClient();
@@ -126,12 +138,32 @@ export default async function HeroSlidesPage() {
                     return (
                       <tr key={slide.id}>
                         <td>
-                          <strong>{slide.title}</strong>
-                          <small>
-                            {slide.is_takeover
-                              ? "Occasion takeover"
-                              : slide.kicker || "Rotation slide"}
-                          </small>
+                          <div className="hero-slide-preview">
+                            <img src={previewImageUrl(slide.image_url)} alt="" loading="lazy" />
+                            <div className="hero-slide-preview-copy">
+                              <span className="hero-slide-kicker">
+                                {slide.is_takeover
+                                  ? "Occasion takeover"
+                                  : slide.kicker || "Rotation slide"}
+                              </span>
+                              <strong>{slide.title}</strong>
+                              <p>{slide.copy}</p>
+                              <div className="hero-slide-ctas">
+                                {slide.cta_label && (
+                                  <span>
+                                    <b>Button 1</b> {slide.cta_label}
+                                    {slide.cta_url && <code>{slide.cta_url}</code>}
+                                  </span>
+                                )}
+                                {slide.cta2_label && (
+                                  <span>
+                                    <b>Button 2</b> {slide.cta2_label}
+                                    {slide.cta2_url && <code>{slide.cta2_url}</code>}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                         </td>
                         <td className="row-actions">
                           {role !== "viewer" && !slide.is_takeover ? (

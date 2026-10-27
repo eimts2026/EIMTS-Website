@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Emerald Isle Content Desk",
-  description: "Private job and application management for Emerald Isle staff.",
+  description: "Private vacancy, hero, popup and project management for Emerald Isle staff.",
   robots: {
     index: false,
     follow: false,

@@ -2,7 +2,7 @@ import JobsPage from "@/features/jobs/JobsPage";
 import { PromoPopup } from "@/components/ui/PromoPopup";
 import { searchPublicJobs, type JobSearchResult } from "@/lib/job-search";
 import { parseJobSearch } from "@/lib/job-search-params";
-import { getActivePopup } from "@/lib/popups";
+import { getActivePopups } from "@/lib/popups";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata = pageMetadata(
@@ -26,7 +26,7 @@ export default async function Page({searchParams}: {searchParams: Promise<Record
   const empty: JobSearchResult = {items:[],total:0,nextCursor:null,locations:[],categories:[]};
   const [result,popup] = await Promise.all([
     loadError ? Promise.resolve(empty) : searchPublicJobs(search).catch(error => { loadError = (error as Error).message; return empty; }),
-    getActivePopup(),
+    getActivePopups(),
   ]);
-  return <><JobsPage initialResult={result} search={search} loadError={loadError} /><PromoPopup popup={popup} /></>;
+  return <><JobsPage initialResult={result} search={search} loadError={loadError} /><PromoPopup popups={popup} /></>;
 }

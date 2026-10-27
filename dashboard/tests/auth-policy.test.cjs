@@ -21,10 +21,12 @@ test('viewer cannot open editor pages or candidate records', () => {
   }
   assert.equal(canAccessRoute('/', 'viewer'), true);
 });
-test('editors can publish but project editors require admin', () => {
-  for (const route of ['/jobs/new', '/hero/123', '/popups/new', '/applications']) {
+test('editors can publish but projects require admin and applications are retired', () => {
+  for (const route of ['/jobs/new', '/hero/123', '/popups/new']) {
     assert.equal(canAccessRoute(route, 'editor'), true);
   }
+  assert.equal(canAccessRoute('/applications', 'editor'), false);
+  assert.equal(canAccessRoute('/applications', 'admin'), false);
   assert.equal(canAccessRoute('/projects/123', 'editor'), false);
   assert.equal(canAccessRoute('/projects/123', 'admin'), true);
 });

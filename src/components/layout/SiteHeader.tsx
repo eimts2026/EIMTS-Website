@@ -10,7 +10,6 @@ const routes = {
   employer: "/client-recruitment-solutions/",
   projects: "/projects/",
   blog: "/insightful-and-engaging-blog-posts-discover-our-latest-articles/",
-  faq: "/emerald-isle-manpower-faq/",
   contact: "/contact/",
 };
 
@@ -55,13 +54,11 @@ function JobMegaMenu({ onClose }: { onClose?: () => void }) {
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
-  const contactMenuRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const mobileTimeline = useRef<gsap.core.Timeline | null>(null);
 
@@ -102,7 +99,6 @@ export function SiteHeader() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (contactMenuRef.current && !contactMenuRef.current.contains(event.target as Node)) setIsContactOpen(false);
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
@@ -122,7 +118,7 @@ export function SiteHeader() {
       const currentScrollY = window.scrollY;
       const delta = currentScrollY - lastScrollY;
       const headerHasFocus = headerRef.current?.contains(document.activeElement);
-      const menuIsOpen = isOpen || isMobileMenuOpen || isContactOpen;
+      const menuIsOpen = isOpen || isMobileMenuOpen;
 
       if (currentScrollY <= 80 || delta < -6 || headerHasFocus || menuIsOpen) {
         setIsHidden(false);
@@ -145,7 +141,7 @@ export function SiteHeader() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isOpen, isMobileMenuOpen, isContactOpen]);
+  }, [isOpen, isMobileMenuOpen]);
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
@@ -157,7 +153,6 @@ export function SiteHeader() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isContactOpen) setIsContactOpen(false);
       if (event.key === "Escape" && isMobileMenuOpen) {
         setIsMobileMenuOpen(false);
         mobileToggleRef.current?.focus();
@@ -171,7 +166,7 @@ export function SiteHeader() {
       document.removeEventListener("keydown", onKeyDown);
       desktop.removeEventListener("change", closeOnDesktop);
     };
-  }, [isMobileMenuOpen, isContactOpen]);
+  }, [isMobileMenuOpen]);
 
   return <header ref={headerRef} className={"global-header" + (isHidden ? " is-hidden" : "")}>
     <div className="wide-container nav-shell">
@@ -197,17 +192,7 @@ export function SiteHeader() {
         <a href={routes.employer}>Employer</a>
         <a href={routes.projects}>Projects</a>
         <a href={routes.blog}>Blogs</a>
-        <div
-          className={"nav-group contact-nav-group" + (isContactOpen ? " is-open" : "")}
-          ref={contactMenuRef}
-          onMouseEnter={() => setIsContactOpen(true)}
-          onMouseLeave={() => setIsContactOpen(false)}
-          onFocus={() => setIsContactOpen(true)}
-          onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setIsContactOpen(false); }}
-        >
-          <a className="nav-group-trigger" href={routes.contact} aria-expanded={isContactOpen} aria-controls="contact-nav-dropdown">Contact us <Caret /></a>
-          <div className="contact-nav-dropdown" id="contact-nav-dropdown"><a href={routes.contact}>Contact us<span>Find an office or send an inquiry</span></a><a href={routes.faq}>FAQ<span>Answers to common questions</span></a></div>
-        </div>
+        <a href={routes.contact}>Contact us</a>
       </nav>
       <a className="register-pill" href="https://registration.emeraldislemanpower.com/">
         <span className="register-pill__icon-wrapper">
@@ -237,7 +222,7 @@ export function SiteHeader() {
           <a href={routes.employer}>Employers</a>
           <a href={routes.projects}>Projects</a>
           <a href={routes.blog}>Blogs</a>
-          <details className="mobile-job-menu mobile-contact-menu"><summary>Contact us <Caret /></summary><a href={routes.contact}>Contact us</a><a href={routes.faq}>FAQ</a></details>
+          <a href={routes.contact}>Contact us</a>
           <a href="https://registration.emeraldislemanpower.com/">Register now</a>
         </nav>
       </div>

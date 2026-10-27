@@ -352,7 +352,7 @@ body{overflow-x:hidden;background:var(--ei-neutral);color:var(--ei-ink)}
 
 .ei-awards{background:#fff}.ei-awards-head{display:grid;grid-template-columns:2fr 1fr;gap:8vw;align-items:end;margin-bottom:55px}.ei-awards-head h2{margin:0;font-size:clamp(3rem,5vw,5rem);line-height:1}.ei-awards-head>p{color:var(--ei-muted);font-size:18px}.ei-award-list{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:#d0d8d3}.ei-award-list article{grid-column:span 4;min-height:230px;padding:28px;background:#fff}.ei-award-list article:nth-child(1),.ei-award-list article:nth-child(2){grid-column:span 6}.ei-award-list span{color:#08795d;font-weight:700}.ei-award-list h3{margin:50px 0 8px;font-size:27px}.ei-award-list p{margin:0;color:var(--ei-muted)}
 .ei-license{padding:80px 0;background:var(--ei-amber)}.ei-license .container{display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:end}.ei-license p{margin:0;color:#3d472f}.ei-license h2{margin:7px 0 0;font-size:clamp(2.4rem,4vw,4rem)}
-.global-header{position:fixed;top:0;left:0;right:0;z-index:1000;background:transparent;box-shadow:none;padding-top:14px}.nav-shell{min-height:72px;padding:0 18px;border-radius:999px;background:rgba(3,39,31,.94);box-shadow:0 8px 18px rgba(0,20,15,.15);backdrop-filter:blur(16px)}.global-brand img{width:184px}.top-nav{font-size:12px;gap:clamp(14px,1.7vw,28px)}.register-pill {
+.global-header{position:fixed;top:0;left:0;right:0;z-index:1000;background:transparent;box-shadow:none;padding-top:14px}.nav-shell{min-height:72px;padding:0 18px;border-radius:999px;background:rgba(3,39,31,.94);box-shadow:0 8px 18px rgba(0,20,15,.15);backdrop-filter:blur(16px)}.global-brand img{display:block;width:214px;height:auto;max-width:100%;object-fit:contain}.top-nav{font-size:12px;gap:clamp(14px,1.7vw,28px)}.register-pill {
   line-height: 1;
   text-decoration: none;
   display: inline-flex;
@@ -1020,15 +1020,15 @@ body{overflow-x:hidden;background:var(--ei-neutral);color:var(--ei-ink)}
   .ei-hero-copy>.ei-kicker,.ei-hero-copy>h1,.ei-hero-copy>p:not(.ei-kicker),.ei-hero-copy>.ei-actions{animation:none;clip-path:none;filter:none}
 }
 /* Clean responsive primary navigation */
-.nav-shell{grid-template-columns:190px minmax(0,1fr) 168px;gap:clamp(18px,2vw,30px)}
+.nav-shell{grid-template-columns:220px minmax(0,1fr) 168px;gap:clamp(18px,2vw,30px)}
 .top-nav{gap:clamp(16px,1.65vw,27px)}
 .top-nav>a,.nav-group>a{letter-spacing:.025em}
 .footer-contact-link{color:var(--ei-amber)!important;font-weight:700}
 .footer-contact-link svg{display:inline-block;width:14px;height:14px;margin-left:5px;vertical-align:-2px;transition:transform .2s var(--ei-ease)}
 @media(hover:hover){.footer-contact-link:hover svg{transform:translateX(4px)}}
 @media(min-width:1041px) and (max-width:1180px){
-  .nav-shell{grid-template-columns:180px minmax(0,1fr) 154px;gap:16px}
-  .global-brand img{width:176px}
+  .nav-shell{grid-template-columns:200px minmax(0,1fr) 154px;gap:16px}
+  .global-brand img{width:198px}
   .top-nav{display:flex;gap:clamp(12px,1.25vw,18px);font-size:11px}
   .register-pill{display:inline-flex;width:auto;justify-self:end}
   .global-mobile-menu{display:none}
@@ -1367,7 +1367,7 @@ input,select,textarea,button{max-inline-size:100%}
 .ei-category-list strong,.ei-category-list small{overflow-wrap:anywhere}
 @media(max-width:360px){
   .wide-container,.container{width:calc(100% - 24px)}
-  .global-brand img{width:150px}
+  .global-brand img{width:166px}
   .global-mobile-menu nav{right:-2px;width:calc(100vw - 24px);max-width:calc(100vw - 24px)}
   .ei-button{max-width:100%;white-space:normal}
 }
@@ -1510,8 +1510,8 @@ input,select,textarea,button{max-inline-size:100%}
 .jobs-popular button{padding:2px 0;border:0;border-bottom:1px solid transparent;background:transparent;color:#53645c;font:650 13px/1.4 var(--font-sans);cursor:pointer;transition:color .2s var(--ei-ease),border-color .2s var(--ei-ease)}
 .jobs-popular button:hover{border-color:#08795d;color:#08795d}
 .jobs-popular button:focus-visible{outline:2px solid var(--ei-amber);outline-offset:4px}
-.jobs-page{padding:clamp(64px,7vw,88px) 0 clamp(80px,9vw,112px);background:#f7f8f5}
-.jobs-results-toolbar{scroll-margin-top:120px;display:flex;align-items:flex-end;justify-content:space-between;gap:36px;margin:0 0 34px;padding-bottom:30px;border-bottom:1px solid #d7e0db}
+.jobs-page{padding:clamp(42px,5vw,60px) 0 clamp(80px,9vw,112px);background:#f7f8f5}
+.jobs-results-toolbar{scroll-margin-top:120px;display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin:0 0 24px;padding-bottom:20px;border-bottom:1px solid #d7e0db}
 .jobs-results-toolbar .section-kicker{margin-bottom:12px}
 .jobs-results-toolbar h2{margin:0;color:var(--ei-ink);font:570 clamp(2.4rem,4vw,4rem)/.98 var(--font-sans);letter-spacing:-.04em;text-wrap:balance}
 .jobs-results-toolbar>div:first-child>p:last-child{margin:16px 0 0;color:#62716a;font-size:14px}
@@ -1519,7 +1519,7 @@ input,select,textarea,button{max-inline-size:100%}
 .jobs-results-controls label{display:block}
 .jobs-results-controls select{min-height:48px;padding:0 42px 0 16px;border:1px solid #d7e0db;border-radius:12px;background:#fff;color:#43534b;font:650 13px/1 var(--font-sans);cursor:pointer}
 .jobs-results-controls select:focus-visible{outline:3px solid rgba(243,184,75,.65);border-color:#08795d}
-.job-directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.job-directory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .job-listing-card{position:relative;min-width:0;min-height:330px;border:1px solid #dce4df;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 1px 0 rgba(3,39,31,.02);transition:border-color .25s var(--ei-ease),box-shadow .25s var(--ei-ease),transform .25s var(--ei-ease)}
 .job-listing-card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--ei-amber);transform:scaleY(0);transform-origin:bottom;transition:transform .28s var(--ei-ease)}
 .job-card-open{position:relative;width:100%;min-height:330px;display:flex;flex-direction:column;align-items:center;padding:26px 30px 22px;border:0;background:transparent;color:var(--ei-ink);font-family:var(--font-sans);text-align:center;cursor:pointer}
@@ -1586,6 +1586,7 @@ input,select,textarea,button{max-inline-size:100%}
 .job-detail-apply:hover{background:var(--ei-deep);color:#fff;transform:translateY(-2px)}
 .job-detail-apply:focus-visible{outline:3px solid var(--ei-amber);outline-offset:3px}
 @media(max-width:900px){
+  .job-directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .jobs-filter.jobs-filter-modern{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:20px}
   .jobs-filter.jobs-filter-modern label:first-child{grid-column:1/-1;border-bottom:1px solid #e1e7e3}
   .jobs-filter.jobs-filter-modern label:nth-child(3){border-right:0}
@@ -1618,8 +1619,8 @@ input,select,textarea,button{max-inline-size:100%}
 @media(max-width:420px){
   .jobs-search-hero{padding-top:112px}
   .jobs-search-intro h1{font-size:3.05rem}
-  .jobs-page{padding-top:60px}
-  .jobs-results-toolbar{margin-bottom:24px}
+  .jobs-page{padding-top:42px}
+  .jobs-results-toolbar{margin-bottom:20px;padding-bottom:16px}
   .jobs-results-toolbar h2{font-size:2.55rem}
   .jobs-results-controls{display:grid;grid-template-columns:1fr}
   .job-listing-card,.job-card-open{min-height:320px}
@@ -2248,9 +2249,6 @@ input,select,textarea,button{max-inline-size:100%}
 @media(max-width:620px){
   .global-mobile-menu>nav{position:absolute;top:calc(100% + 16px);right:-6px;left:auto;width:calc(100vw - 40px);max-width:calc(100vw - 40px);max-height:calc(100dvh - 112px);overscroll-behavior:contain}
   .global-mobile-menu .mobile-job-menu>a{justify-content:flex-start!important;text-align:left}
-  .global-mobile-menu .mobile-contact-menu[open]{padding-bottom:8px;background:rgba(8,121,93,.08)}
-  .global-mobile-menu .mobile-contact-menu[open]>a{display:flex!important;min-height:46px;padding:10px 16px!important;color:#0b3815!important;opacity:1!important;visibility:visible!important;justify-content:flex-start!important;text-align:left!important}
-  .global-mobile-menu .mobile-contact-menu[open]>a:focus-visible{outline:2px solid var(--ei-amber);outline-offset:-2px}
 }
 @media(prefers-reduced-motion:reduce){.global-mobile-menu>nav,.mobile-nav-toggle,.menu-lines,.menu-lines:before,.menu-lines:after{transition:none!important}}
 

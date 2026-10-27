@@ -27,31 +27,6 @@ export type JobRecord = {
 
 export type ProfileRole = "admin" | "editor" | "viewer";
 
-export type ApplicationStatus =
-  | "new"
-  | "reviewing"
-  | "shortlisted"
-  | "rejected"
-  | "hired";
-
-export type ApplicationRecord = {
-  id: string;
-  job_id: string | null;
-  // Snapshot of the vacancy title when the CV arrived, so later edits to the
-  // job never relabel applications already received against it.
-  job_title: string | null;
-  full_name: string;
-  age: number;
-  email: string;
-  phone: string | null;
-  cv_path: string;
-  cover_note: string | null;
-  status: ApplicationStatus;
-  consent_at: string;
-  created_at: string;
-  updated_at: string;
-};
-
 export type HeroSlideRecord = {
   id: string;
   kicker: string | null;

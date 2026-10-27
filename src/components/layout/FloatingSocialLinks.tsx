@@ -19,7 +19,19 @@ const socials: Array<{ name: SocialName; label: string; href: string }> = [
 export function FloatingSocialLinks() {
   const [open, setOpen] = useState(false);
   const [onDark, setOnDark] = useState(false);
+  const [emiRevealed, setEmiRevealed] = useState(false);
   const emiRef = useRef<HTMLAnchorElement>(null);
+  const emiTouch = useRef(false);
+  useEffect(() => {
+    if (!emiRevealed) return;
+    const dismiss = (event: PointerEvent) => {
+      if (!emiRef.current?.contains(event.target as Node)) setEmiRevealed(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setEmiRevealed(false); };
+    document.addEventListener("pointerdown", dismiss);
+    document.addEventListener("keydown", onKeyDown);
+    return () => { document.removeEventListener("pointerdown", dismiss); document.removeEventListener("keydown", onKeyDown); };
+  }, [emiRevealed]);
   useEffect(() => {
     let sampleTimer = 0;
     const sample = () => {
@@ -73,11 +85,16 @@ export function FloatingSocialLinks() {
   return <>
     <a
       ref={emiRef}
-      className={"ei-whatsapp-bot" + (onDark ? " is-on-dark" : "")}
+      className={"ei-whatsapp-bot" + (onDark ? " is-on-dark" : "") + (emiRevealed ? " is-revealed" : "")}
       href="https://wa.me/94765606454?text=Hi%20EMI%2C%20I%20need%20some%20guidance."
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Ask Emi on WhatsApp (opens in a new tab)"
+      onPointerDown={(event) => { emiTouch.current = event.pointerType === "touch"; }}
+      onClick={(event) => {
+        if (emiTouch.current && !emiRevealed) { event.preventDefault(); setEmiRevealed(true); }
+        emiTouch.current = false;
+      }}
     >
       <span className="ei-whatsapp-bot-copy"><strong>Ask From Emi</strong></span>
       <img className="ei-emi-avatar" src="/assets/emi-guide.webp" alt="EMI, your virtual recruitment guide" width="96" height="112" />

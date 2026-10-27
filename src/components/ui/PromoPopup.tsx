@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import type { PublicPopup } from "@/lib/popups";
 
 type Props = {
-  popup: PublicPopup | null;
+  popups: PublicPopup[];
 };
 
-export function PromoPopup({ popup }: Props) {
-  const hasImage = Boolean(popup?.image_url);
+export function PromoPopup({ popups }: Props) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const popup = popups[activeIndex];
+  const hasImage = popups.length > 0;
   const linkUrl = safeNavigationUrl(popup?.link_url);
   const [open, setOpen] = useState(false);
 
@@ -19,6 +21,14 @@ export function PromoPopup({ popup }: Props) {
     return () => window.clearTimeout(timer);
   }, [hasImage]);
 
+  useEffect(() => {
+    setActiveIndex((index) => Math.min(index, Math.max(0, popups.length - 1)));
+  }, [popups.length]);
+
+  function move(step: number) {
+    setActiveIndex((index) => (index + step + popups.length) % popups.length);
+  }
+
   function dismiss() {
     setOpen(false);
   }
@@ -26,14 +36,21 @@ export function PromoPopup({ popup }: Props) {
   useEffect(() => {
     if (!open) return;
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") dismiss();
+      if (event.key === "Escape") setOpen(false);
+      if (popups.length > 1 && event.key === "ArrowLeft") {
+        event.preventDefault();
+        move(-1);
+      }
+      if (popups.length > 1 && event.key === "ArrowRight") {
+        event.preventDefault();
+        move(1);
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, popups.length]);
 
-  if (!open || !hasImage || !popup) return null;
+  if (!open || !hasImage || !popup?.image_url) return null;
 
   const image = (
     <img
@@ -48,31 +65,40 @@ export function PromoPopup({ popup }: Props) {
       className="promo-popup-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label={popup.title || "Promotional popup"}
+      aria-label={`${popup.title || "Promotional popup"}, ${activeIndex + 1} of ${popups.length}`}
       onClick={(event) => {
         if (event.target === event.currentTarget) dismiss();
       }}
     >
-      <div className="promo-popup-card">
-        <button
-          type="button"
-          className="promo-popup-close"
-          aria-label="Close popup"
-          onClick={dismiss}
-        >
-          ×
-        </button>
-        {linkUrl ? (
-          <a
-            className="promo-popup-link"
-            href={linkUrl}
-            aria-label={popup.title || "Open popup destination"}
+      <div className="promo-popup-layout">
+        {popups.length > 1 && <button type="button" className="promo-popup-arrow promo-popup-arrow--previous" aria-label="Previous popup" onClick={() => move(-1)}>‹</button>}
+        <div className="promo-popup-card">
+          <button
+            type="button"
+            className="promo-popup-close"
+            aria-label="Close popup"
             onClick={dismiss}
           >
-            {image}
-          </a>
-        ) : (
-          <div className="promo-popup-image-frame">{image}</div>
+            ×
+          </button>
+          {linkUrl ? (
+            <a
+              className="promo-popup-link"
+              href={linkUrl}
+              aria-label={popup.title || "Open popup destination"}
+              onClick={dismiss}
+            >
+              {image}
+            </a>
+          ) : (
+            <div className="promo-popup-image-frame">{image}</div>
+          )}
+        </div>
+        {popups.length > 1 && <button type="button" className="promo-popup-arrow promo-popup-arrow--next" aria-label="Next popup" onClick={() => move(1)}>›</button>}
+        {popups.length > 1 && (
+          <p className="promo-popup-count" aria-live="polite">
+            Popup {activeIndex + 1} of {popups.length}
+          </p>
         )}
       </div>
       <style>{`
@@ -82,17 +108,31 @@ export function PromoPopup({ popup }: Props) {
           z-index: 999;
           display: grid;
           place-items: center;
-          padding: 1rem;
+          overflow-y: auto;
+          overscroll-behavior: contain;
+          padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
           background: rgba(7, 16, 12, 0.68);
           backdrop-filter: blur(8px);
           animation: promo-fade 0.3s ease both;
+        }
+        .promo-popup-layout {
+          display: grid;
+          grid-template-columns: 48px minmax(0, 900px) 48px;
+          grid-template-areas: "previous card next" ". count .";
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          width: min(100%, 1024px);
+          margin: auto;
         }
         .promo-popup-card {
           position: relative;
           display: grid;
           place-items: center;
-          width: min(900px, 100%);
-          max-height: 92vh;
+          grid-area: card;
+          width: 100%;
+          max-height: calc(100vh - 5rem);
+          max-height: calc(100svh - 5rem);
           overflow: hidden;
           border: 1px solid rgba(255, 255, 255, 0.72);
           border-radius: 22px;
@@ -102,9 +142,12 @@ export function PromoPopup({ popup }: Props) {
         }
         .promo-popup-link,
         .promo-popup-image-frame {
-          display: block;
+          display: grid;
+          place-items: center;
+          width: 100%;
           max-width: 100%;
-          max-height: 92vh;
+          max-height: calc(100vh - 5rem);
+          max-height: calc(100svh - 5rem);
           line-height: 0;
           cursor: pointer;
         }
@@ -113,7 +156,8 @@ export function PromoPopup({ popup }: Props) {
           width: auto;
           max-width: 100%;
           height: auto;
-          max-height: 92vh;
+          max-height: calc(100vh - 5rem);
+          max-height: calc(100svh - 5rem);
           object-fit: contain;
           transition: transform 0.35s ease, filter 0.35s ease;
         }
@@ -139,6 +183,38 @@ export function PromoPopup({ popup }: Props) {
           cursor: pointer;
           transition: background 0.2s ease, transform 0.2s ease;
         }
+        .promo-popup-arrow {
+          display: grid;
+          place-items: center;
+          width: 48px;
+          height: 48px;
+          padding: 0;
+          border: 1px solid rgba(255,255,255,.3);
+          border-radius: 50%;
+          background: #e5bf6d;
+          color: #082f25;
+          font: 500 2rem/1 system-ui, sans-serif;
+          cursor: pointer;
+          touch-action: manipulation;
+          transition: transform .2s ease, background .2s ease;
+        }
+        .promo-popup-arrow:hover {
+          transform: scale(1.06);
+          background: #f2cf81;
+        }
+        .promo-popup-arrow--previous { grid-area: previous; }
+        .promo-popup-arrow--next { grid-area: next; }
+        .promo-popup-count {
+          grid-area: count;
+          justify-self: center;
+          margin: 0;
+          padding: .4rem .75rem;
+          border: 1px solid rgba(255,255,255,.2);
+          border-radius: 999px;
+          background: rgba(7,16,12,.72);
+          color: #fff;
+          font: 600 .78rem/1.2 system-ui, sans-serif;
+        }
         .promo-popup-close:hover {
           background: rgba(7, 16, 12, 0.9);
           transform: rotate(90deg);
@@ -151,6 +227,29 @@ export function PromoPopup({ popup }: Props) {
           from { opacity: 0; transform: translateY(20px) scale(0.97); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
+        @media (max-width: 700px) {
+          .promo-popup-overlay {
+            padding: max(.5rem, env(safe-area-inset-top)) max(.5rem, env(safe-area-inset-right)) max(.5rem, env(safe-area-inset-bottom)) max(.5rem, env(safe-area-inset-left));
+          }
+          .promo-popup-layout {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            grid-template-areas: "card card" "previous next" "count count";
+            gap: .65rem;
+          }
+          .promo-popup-card,
+          .promo-popup-link,
+          .promo-popup-image-frame,
+          .promo-popup-image {
+            max-height: calc(100vh - 9rem);
+            max-height: calc(100svh - 9rem);
+          }
+          .promo-popup-arrow {
+            width: 48px;
+            height: 48px;
+            justify-self: center;
+          }
+          .promo-popup-count { margin-top: -.1rem; }
+        }
         @media (prefers-reduced-motion: reduce) {
           .promo-popup-overlay,
           .promo-popup-card {
@@ -159,6 +258,7 @@ export function PromoPopup({ popup }: Props) {
           .promo-popup-image {
             transition: none;
           }
+          .promo-popup-arrow { transition: none; }
         }
       `}</style>
     </div>

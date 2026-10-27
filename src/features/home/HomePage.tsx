@@ -1,13 +1,11 @@
-import { preload } from "react-dom";
 import type { HeroContent } from "../../lib/hero";
 import Link from "../../components/ui/Link";
 import type { Job } from "../jobs/JobsPage";
 import ClientGlobe from "../../components/visuals/ClientGlobe";
 import TestimonialsRail from "./TestimonialsRail";
-import HeroTagline from "./HeroTagline";
+import RecruitmentHero from "./RecruitmentHero";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
 import "./HomePage.css";
-import "./RecruitmentHero.css";
 const jobsUrl = "/foreign-job-vacancies/";
 const industries = [
   { title: "Roads & building construction", description: "Site engineers, supervisors and skilled trades for building and infrastructure projects.", icon: "houses" },
@@ -18,32 +16,12 @@ const industries = [
   { title: "Agriculture", description: "Workers and specialists supporting farms and agricultural operations.", icon: "globe" },
 ] as const;
 export default function Home({ hero, urgentJobs = [] }: { hero: HeroContent; urgentJobs?: Job[] }) {
-  preload("/assets/emerald-journey-hero.webp", { as: "image", fetchPriority: "high" });
-  const occasion = hero.takeover ? hero.slides[0] : null;
+  const newestUrgentJobs = urgentJobs.filter(job => job.urgent).slice(0, 8);
   return <main id="main" className="home-foundation">
-    <section className="recruit-hero" aria-labelledby="home-title"><div className="hf-shell">
-      <div className="recruit-hero-top"><span>Emerald Isle Manpower &amp; Travel Services</span><span>From Sri Lanka. Since 1995.</span></div>
-      <div className="recruit-hero-grid"><div className="recruit-hero-copy">
-        <p className="recruit-hero-kicker">Sri Lankan talent. Global opportunity.</p>
-        {occasion ? <h1 id="home-title">{occasion.title}</h1> : <HeroTagline />}
-        <p className="recruit-hero-lead">{occasion ? occasion.copy : "We connect people with overseas careers and employers with dependable teams. From recruitment to documentation and deployment, our team helps you take the next step."}</p>
-        <div className="recruit-hero-actions">
-          <Link className="register-pill recruit-action-pill" href={jobsUrl}><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>Browse jobs</Link>
-          <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href="/client-recruitment-solutions/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>For employers</Link>
-          <Link className="hf-link" href="/contact/">Contact us <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link>
-        </div>
-      </div><div className="recruit-hero-art"><img src="/assets/emerald-journey-hero.webp" alt="" fetchPriority="high" /><div className="recruit-hero-caption"><span>From Sri Lanka to the world</span><p>People first.<br />Every step of the journey.</p></div></div></div>
-      <div className="recruit-hero-proof" aria-label="Our recruitment credentials">
-        <div><strong>One team</strong><span>Recruitment through deployment</span></div>
-        <div><strong>SLBFE 1162</strong><span>Licensed recruitment agency</span></div>
-        <div><strong>6 sectors</strong><span>Specialist recruitment support</span></div>
-        <div><strong>32+ </strong><span>Years of Compliance</span></div>
-      </div>
-      <div className="recruit-hero-foot"><a href="#urgent-title">Explore current opportunities <BootstrapIcon name="arrow-down" /></a></div>
-    </div></section>
+    <RecruitmentHero hero={hero} />
     <section className="hf-section hf-jobs" aria-labelledby="urgent-title"><div className="hf-shell">
       <div className="hf-heading"><div><p className="hf-eyebrow"><i />Your next chapter</p><h2 id="urgent-title">Urgent opportunities.<br /><em>A world ahead of you.</em></h2></div><Link className="hf-link" href={jobsUrl}>View all vacancies <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link></div>
-      {urgentJobs.length > 0 ? <div className="hf-job-grid">{urgentJobs.map(job => <Link className="hf-job-card" href={jobsUrl + job.slug + "/"} key={job.id}>
+      {newestUrgentJobs.length > 0 ? <div className="hf-job-grid">{newestUrgentJobs.map(job => <Link className="hf-job-card" href={jobsUrl + job.slug + "/"} key={job.id}>
         <div className="hf-job-image"><img src={job.image} alt="" loading="lazy" style={{ objectPosition: job.imagePosition }} /><span>Urgent hiring</span></div>
         <div className="hf-job-body"><p className="hf-eyebrow">{job.country && job.country !== job.location ? job.location + ", " + job.country : job.location}</p><h3>{job.title}</h3><div className="hf-job-meta"><span>{job.category}</span><span>{job.employmentType}</span></div><div className="hf-job-bottom"><small>{job.expiresAt ? "Apply by " + new Date(job.expiresAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Colombo" }) : "View job details"}</small><span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></div></div>
       </Link>)}</div> : <div className="hf-empty"><div><h3>Your next opportunity starts here.</h3><p>No urgent vacancies are listed right now. Explore our current openings or speak with our team for guidance.</p></div></div>}

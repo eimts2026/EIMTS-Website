@@ -1,13 +1,6 @@
 /* Shared public-site actions. Keep navigation and inline links visually lighter. */
 html.lenis,html.lenis body{height:auto}
 html.lenis{scroll-behavior:auto!important}
-.contact-nav-group{position:relative}
-.contact-nav-dropdown{position:absolute;z-index:1010;right:-18px;top:100%;width:290px;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#03271f;color:#fff;box-shadow:0 24px 48px rgba(0,20,15,.28);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(10px);transition:opacity .25s var(--ei-ease),transform .25s var(--ei-ease),visibility .25s}
-.contact-nav-group.is-open .contact-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
-.top-nav .contact-nav-dropdown a{display:block;min-height:44px;padding:13px 15px;border-radius:10px;color:#fff;font-size:14px;text-transform:none;letter-spacing:0;white-space:normal;transition:background .2s,color .2s}
-.top-nav .contact-nav-dropdown a:hover,.top-nav .contact-nav-dropdown a:focus-visible{background:rgba(255,255,255,.09);color:var(--ei-amber)}
-.contact-nav-dropdown a span{display:block;margin-top:5px;color:#c7d5cf;font-size:12px;font-weight:400;line-height:1.4}
-.contact-nav-group .nav-group-trigger:focus-visible{outline:3px solid var(--ei-amber);outline-offset:5px;border-radius:5px}
 .global-footer-brand address{font-style:normal;margin-top:16px;max-width:28ch;line-height:1.65}
 .global-footer-brand address a{font-size:14px}
 :is(.ei-button,.primary-button,.secure-inquiry-submit,.hf-button,.jobs-filter button,.jobs-empty button){border-radius:999px;min-height:48px;font-weight:650;cursor:pointer;transition:background-color .2s,color .2s,box-shadow .2s}

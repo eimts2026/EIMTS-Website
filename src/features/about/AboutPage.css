@@ -940,6 +940,15 @@
 .ei-strength-icon--globe{-webkit-mask-image:url('/assets/icons/bootstrap/globe2.svg');mask-image:url('/assets/icons/bootstrap/globe2.svg')}
 .ei-about-strengths-list h3{font-size:23px;line-height:1.25;margin:0 0 12px;color:var(--ei-ink)}
 .ei-about-strengths-list p{margin:0}
+@media(hover:hover) and (pointer:fine){
+  .ei-about-strengths-list article .ei-strength-icon{transition:transform .25s var(--ei-ease)}
+  .ei-about-strengths-list article:hover .ei-strength-icon{transform:translateX(4px)}
+  .ei-about-strengths-list article h3{transition:color .25s var(--ei-ease)}
+  .ei-about-strengths-list article:hover h3{color:var(--ei-green)}
+  .ei-recognition-feature{transition:box-shadow .25s var(--ei-ease)}
+  .ei-recognition-feature:hover{box-shadow:0 8px 24px rgba(3,39,31,.12)}
+}
+@media(prefers-reduced-motion:reduce){.ei-about-strengths-list article .ei-strength-icon,.ei-about-strengths-list article h3,.ei-recognition-feature{transition:none}}
 .ei-about-contact{padding:80px 0;background:var(--ei-deep);color:#fff}
 .ei-about-contact>.container{display:flex;align-items:center;justify-content:space-between;gap:48px}
 .ei-about-contact h2{max-width:740px;color:#fff}

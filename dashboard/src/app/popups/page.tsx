@@ -65,8 +65,8 @@ export default async function PopupsPage() {
             <p className="eyebrow">Website announcements</p>
             <h1>Popups</h1>
             <p>
-              Publish one image-first popup at a time on the public find-jobs
-              page.
+              All live popups appear on the public find-jobs page with
+              previous and next controls.
             </p>
           </div>
           {role !== "viewer" && (

@@ -13,7 +13,7 @@ export const metadata = pageMetadata(
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const [hero, jobs] = await Promise.all([getHeroContent(), getPublishedJobs({ urgentOnly: true, limit: 6 }).catch(() => {
+  const [hero, jobs] = await Promise.all([getHeroContent(), getPublishedJobs({ urgentOnly: true, limit: 8 }).catch(() => {
     console.error(JSON.stringify({ event: "homepage_jobs_unavailable" }));
     return [];
   })]);

@@ -142,20 +142,6 @@ export async function deleteJob(id: string): Promise<{ error: string } | null> {
     return { error: "Only administrators can delete vacancies." };
   }
 
-  // Remove candidate CV files and associated applications if any exist
-  const { data: apps } = await supabase
-    .from("applications")
-    .select("id, cv_path")
-    .eq("job_id", id);
-
-  if (apps && apps.length > 0) {
-    const cvPaths = apps.map((a) => a.cv_path).filter(Boolean);
-    if (cvPaths.length > 0) {
-      await supabase.storage.from("candidate-cvs").remove(cvPaths);
-    }
-    await supabase.from("applications").delete().eq("job_id", id);
-  }
-
   const { data, error } = await supabase
     .from("jobs")
     .delete()
@@ -683,29 +669,6 @@ export async function migrateBundledProjectImages(id: string) {
 
   revalidatePath("/projects");
   return { error: null };
-}
-
-const applicationStatuses = [
-  "new",
-  "reviewing",
-  "shortlisted",
-  "rejected",
-  "hired",
-];
-
-export async function updateApplicationStatus(id: string, formData: FormData) {
-  const { supabase } = await requireStaff();
-  const status = text(formData, "status");
-  if (!applicationStatuses.includes(status)) {
-    throw new Error("Unknown application status.");
-  }
-
-  const { error } = await supabase
-    .from("applications")
-    .update({ status })
-    .eq("id", id);
-  if (error) throw new Error(error.message);
-  revalidatePath("/applications");
 }
 
 export async function signOut() {

@@ -1,7 +1,8 @@
 export function canAccessRoute(path: string, role: string | undefined): boolean {
   if (!role || !["admin", "editor", "viewer"].includes(role)) return false;
+  if (path === "/applications" || path.startsWith("/applications/")) return false;
   if (/^\/projects\/.+/.test(path)) return role === "admin";
-  if (/^\/(jobs|hero|popups)\/.+/.test(path) || path === "/applications") {
+  if (/^\/(jobs|hero|popups)\/.+/.test(path)) {
     return role === "admin" || role === "editor";
   }
   return true;

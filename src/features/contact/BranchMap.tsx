@@ -109,7 +109,9 @@ export function BranchMap() {
           <div className="branch-map-list" data-lenis-prevent>
             {visibleBranches.map((branch, index) => {
               const isSelected = branch.id === selectedBranchId;
-              const directionsUrl = branch.mapsUrl;
+              const directionsUrl = branch.approximate
+                ? branch.mapsUrl
+                : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(branch.address)}`;
 
               return <article className={`branch-map-card${isSelected ? " is-selected" : ""}`} key={branch.id} data-id={branch.id}>
                 <button

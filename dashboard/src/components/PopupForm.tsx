@@ -17,8 +17,9 @@ export function PopupForm({ action, popup }: Props) {
           <p className="eyebrow">Popup details</p>
           <h2>Shown on the find-jobs page</h2>
           <p className="form-hint">
-            Visitors see one image popup on the find-jobs page. Clicking the
-            image opens the destination you provide below.
+            Visitors can browse every active popup on the find-jobs page using
+            the previous and next controls. Clicking an image opens its
+            destination.
           </p>
         </div>
         <div className="form-grid">
@@ -70,13 +71,13 @@ export function PopupForm({ action, popup }: Props) {
         <Toggle
           name="active"
           label="Show on the website"
-          hint="Visitors only see it inside the date window."
-          defaultChecked={popup?.active}
+          hint="Active popups appear in the public carousel during their date window."
+          defaultChecked={popup ? popup.active : true}
         />
         <SubmitButton label={popup ? "Save changes" : "Create popup"} />
         <p className="panel-hint">
-          Only active popups inside their date window appear to visitors. The
-          newest active popup is shown.
+          Every active popup inside its date window is available to visitors in
+          the public carousel.
         </p>
       </aside>
     </form>

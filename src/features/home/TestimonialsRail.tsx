@@ -13,7 +13,7 @@ const testimonials = [
 const countryNames: Record<string, string> = { SG: "Singapore", SA: "Saudi Arabia", OM: "Oman", QA: "Qatar" };
 
 export default function TestimonialsRail() {
-  return <HorizontalDragRail className="hf-testimonial-rail" label="Client testimonials. Drag, swipe, or scroll to browse.">
+  return <HorizontalDragRail className="hf-testimonial-rail" label="Client testimonials. Drag, swipe, or scroll to browse." loop>
     {testimonials.map((item) => <figure className="hf-quote" key={item.quote}>
       <span className="hf-quote-mark" aria-hidden="true">“</span>
       <blockquote>{item.quote}</blockquote>

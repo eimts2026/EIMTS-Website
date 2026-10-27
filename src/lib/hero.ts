@@ -33,7 +33,7 @@ type HeroSlideRow = {
 // homepage hero can never render empty.
 const fallbackSlides: HeroSlide[] = [
   {
-    image: "/assets/emerald-journey-hero.webp",
+    image: "/assets/hero-careers-airport.webp",
     kicker: "Trusted in Sri Lanka since 1995",
     title: "32+ years of connecting Sri Lankan talent with global opportunity.",
     copy: "Responsible overseas recruitment, documentation and travel guidance, supported by one accountable team.",
@@ -43,7 +43,7 @@ const fallbackSlides: HeroSlide[] = [
     cta2Url: "/client-recruitment-solutions/",
   },
   {
-    image: "/assets/hero-employer-partnership.webp",
+    image: "/assets/hero-careers-healthcare.webp",
     kicker: "Trusted recruitment. Stronger teams.",
     title: "Exceptional people build stronger businesses.",
     copy: "Industry-focused recruitment connecting respected employers with carefully screened talent.",
@@ -53,7 +53,7 @@ const fallbackSlides: HeroSlide[] = [
     cta2Url: "/client-recruitment-solutions/",
   },
   {
-    image: "/assets/hero-travel-guidance.webp",
+    image: "/assets/hero-careers-engineering.webp",
     kicker: "From application to arrival.",
     title: "Every overseas journey deserves clear guidance.",
     copy: "Recruitment, documentation and travel support brought together by one accountable team.",
