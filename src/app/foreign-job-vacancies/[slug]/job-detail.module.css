@@ -275,6 +275,17 @@
 
 .content li {
   margin-bottom: 0.8rem;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.formattedText {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.markedRequirement {
+  list-style: none;
 }
 
 .content aside {

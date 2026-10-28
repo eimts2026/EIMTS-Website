@@ -222,16 +222,13 @@ export default async function JobDetailPage({ params }: PageProps) {
       <div className={styles.content}>
         <article>
           <h2>Job Description</h2>
-          {job.description
-            .split(/\n{2,}/)
-            .filter(Boolean)
-            .map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          <p className={styles.formattedText}>{job.description}</p>
           {job.requirements.length > 0 && (
             <>
               <h2>What you will need</h2>
               <ul>
-                {job.requirements.map((requirement) => (
-                  <li key={requirement}>{requirement}</li>
+                {job.requirements.map((requirement, index) => (
+                  <li key={index} className={/^[\s]*[•●▪◦‣⁃🔹🔸✅✔☑-]/u.test(requirement) ? styles.markedRequirement : undefined}>{requirement}</li>
                 ))}
               </ul>
             </>

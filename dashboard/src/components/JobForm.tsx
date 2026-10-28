@@ -21,6 +21,7 @@ const countrySuggestions = [
   "Israel",
   "Malaysia",
   "Singapore",
+  "Seychelles",
   "Maldives",
   "Japan",
   "South Korea",
