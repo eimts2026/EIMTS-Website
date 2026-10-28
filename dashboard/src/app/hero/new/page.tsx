@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import { redirect } from "next/navigation";
 import { createHeroSlide } from "@/app/actions";
@@ -24,6 +25,7 @@ export default async function NewHeroSlidePage() {
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main">
+        <BackToListing href="/hero" label="hero slides" />
         <section className="editor-title">
           <p className="eyebrow">New hero slide</p>
           <h1>Add a homepage slide</h1>

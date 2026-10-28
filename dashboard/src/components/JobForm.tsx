@@ -20,6 +20,7 @@ const countrySuggestions = [
   "Turkey",
   "Israel",
   "Malaysia",
+  "Thailand",
   "Singapore",
   "Seychelles",
   "Maldives",
@@ -51,7 +52,7 @@ const categorySuggestions = [
   "Domestic Work",
 ];
 
-const currencies = ["LKR", "USD", "AED", "SAR", "QAR", "KWD", "BHD", "OMR", "TRY", "MYR", "SGD", "KRW", "EUR", "GBP"];
+const currencies = ["LKR", "USD", "AED", "SAR", "QAR", "KWD", "BHD", "OMR", "TRY", "MYR", "THB", "SGD", "KRW", "EUR", "GBP"];
 
 export function JobForm({ action, job }: Props) {
   return (
@@ -111,6 +112,7 @@ export function JobForm({ action, job }: Props) {
               placeholder="e.g. 199080"
             />
           </label>
+          <div className="full"><Toggle name="salary_negotiable" label="Salary is negotiable" hint="Displays Negotiable publicly. Entered amounts are retained for future edits." defaultChecked={job?.salary_negotiable || job?.currency === "NEG"} /></div>
           <label>
             LKR equivalent (optional)
             <input
@@ -127,7 +129,7 @@ export function JobForm({ action, job }: Props) {
             <GlassSelect
               name="currency"
               ariaLabel="Currency"
-              defaultValue={job?.currency || "LKR"}
+              defaultValue={job?.currency === "NEG" ? "LKR" : job?.currency || "LKR"}
               options={currencies}
             />
           </label>

@@ -8,6 +8,7 @@ export type JobRecord = {
   location: string | null;
   category: string;
   employment_type: string;
+  salary_negotiable?: boolean;
   salary_amount: number | null;
   salary_lkr: number | null;
   currency: string;

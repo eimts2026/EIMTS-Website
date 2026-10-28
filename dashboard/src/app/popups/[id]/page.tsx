@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import type { PopupRecord } from "@eimts/database";
 import { notFound, redirect } from "next/navigation";
@@ -39,6 +40,7 @@ export default async function EditPopupPage({
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main">
+        <BackToListing href="/popups" label="popups" />
         <section className="editor-title">
           <p className="eyebrow">Edit popup</p>
           <h1>{popup.title}</h1>

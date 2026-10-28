@@ -73,6 +73,7 @@ function jobPayload(formData: FormData) {
     location: text(formData, "location") || null,
     category: text(formData, "category"),
     employment_type: text(formData, "employment_type") || "Full-time",
+    salary_negotiable: formData.get("salary_negotiable") === "on",
     currency: (text(formData, "currency") || "LKR").toUpperCase(),
     salary_amount: salaryValue(formData, "salary_amount"),
     salary_lkr: salaryValue(formData, "salary_lkr"),

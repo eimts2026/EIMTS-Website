@@ -106,8 +106,7 @@ export default async function DashboardPage() {
                   {jobs.map((job) => (
                     <tr key={job.id}>
                       <td>
-                        <strong>{job.title}</strong>
-                        <small>{job.category}</small>
+                        <div className="vacancy-preview">{job.image_url && <img src={job.image_url} alt="" loading="lazy" />}<div><strong>{job.title}</strong><small>{job.category}</small></div></div>
                       </td>
                       <td>{job.location || job.country}</td>
                       <td>

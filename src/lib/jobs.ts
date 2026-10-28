@@ -13,6 +13,7 @@ export type PublicJobDetail = {
   location: string | null;
   category: string;
   employment_type: string;
+  salary_negotiable?: boolean;
   salary_amount: number | null;
   salary_lkr: number | null;
   currency: string;
@@ -26,6 +27,7 @@ export type PublicJobDetail = {
 };
 
 export type PublishedJobRow = {
+  salary_negotiable?: boolean;
   salary_amount: number | null;
   salary_lkr: number | null;
   currency: string;
@@ -55,7 +57,7 @@ async function loadPublishedJobs(options: { urgentOnly?: boolean; limit?: number
   let query = supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position,expires_at,salary_amount,salary_lkr,currency",
+      "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position,expires_at,salary_negotiable,salary_amount,salary_lkr,currency",
     )
     .eq("status", "published")
     .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
@@ -100,7 +102,7 @@ const loadPublishedJobBySlug = publicCache("job-detail", async function getPubli
   const { data, error } = await supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,salary_amount,salary_lkr,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
+      "id,slug,title,country,location,category,employment_type,salary_negotiable,salary_amount,salary_lkr,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
     )
     .eq("slug", slug)
     .eq("status", "published")

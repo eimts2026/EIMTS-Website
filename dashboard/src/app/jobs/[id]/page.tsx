@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import type { JobRecord } from "@eimts/database";
 import { notFound, redirect } from "next/navigation";
@@ -35,6 +36,7 @@ export default async function EditJobPage({
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main">
+        <BackToListing href="/" label="vacancies" />
         <section className="editor-title">
           <p className="eyebrow">Edit vacancy</p>
           <h1>{job.title}</h1>

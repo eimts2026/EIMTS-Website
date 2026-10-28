@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import type { HeroSlideRecord } from "@eimts/database";
 import { notFound, redirect } from "next/navigation";
@@ -39,6 +40,7 @@ export default async function EditHeroSlidePage({
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main">
+        <BackToListing href="/hero" label="hero slides" />
         <section className="editor-title">
           <p className="eyebrow">Edit hero slide</p>
           <h1>{slide.title}</h1>

@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import { redirect } from "next/navigation";
 import { createProject } from "@/app/actions";
@@ -31,6 +32,7 @@ export default async function NewProjectPage() {
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main dashboard-main-wide">
+        <BackToListing href="/projects" label="projects" />
         <section className="editor-title">
           <p className="eyebrow">New project</p>
           <h1>Build a project gallery</h1>

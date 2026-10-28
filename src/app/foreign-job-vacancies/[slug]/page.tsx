@@ -119,7 +119,7 @@ export default async function JobDetailPage({ params }: PageProps) {
         addressCountry: job.country,
       },
     },
-    ...(job.salary_amount != null
+    ...(!job.salary_negotiable && job.currency !== "NEG" && job.salary_amount != null
       ? {
           baseSalary: {
             "@type": "MonetaryAmount",

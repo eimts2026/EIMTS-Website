@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import { redirect } from "next/navigation";
 import { createJob } from "@/app/actions";
@@ -24,6 +25,7 @@ export default async function NewJobPage() {
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main">
+        <BackToListing href="/" label="vacancies" />
         <section className="editor-title">
           <p className="eyebrow">New vacancy</p>
           <h1>Create a job posting</h1>

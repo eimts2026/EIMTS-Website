@@ -1,10 +1,12 @@
 type Salary = {
+  salary_negotiable?: boolean;
   salary_amount: number | null;
   salary_lkr: number | null;
   currency: string;
 };
 
 export function formatJobSalary(job: Salary): string | null {
+  if (job.salary_negotiable || job.currency === "NEG") return "Negotiable";
   const amount = new Intl.NumberFormat("en-GB", { maximumFractionDigits: 2 });
   const primary = job.salary_amount;
   if (primary == null) return null;

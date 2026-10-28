@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import type { ProjectRecord } from "@eimts/database";
 import { notFound, redirect } from "next/navigation";
@@ -45,6 +46,7 @@ export default async function EditProjectPage({
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main dashboard-main-wide">
+        <BackToListing href="/projects" label="projects" />
         <section className="editor-title">
           <p className="eyebrow">Edit project</p>
           <h1>{project.name}</h1>

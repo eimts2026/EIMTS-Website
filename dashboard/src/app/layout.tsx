@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles.css";
 
+
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
@@ -26,7 +27,9 @@ export default function RootLayout({
               'try{if(localStorage.getItem("ei-dashboard-theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}',
           }}
         />
+
         {children}
+        <footer className="dashboard-footer"><span>All rights reserved — EmeraldIsle Man Power</span><span>Crafted with <span className="footer-rgb-heart" aria-label="love">❤️</span></span></footer>
       </body>
     </html>
   );

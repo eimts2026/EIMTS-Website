@@ -1,3 +1,4 @@
+import { BackToListing } from "@/components/BackToListing";
 import { requireRouteAccess } from "@/lib/require-route-access";
 import { redirect } from "next/navigation";
 import { createPopup } from "@/app/actions";
@@ -24,6 +25,7 @@ export default async function NewPopupPage() {
     <div className="dashboard-shell">
       <DashboardHeader email={user.email || "Staff"} />
       <main className="dashboard-main">
+        <BackToListing href="/popups" label="popups" />
         <section className="editor-title">
           <p className="eyebrow">New popup</p>
           <h1>Create a website popup</h1>
