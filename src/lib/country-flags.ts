@@ -7,7 +7,7 @@ const countryCodes: Record<string, string> = {
   turkey: "tr", turkiye: "tr", tr: "tr",
   israel: "il", il: "il", malaysia: "my", my: "my",
   singapore: "sg", sg: "sg", maldives: "mv", mv: "mv",
-  ireland: "ie", ie: "ie", korea: "kr",
+  ireland: "ie", ie: "ie", latvia: "lv", lv: "lv", korea: "kr",
   japan: "jp", jp: "jp", "south korea": "kr", "republic of korea": "kr", kr: "kr",
   romania: "ro", ro: "ro", poland: "pl", pl: "pl", cyprus: "cy", cy: "cy",
 };

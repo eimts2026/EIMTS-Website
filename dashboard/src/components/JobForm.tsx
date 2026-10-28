@@ -26,6 +26,7 @@ const countrySuggestions = [
   "South Korea",
   "Korea",
   "Ireland",
+  "Latvia",
   "Romania",
   "Poland",
   "Cyprus",
