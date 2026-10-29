@@ -79,6 +79,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
         Age
         <input name="age" type="number" min="18" max="99" inputMode="numeric" required />
       </label>
+      <label>NIC number<input name="nic" autoComplete="off" maxLength={12} pattern="([0-9]{9}[VvXx]|[0-9]{12})" title="9 digits followed by V or X, or 12 digits" required /></label>
       <label>
         Email
         <input name="email" type="email" autoComplete="email" maxLength={254} required />
@@ -98,6 +99,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
         />
       </label>
       <p className="application-upload-note">Larger CV? Email <a href="mailto:cv@emeraldisle.lk">cv@emeraldisle.lk</a> with the vacancy title.</p>
+      <p className="application-upload-note">Read our <a href="/privacy-policy/">privacy policy</a> to learn how we handle your application.</p>
       <BotProtection action="application" resetKey={botReset} onToken={setBotToken} />
       <button type="submit" disabled={busy || !botToken} aria-busy={busy}>
         {busy && <svg data-submit-spinner viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /></svg>}

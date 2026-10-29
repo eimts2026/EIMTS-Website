@@ -16,6 +16,9 @@
 .recruit-hero-kicker{font-size:13px;font-weight:600;color:#e5bf6d;margin:0 0 20px}
 .home-foundation .recruit-hero h1{max-width:760px;color:#f7faf4;font-size:clamp(44px,4.8vw,74px);font-weight:650;line-height:1.04;letter-spacing:-.05em;text-wrap:balance}
 .recruit-hero h1 span{color:#e5bf6d}
+.recruit-hero h1.hero-typewriter,.recruit-hero h1.hero-typewriter span{color:#fff}
+.hero-typewriter-word{white-space:normal}
+.hero-typewriter-cursor{box-shadow:2px 0 0 currentColor}
 .hero-tagline-endings{position:relative;display:grid;overflow:hidden;font-size:.84em;line-height:1.13;margin-top:.12em;text-wrap:initial}
 .hero-tagline-spacer{grid-area:1/1;visibility:hidden;pointer-events:none;padding-bottom:.12em}
 .hero-tagline-active{position:absolute;inset:0;display:block}

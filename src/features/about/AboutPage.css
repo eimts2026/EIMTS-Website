@@ -24,7 +24,6 @@
   overflow: hidden;
   opacity: 0;
   animation: ei-about-hero-cycle 18s linear infinite;
-  will-change: opacity;
 }
 
 .ei-about-hero-slide:nth-child(2) { animation-delay: 6s; }
@@ -42,7 +41,6 @@
   height: calc(100% + 56px);
   object-fit: cover;
   object-position: center top;
-  filter: blur(24px) saturate(0.82);
   transform: scale(1.04);
 }
 

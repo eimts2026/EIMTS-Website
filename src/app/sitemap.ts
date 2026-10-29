@@ -7,6 +7,7 @@ const routes = [
   "",
   "/about-us-emerald-isle-manpower",
   "/contact",
+  "/privacy-policy",
   "/foreign-job-vacancies",
   "/client-recruitment-solutions",
   "/projects",

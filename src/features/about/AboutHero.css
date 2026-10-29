@@ -98,3 +98,4 @@
 @media (prefers-reduced-motion: reduce) {
   .about-editorial-story, .about-editorial-story span { transition: none; }
 }
+.about-editorial-heading,.about-editorial-intro,.about-editorial-story{opacity:1;transform:none;animation:none;transition:none}

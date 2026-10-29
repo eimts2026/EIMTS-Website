@@ -3,6 +3,7 @@ export type ApplicationDetails = {
   category: string;
   fullName: string;
   age: number;
+  nic: string;
   email: string;
   phone: string;
 };
@@ -12,7 +13,7 @@ const escapeHtml = (value: string | number) => String(value).replace(/[&<>"']/g,
 })[character]!);
 
 export function applicationEmailTemplate(details: ApplicationDetails) {
-  const rows = [["Full name", details.fullName], ["Age", details.age], ["Email", details.email], ["Phone", details.phone]];
+  const rows = [["Full name", details.fullName], ["Age", details.age], ["NIC", details.nic], ["Email", details.email], ["Phone", details.phone]];
   const text = [`Category: ${details.category}`, `Position: ${details.jobTitle}`, ...rows.map(([label, value]) => `${label}: ${value}`), "", "The candidate's CV is attached. Reply to this email to contact the candidate."].join("\n");
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>New job application</title></head>
   <body style="margin:0;background:#f2f5f1;font-family:Arial,sans-serif;color:#173c31">

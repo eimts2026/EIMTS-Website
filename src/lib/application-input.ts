@@ -55,6 +55,8 @@ export function validateApplication(form: FormData) {
   const fullName = field("name", 150);
   const email = field("email", 254);
   const phone = field("phone", 40);
+  const nic = field("nic", 12).toUpperCase();
+  if (!/^(?:[0-9]{9}[VX]|[0-9]{12})$/.test(nic)) throw new ApplicationInputError("Enter a valid NIC number.");
   const ageText = field("age", 2);
   const age = Number(ageText);
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(jobId)) {
@@ -77,5 +79,5 @@ export function validateApplication(form: FormData) {
   if (!["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(cv.type)) {
     throw new ApplicationInputError("Please upload a PDF, DOC or DOCX CV.");
   }
-  return {jobId, fullName, email, phone, age, cv};
+  return {jobId, fullName, email, phone, age, nic, cv};
 }

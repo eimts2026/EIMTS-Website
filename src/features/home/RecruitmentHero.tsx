@@ -7,6 +7,7 @@ import type { HeroContent } from "@/lib/hero";
 import Link from "@/components/ui/Link";
 import BootstrapIcon from "@/components/ui/BootstrapIcon";
 import CountUp from "./CountUp";
+import TypewriterHeading from "./TypewriterHeading";
 import { complianceYears } from "./complianceYears";
 import "./RecruitmentHero.css";
 
@@ -83,12 +84,12 @@ export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
           <div className="recruit-hero-copy" aria-live={isPaused ? "polite" : "off"} aria-atomic="true">
             <p className="recruit-hero-kicker">{activeSlide.kicker || "Sri Lankan talent. Global opportunity."}</p>
             <div className="recruit-hero-title-entrance" key={`${activeIndex}-${activeSlide.title}`}>
-              <h1 id="home-title">{activeSlide.title}</h1>
+              <TypewriterHeading text={activeSlide.title} />
             </div>
             <p className="recruit-hero-lead">{activeSlide.copy}</p>
             <div className="recruit-hero-actions">
               <Link className="register-pill recruit-action-pill" href="/foreign-job-vacancies/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>Browse jobs</Link>
-              <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href="/client-recruitment-solutions/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>For employers</Link>
+              <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href="/client-recruitment-solutions/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>For Clients</Link>
               <Link className="hf-link" href="/contact/">Contact us <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link>
             </div>
           </div>

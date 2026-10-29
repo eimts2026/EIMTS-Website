@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       ? failure(error.message, error.status)
       : failure("Your application could not be read. Please try again.");
   }
-  const { jobId, fullName, age, email, phone, cv } = input;
+  const { jobId, fullName, age, nic, email, phone, cv } = input;
   try { await limitSubmission(request, email, "application"); } catch (error) {
     return error instanceof SubmissionError ? failure(error.message, error.status) : failure("Submissions unavailable.",503);
   }
@@ -77,6 +77,7 @@ export async function POST(request: Request) {
       category: job.category || "General recruitment",
       fullName,
       age,
+      nic,
       email,
       phone,
       cvFileName: `candidate-cv.${extension}`,

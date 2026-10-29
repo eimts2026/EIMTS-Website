@@ -16,6 +16,7 @@ export default function TestimonialsRail() {
   return <HorizontalDragRail className="hf-testimonial-rail" label="Client testimonials. Drag, swipe, or scroll to browse." loop>
     {testimonials.map((item) => <figure className="hf-quote" key={item.quote}>
       <span className="hf-quote-mark" aria-hidden="true">“</span>
+      <div className="hf-quote-rating" role="img" aria-label="Five out of five stars"><span aria-hidden="true">★★★★★</span></div>
       <blockquote>{item.quote}</blockquote>
       <figcaption><img className="hf-country-flag" src={`/assets/flags/${item.country.toLowerCase()}.svg`} alt={countryNames[item.country]} width="42" height="28" loading="lazy" /></figcaption>
     </figure>)}
