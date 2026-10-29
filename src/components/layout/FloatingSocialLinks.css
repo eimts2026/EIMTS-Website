@@ -1,6 +1,7 @@
 .ei-social-link--youtube{--social-start:#c01724;--social-end:#ed3946}
 .ei-social-link--facebook{--social-start:#184ab4;--social-end:#2871de}
 .ei-social-link--linkedin{--social-start:#075488;--social-end:#1479ad}
+.ei-social-link--instagram{--social-start:#833ab4;--social-end:#e1306c}
 .ei-social-link--whatsapp{--social-start:#116d41;--social-end:#198750}
 .ei-social-link{color:#fff;background:linear-gradient(115deg,var(--social-start),var(--social-end));text-decoration:none;box-shadow:0 4px 14px #001b1626}
 .ei-social-link svg{width:22px;height:22px;fill:currentColor;flex:0 0 22px;transition:transform .3s ease}

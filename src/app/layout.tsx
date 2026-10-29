@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   applicationName: siteName,
   icons: {
     icon: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
@@ -56,6 +57,12 @@ export default function RootLayout({
           url: siteUrl + "/",
           logo: siteUrl + "/assets/emerald-isle-logo.webp",
           telephone: "+94114335444",
+          sameAs: [
+            "https://www.instagram.com/emeraldforeignjobs_/",
+            "https://www.facebook.com/EmeraldIsleRecruitment",
+            "https://www.youtube.com/@EmeraldIsleManpower",
+            "https://lk.linkedin.com/company/emeraldislerecruitment",
+          ],
           address: { "@type": "PostalAddress", streetAddress: "198 Galle Road", addressLocality: "Dehiwala-Mount Lavinia", postalCode: "10370", addressCountry: "LK" },
         }).replace(/</g, "\\u003c") }} />
         <SmoothScroll />

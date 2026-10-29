@@ -3,7 +3,7 @@
 import HorizontalDragRail from "../../components/ui/HorizontalDragRail";
 
 const testimonials = [
-  { quote: "This 5th intake is one of the most challenging intake recruitment drives in recent memory with the holiday season and Simultaneously deployment of 3rd and 4th intake nurses. Inspite of the challenges. This recruitment drive has also seen the largest number", country: "SG" },
+  { quote: "This 5th intake is one of the most challenging intake recruitment drives in recent memory with the holiday season and simultaneous deployment of 3rd and 4th intake nurses. In spite of the challenges, this recruitment drive has also seen the largest number", country: "SG" },
   { quote: "Always the best support, whenever it is required. A recruitment partner we genuinely value.", country: "SA" },
   { quote: "Professional staff, a welcoming environment and service that makes every requirement feel carefully handled.", country: "SA" },
   { quote: "From the first day, the team took our requirements seriously. I truly appreciate the partnership.", country: "OM" },
