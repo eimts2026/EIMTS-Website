@@ -101,9 +101,9 @@ export default async function JobDetailPage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "JobPosting",
     title: job.title,
-    description: job.description,
-    datePosted: job.published_at,
-    validThrough: job.expires_at,
+    description: [job.summary, job.description, ...job.requirements].filter(Boolean).join("\n\n"),
+    ...(job.published_at ? { datePosted: job.published_at } : {}),
+    ...(job.expires_at ? { validThrough: job.expires_at } : {}),
     employmentType: job.employment_type.toUpperCase().replace(/[- ]/g, "_"),
     hiringOrganization: {
       "@type": "Organization",

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description:
-    "Award-winning recruitment agency in Sri Lanka connecting skilled candidates with trusted foreign employers.",
+    "Explore foreign job vacancies with Emerald Isle Manpower, a recruitment agency in Sri Lanka supporting candidates and employers from application to deployment.",
   applicationName: siteName,
   icons: {
     icon: "/favicon.png",
@@ -48,6 +48,16 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to main content
         </a>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "@id": siteUrl + "/#organization",
+          name: siteName,
+          url: siteUrl + "/",
+          logo: siteUrl + "/assets/emerald-isle-logo.webp",
+          telephone: "+94114335444",
+          address: { "@type": "PostalAddress", streetAddress: "198 Galle Road", addressLocality: "Dehiwala-Mount Lavinia", postalCode: "10370", addressCountry: "LK" },
+        }).replace(/</g, "\\u003c") }} />
         <SmoothScroll />
         <SiteHeader />
         {children}

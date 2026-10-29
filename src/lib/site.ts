@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://emeraldislemanpower.com";
+  "https://www.emeraldislemanpower.com";
 
 export const siteName = "Emerald Isle Manpower";
 

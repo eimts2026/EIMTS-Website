@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/site";
 
 export const metadata = pageMetadata(
   "Foreign Job Vacancies for Sri Lankans",
-  "Explore current foreign job vacancies in hospitality, automotive, construction, logistics and culinary sectors.",
+  "Browse current overseas job vacancies for Sri Lankans in hospitality, engineering, construction, transport and more. View role details and apply online.",
   "/foreign-job-vacancies",
 );
 

@@ -4,8 +4,8 @@ import { getHeroContent } from "@/lib/hero";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata = pageMetadata(
-  "Emerald Isle Manpower – Top Recruitment Agency in Sri Lanka",
-  "Award-winning recruitment agency in Sri Lanka connecting skilled candidates with trusted foreign employers.",
+  "Recruitment Agency in Sri Lanka",
+  "Explore foreign job vacancies with Emerald Isle Manpower, a recruitment agency in Sri Lanka supporting candidates and employers from application to deployment.",
   "/",
 );
 

@@ -20,7 +20,7 @@ export default function Home({ hero, urgentJobs = [] }: { hero: HeroContent; urg
   return <main id="main" className="home-foundation">
     <RecruitmentHero hero={hero} />
     <section className="hf-section hf-jobs" aria-labelledby="urgent-title"><div className="hf-shell">
-      <div className="hf-heading"><div><p className="hf-eyebrow"><i />Your next chapter</p><h2 id="urgent-title">Urgent opportunities.<br /><em>A world ahead of you.</em></h2></div><Link className="hf-link" href={jobsUrl}>View all vacancies <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link></div>
+      <div className="hf-heading"><div><p className="hf-eyebrow"><i />Your next chapter</p><h2 id="urgent-title">Foreign job vacancies.<br /><em>A world ahead of you.</em></h2></div><Link className="hf-link" href={jobsUrl}>View all vacancies <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link></div>
       {newestUrgentJobs.length > 0 ? <div className="hf-job-grid">{newestUrgentJobs.map(job => <Link className="hf-job-card" href={jobsUrl + job.slug + "/"} key={job.id}>
         <div className="hf-job-image"><img src={job.image} alt="" loading="lazy" style={{ objectPosition: job.imagePosition }} /><span>Urgent hiring</span></div>
         <div className="hf-job-body"><p className="hf-eyebrow">{job.country && job.country !== job.location ? job.location + ", " + job.country : job.location}</p><h3>{job.title}</h3><div className="hf-job-meta"><span>{job.category}</span><span>{job.employmentType}</span></div><div className="hf-job-bottom"><small>{job.expiresAt ? "Apply by " + new Date(job.expiresAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Colombo" }) : "View job details"}</small><span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></div></div>
@@ -34,7 +34,7 @@ export default function Home({ hero, urgentJobs = [] }: { hero: HeroContent; urg
       </div>
     </div></section>
     <section className="hf-section hf-industries" aria-labelledby="industries-title"><div className="hf-shell">
-      <div className="hf-industries-heading"><p className="hf-eyebrow">Where we work</p><h2 id="industries-title">Industries we serve.</h2><p>From skilled trades to service teams, we help employers find people across these sectors. Open roles vary by employer and destination.</p></div>
+      <div className="hf-industries-heading"><p className="hf-eyebrow">Where we work</p><h2 id="industries-title">Recruitment services in Sri Lanka.</h2><p>From skilled trades to service teams, we help employers find people across these sectors. Open roles vary by employer and destination.</p></div>
       <div className="hf-industries-grid">{industries.map(industry => <article className="hf-industry-card" key={industry.title}><span className="hf-industry-icon" aria-hidden="true"><i className={`hf-industry-icon--${industry.icon}`} /></span><h3>{industry.title}</h3><p>{industry.description}</p></article>)}</div>
       <div className="hf-industries-end"><span>Looking for your next role?</span><Link className="hf-link" href={jobsUrl}>Browse current vacancies <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link></div>
     </div></section>
