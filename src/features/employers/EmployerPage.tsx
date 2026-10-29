@@ -64,7 +64,7 @@ export default function EmployerPage() {
           <p className="section-kicker">Prefer a quick conversation?</p>
           <h2>Continue on WhatsApp.</h2>
           <p>Connect directly with our employer solutions team for a faster first conversation about your staffing requirements.</p>
-          <a href="https://api.whatsapp.com/send?phone=94773876467" target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></a>
+          <a href="https://api.whatsapp.com/send?phone=94777304105" target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></a>
           <small>Available during Sri Lanka business hours</small>
         </aside>
       </div>
