@@ -33,7 +33,22 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-GB" suppressHydrationWarning>
-      <head><link rel="preload" href="/fonts/raleway/raleway-latin-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" /></head>
+      <head>
+        <link rel="preload" href="/fonts/raleway/raleway-latin-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-GF4XKVLTXY"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-GF4XKVLTXY');
+          `}
+        </Script>
+      </head>
       <body>
         {/* Runs before first paint so reveal targets start hidden instead of
             flashing visible then re-animating. Without JS it never runs and
