@@ -9,6 +9,7 @@ import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import "lenis/dist/lenis.css";
 import { siteName, siteUrl } from "@/lib/site";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "@/styles/globals.css";
 import "@/styles/employer-tailwind.css";
 import "@/styles/ui-refinements.css";
@@ -88,6 +89,7 @@ export default function RootLayout({
         <ScrollReveal />
         <ScrollToTop />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
