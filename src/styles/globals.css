@@ -1353,6 +1353,9 @@ body{overflow-x:hidden;background:var(--ei-neutral);color:var(--ei-ink)}
 .footer-review-column{display:flex;flex-direction:column;align-items:flex-start}
 .footer-review-column>p{max-width:25ch;margin:0;color:#b8cbc2;font-size:14px;line-height:1.55}
 .footer-review-column .footer-review{margin-top:18px!important}
+.footer-review-column .footer-review{width:min(100%,290px);grid-template-columns:38px minmax(0,1fr);gap:10px;margin-top:12px!important;padding:8px 15px 8px 8px;border-radius:999px;background:rgba(255,255,255,.04)}
+.footer-review-column .footer-review__google{width:38px;height:38px}
+.footer-review-column .footer-review__google svg{width:23px;height:23px}
 @media(max-width:900px){.global-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-review-column{padding-top:12px}}
 @media(max-width:620px){.global-footer>.wide-container{width:calc(100% - 28px)}.global-footer-grid{grid-template-columns:1fr}.footer-review-column{padding-top:0}.footer-review-column .footer-review{width:min(100%,320px)}}
 

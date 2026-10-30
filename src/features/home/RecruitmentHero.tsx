@@ -11,7 +11,8 @@ import TypewriterHeading from "./TypewriterHeading";
 import { complianceYears } from "./complianceYears";
 import "./RecruitmentHero.css";
 
-const ROTATE_EVERY_MS = 6500;
+const ROTATE_EVERY_MS = 7500;
+let heroRealtimeClient: ReturnType<typeof createClient> | null = null;
 
 export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
   const router = useRouter();
@@ -38,7 +39,8 @@ export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
     const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
     if (!url || !key) return;
 
-    const supabase = createClient(url, key, { auth: { persistSession: false } });
+    heroRealtimeClient ??= createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+    const supabase = heroRealtimeClient;
     const channel = supabase
       .channel("homepage-hero-live")
       .on("postgres_changes", { event: "*", schema: "public", table: "hero_slides" }, () => router.refresh())
@@ -92,6 +94,10 @@ export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
               <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href="/client-recruitment-solutions/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>For Clients</Link>
               <Link className="hf-link" href="/contact/">Contact us <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link>
             </div>
+            <a className="hero-review-trust" href="https://www.google.com/maps/place//@6.8425904,79.866525,17z/data=!3m1!4b1!4m3!3m2!1s0x3ae25b19204c0875:0xf99af88e1968c1a0!12e1?entry=ttu&g_ep=EgoyMDI2MDcxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" aria-label="930 plus Google reviews. Leave a review for Emerald Isle">
+              <span className="hero-review-avatars" aria-hidden="true">{["8ab4cd865aa6b62352300cf71c5805c86d8523505636e2a499cda7932a803953", "a2ee1266115ad682a19f5d4752ea8efa7eefa3ae03e658f500cbb3e1a6145b0b", "f8db32ee1fe8c51fa678e3325eee3f8bf72a3a8cc8947784d5ef9c7bf5fb8adb", "449ffab8e7b480176aaea3dd5578119223a41e2e0c92c805a5a6b71ca4cbdd14"].map((image) => <img key={image} src={"https://cdn.21st.dev/assets/localized/" + image + ".jpg"} width={22} height={22} alt="" loading="lazy" />)}</span>
+              <span><strong>930+</strong> Google reviews</span>
+            </a>
           </div>
         </div>
         {!hero.takeover && slides.length > 1 && (

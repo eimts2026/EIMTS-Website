@@ -1,5 +1,6 @@
 import Image from "next/image";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
+import AboutTypewriter from "./AboutTypewriter";
 import "./AboutHero.css";
 
 export default function AboutHero() {
@@ -8,7 +9,7 @@ export default function AboutHero() {
       <div className="container about-editorial-layout">
         <header className="about-editorial-heading">
           <p className="about-editorial-label">About Emerald Isle <span>Since 1995</span></p>
-          <h1 id="about-hero-title">Connecting Sri Lankan talent with global opportunity.</h1>
+          <AboutTypewriter />
         </header>
         <p className="about-editorial-intro">
           Get to know the people and purpose behind Emerald Isle.

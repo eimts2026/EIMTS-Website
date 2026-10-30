@@ -35,6 +35,10 @@
   text-wrap: balance;
   color: #f4f5f0;
 }
+.about-typewriter-letter { opacity:0; transition:opacity .12s ease-out; }
+.about-typewriter-letter.is-visible { opacity:1; }
+.about-editorial-heading h1 { animation:about-heading-settle .42s ease-out both; }
+@keyframes about-heading-settle { from { transform:translateY(4px); } to { transform:translateY(0); } }
 .about-editorial-intro {
   grid-column: 2;
   margin: 44px 0 24px;
@@ -96,6 +100,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .about-editorial-heading h1 { animation:about-heading-settle .42s ease-out both; }
   .about-editorial-story, .about-editorial-story span { transition: none; }
 }
 .about-editorial-heading,.about-editorial-intro,.about-editorial-story{opacity:1;transform:none;animation:none;transition:none}
