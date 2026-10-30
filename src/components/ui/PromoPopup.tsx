@@ -95,11 +95,6 @@ export function PromoPopup({ popups }: Props) {
           )}
         </div>
         {popups.length > 1 && <button type="button" className="promo-popup-arrow promo-popup-arrow--next" aria-label="Next popup" onClick={() => move(1)}>›</button>}
-        {popups.length > 1 && (
-          <p className="promo-popup-count" aria-live="polite">
-            Popup {activeIndex + 1} of {popups.length}
-          </p>
-        )}
       </div>
       <style>{`
         .promo-popup-overlay {
@@ -118,7 +113,7 @@ export function PromoPopup({ popups }: Props) {
         .promo-popup-layout {
           display: grid;
           grid-template-columns: 48px minmax(0, 900px) 48px;
-          grid-template-areas: "previous card next" ". count .";
+          grid-template-areas: "previous card next";
           align-items: center;
           justify-content: center;
           gap: 0.75rem;
@@ -186,21 +181,21 @@ export function PromoPopup({ popups }: Props) {
         .promo-popup-arrow {
           display: grid;
           place-items: center;
-          width: 48px;
-          height: 48px;
+          width: 42px;
+          height: 42px;
           padding: 0;
           border: 1px solid rgba(255,255,255,.3);
           border-radius: 50%;
-          background: #e5bf6d;
-          color: #082f25;
-          font: 500 2rem/1 system-ui, sans-serif;
+          background: rgba(7, 16, 12, 0.7);
+          color: #fff;
+          font: 400 1.75rem/1 system-ui, sans-serif;
           cursor: pointer;
           touch-action: manipulation;
           transition: transform .2s ease, background .2s ease;
         }
         .promo-popup-arrow:hover {
-          transform: scale(1.06);
-          background: #f2cf81;
+          transform: scale(1.04);
+          background: rgba(7, 16, 12, 0.92);
         }
         .promo-popup-arrow--previous { grid-area: previous; }
         .promo-popup-arrow--next { grid-area: next; }
@@ -233,7 +228,7 @@ export function PromoPopup({ popups }: Props) {
           }
           .promo-popup-layout {
             grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            grid-template-areas: "card card" "previous next" "count count";
+          grid-template-areas: "card card" "previous next";
             gap: .65rem;
           }
           .promo-popup-card,
@@ -248,7 +243,6 @@ export function PromoPopup({ popups }: Props) {
             height: 48px;
             justify-self: center;
           }
-          .promo-popup-count { margin-top: -.1rem; }
         }
         @media (prefers-reduced-motion: reduce) {
           .promo-popup-overlay,

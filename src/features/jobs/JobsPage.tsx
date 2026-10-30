@@ -205,7 +205,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
   const locationOptions = [{value:"",label:"All locations"}, ...initialResult.locations.map(facet => ({value:facet.value,label:facet.value+" ("+facet.count+")"}))];
   const categoryOptions = [{value:"",label:"All categories"}, ...initialResult.categories.map(facet => ({value:facet.value,label:facet.value+" ("+facet.count+")"}))];
   if (search.location && !locationOptions.some(option => option.value === search.location)) locationOptions.push({value:search.location,label:search.location+" (0)"});
-  if (search.category && !categoryOptions.some(option => option.value === search.category)) categoryOptions.push({value:search.category,label:search.category+" (0)"});
+  if (search.category && !categoryOptions.some(option => option.value === search.category)) categoryOptions.push({value:search.category,label:search.category});
   const popularSearches = initialResult.categories.slice(0,4).map(facet => facet.value);
   useEffect(() => { setDraft({title:search.title,location:search.location,category:search.category}); },[search.title,search.location,search.category]);
   useEffect(() => {

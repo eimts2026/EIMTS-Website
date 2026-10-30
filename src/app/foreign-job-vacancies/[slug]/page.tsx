@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JobApplicationForm } from "@/components/jobs/JobApplicationForm";
+import { BackButton } from "@/components/jobs/BackButton";
 import { formatJobSalary } from "@/lib/salary";
 import { getPublishedJobBySlug } from "@/lib/jobs";
 import { pageMetadata, siteName, siteUrl } from "@/lib/site";
@@ -149,7 +150,7 @@ export default async function JobDetailPage({ params }: PageProps) {
       />
       <section className={styles.hero}>
         <div className={styles.heroInner}>
-          <a href="/foreign-job-vacancies/">← All vacancies</a>
+          <BackButton />
           <div
             className={
               job.image_url

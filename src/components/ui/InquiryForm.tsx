@@ -71,7 +71,7 @@ export function InquiryForm({ kind = "employer", headingId }: { kind?: "employer
           <BotProtection action={kind} resetKey={botReset} onToken={setBotToken} />
           <div className="inquiry-form-footer"><button className="secure-inquiry-submit" type="submit" disabled={status === "sending" || !botToken}>{status === "sending" ? "Sending inquiry…" : "Send inquiry"}<span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></button><small>{contact ? "All fields are required." : "Fields marked * are required."}</small></div>
           <p className="secure-inquiry-error" role="alert">{status === "error" ? feedback : ""}</p>
-          {contact && <p className="inquiry-email-alternative">Or email <a href="mailto:info@emeraldisle.lk">info@emeraldisle.lk</a></p>}
+          {contact && <p className="inquiry-email-alternative">Or email <a href="mailto:info@emeraldislemanpower.com">info@emeraldislemanpower.com</a></p>}
         </form>
       </div>
       <div ref={confirmation} className="inquiry-flip-back" inert={!success} aria-hidden={!success} tabIndex={-1} role="status" aria-live="polite">
