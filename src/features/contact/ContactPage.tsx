@@ -43,7 +43,7 @@ export default function ContactPage() {
         {/* Left Column: Office directory */}
         <div>
           <p className="section-kicker">Our offices</p>
-          <h2>Speak with a local team</h2>
+          <h2>Speak with a <span className="heading-accent">local team</span></h2>
           <p className="contact-intro">Visit a team in Sri Lanka or explore our international network. Choose a location below for available details.</p>
           {(["local", "international"] as const).map((region) => <section className="contact-office-group" key={region} aria-labelledby={`offices-${region}`}>
             <header><h3 id={`offices-${region}`}>{region === "local" ? "Sri Lanka" : "International"}</h3><a className="contact-map-link" href={`#branch-map-${region}`}>Explore map</a></header>

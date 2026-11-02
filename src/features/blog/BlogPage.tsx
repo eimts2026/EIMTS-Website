@@ -44,7 +44,7 @@ export default function BlogPage() {
         <div className="container journal-hero-grid">
           <div className="journal-hero-copy">
             <p className="eyebrow">Career and recruitment insights</p>
-            <h1 id="journal-title"><AnimatedText text="Navigate the world of work with clarity." /></h1>
+            <h1 id="journal-title"><AnimatedText text="Navigate the world of work with clarity." accent="with clarity." /></h1>
             <p>Practical guidance for candidates, employers and professionals building careers across borders.</p><a className="journal-browse ei-scroll-cta" href="#latest-journal-title">Explore all articles <span aria-hidden="true"><BootstrapIcon name="arrow-down" /></span></a>
           </div>
 
@@ -76,7 +76,7 @@ export default function BlogPage() {
         <div className="container journal-index-heading">
           <div>
             <p className="eyebrow">Latest thinking</p>
-            <h2 id="latest-journal-title">Ideas you can put to work.</h2>
+            <h2 id="latest-journal-title">Ideas you can <span className="heading-accent">put to work.</span></h2>
           </div>
           <p>{articles.length} articles on interviews, careers, leadership and international recruitment.</p>
         </div>

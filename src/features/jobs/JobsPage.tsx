@@ -250,7 +250,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
       <div className="container">
         <div className="jobs-search-intro">
           <p className="section-kicker">Verified overseas opportunities</p>
-          <h1 id="jobs-page-title">Find work that moves you forward.</h1>
+          <h1 id="jobs-page-title">Find work that <span className="heading-accent heading-accent--dark">moves you forward.</span></h1>
           <p>Search current international vacancies and apply directly for the role that suits you.</p>
         </div>
 
@@ -293,7 +293,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
         <div className="jobs-results-toolbar">
           <div>
             <p className="section-kicker">Current openings</p>
-            <h2 id="jobs-results-title">Opportunities ready for you</h2>
+            <h2 id="jobs-results-title">Opportunities <span className="heading-accent">ready for you</span></h2>
             <p aria-live="polite">{pending ? "Loading vacancies…" : `${initialResult.total} ${initialResult.total === 1 ? "vacancy" : "vacancies"} · ${visibleJobs.length} on this page`}</p>
           </div>
           <div className="jobs-results-controls">

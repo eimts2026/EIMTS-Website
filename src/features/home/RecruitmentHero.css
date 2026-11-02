@@ -6,14 +6,12 @@
 .recruit-hero-mobile-image{display:none}
 .recruit-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#082f25 0%,rgba(8,47,37,.96) 37%,rgba(8,47,37,.73) 58%,rgba(8,47,37,.45) 100%),linear-gradient(0deg,rgba(3,25,18,.7),transparent 48%)}
 .recruit-hero>.hf-shell{position:relative;z-index:1;display:flex;flex-direction:column}
-.recruit-hero-top{display:flex;justify-content:space-between;gap:24px;color:#c4d6cb;font-size:12px}
 .recruit-hero-grid{display:flex;align-items:center;flex:1;min-height:0;padding:48px 0}
 .recruit-hero-copy{min-width:0;max-width:760px;align-self:center}
 .recruit-hero :is(h1,p){opacity:1!important;transform:none!important}
 .recruit-hero-title-entrance{animation:recruit-title-entrance .7s cubic-bezier(.2,.8,.2,1) both}
 @keyframes recruit-title-entrance{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.recruit-hero-title-entrance{animation:none}}
-.recruit-hero-kicker{font-size:13px;font-weight:600;color:#e5bf6d;margin:0 0 20px}
 .home-foundation .recruit-hero h1{max-width:760px;color:#f7faf4;font-size:clamp(44px,4.8vw,74px);font-weight:650;line-height:1.04;letter-spacing:-.05em;text-wrap:balance}
 .recruit-hero h1 span{color:#e5bf6d}
 .recruit-hero h1.hero-typewriter,.recruit-hero h1.hero-typewriter span{color:#fff}
@@ -61,7 +59,7 @@
 .recruit-hero-dots button[aria-current="true"]{width:24px;border-radius:99px;background:#e5bf6d}
 @media(hover:hover) and (pointer:fine){.recruit-hero-foot>a:hover{text-decoration:underline;text-underline-offset:5px}}
 @media(max-width:1050px){.recruit-hero-grid{padding-block:40px}.home-foundation .recruit-hero h1{font-size:clamp(42px,5.3vw,60px)}.recruit-hero-actions{gap:12px}.recruit-hero-proof{gap:18px;padding:24px}}
-@media(max-width:760px){.recruit-hero{padding-top:106px}.recruit-hero-background{display:none}.recruit-hero::before{background:linear-gradient(180deg,#082f25 0%,#082f25 70%,#05251c 100%)}.recruit-hero-top{font-size:10px;gap:18px}.recruit-hero-top>span:first-child{max-width:180px}.recruit-hero-top>span:last-child{text-align:right;max-width:120px}.recruit-hero-mobile-image{display:block;position:relative;aspect-ratio:auto;width:100vw;max-height:none;margin:22px 0 0 calc(50% - 50vw);overflow:hidden;border:0;border-radius:0;background:#123d2f}.recruit-hero-mobile-image img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;object-position:center}.recruit-hero-grid{padding:28px 0 22px}.home-foundation .recruit-hero h1{font-size:clamp(40px,8.8vw,64px);max-width:620px}.recruit-hero-lead{font-size:16px;margin:22px 0}.recruit-hero-proof{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px;padding:24px 20px}.recruit-hero-proof strong{font-size:24px}.recruit-hero-actions .recruit-action-pill{display:inline-flex}.recruit-hero-actions{align-items:stretch}.recruit-hero .recruit-action-pill{min-width:0;flex:1 1 150px;justify-content:flex-start}}
+@media(max-width:760px){.recruit-hero{padding-top:106px}.recruit-hero-background{display:none}.recruit-hero::before{background:linear-gradient(180deg,#082f25 0%,#082f25 70%,#05251c 100%)}.recruit-hero-mobile-image{display:block;position:relative;aspect-ratio:auto;width:100vw;max-height:none;margin:22px 0 0 calc(50% - 50vw);overflow:hidden;border:0;border-radius:0;background:#123d2f}.recruit-hero-mobile-image img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;object-position:center}.recruit-hero-grid{padding:28px 0 22px}.home-foundation .recruit-hero h1{font-size:clamp(40px,8.8vw,64px);max-width:620px}.recruit-hero-lead{font-size:16px;margin:22px 0}.recruit-hero-proof{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px;padding:24px 20px}.recruit-hero-proof strong{font-size:24px}.recruit-hero-actions .recruit-action-pill{display:inline-flex}.recruit-hero-actions{align-items:stretch}.recruit-hero .recruit-action-pill{min-width:0;flex:1 1 150px;justify-content:flex-start}}
 @media(max-width:380px){.recruit-hero-actions{gap:10px}.recruit-hero .recruit-action-pill{font-size:13px;gap:9px;padding-right:15px}.recruit-hero-proof{padding:20px 16px}.recruit-hero-proof strong{font-size:21px}}
 @media(max-width:760px){.recruit-hero-pagination{position:static;justify-content:flex-end;margin:-8px 0 16px}}
 @media(prefers-reduced-motion:reduce){.recruit-action-pill .register-pill__icon-svg{transition:none!important}.recruit-hero-background img,.recruit-hero-pagination>button,.recruit-hero-dots button{transition:none}}

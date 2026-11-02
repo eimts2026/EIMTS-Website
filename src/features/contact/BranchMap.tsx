@@ -75,7 +75,7 @@ export function BranchMap() {
       <header className="branch-map-heading">
         <div>
           <p className="section-kicker">Our international network</p>
-          <h2 id="branch-map-title">Meet us closer to home.</h2>
+          <h2 id="branch-map-title">Meet us <span className="heading-accent">closer to home.</span></h2>
           <p>Explore our offices in Sri Lanka, Nepal and the UAE. Select a branch for contact details.</p>
         </div>
         <div className="branch-map-metric" aria-label={`${visibleBranches.length} branch locations`}>

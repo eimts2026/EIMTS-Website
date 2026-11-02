@@ -1,6 +1,6 @@
-import Image from "next/image";
+import TypewriterHeading from "../home/TypewriterHeading";
+import AboutProof from "./AboutProof";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
-import AboutTypewriter from "./AboutTypewriter";
 import "./AboutHero.css";
 
 export default function AboutHero() {
@@ -8,28 +8,16 @@ export default function AboutHero() {
     <section className="about-editorial" aria-labelledby="about-hero-title">
       <div className="container about-editorial-layout">
         <header className="about-editorial-heading">
-          <p className="about-editorial-label">About Emerald Isle <span>Since 1995</span></p>
-          <AboutTypewriter />
+          <p className="about-editorial-label">About Emerald Isle</p>
+          <TypewriterHeading id="about-hero-title" text="Three decades connecting Sri Lankan talent with global opportunity." accent="global opportunity." skeleton />
         </header>
         <p className="about-editorial-intro">
-          Get to know the people and purpose behind Emerald Isle.
-          We connect people with overseas employment and help employers build capable teams.
+          Since 1995, we have connected Sri Lankan talent with overseas employment and helped employers build capable teams.
         </p>
-        <a className="about-editorial-story" href="#about-story">
-          Discover our story
-          <span aria-hidden="true"><BootstrapIcon name="arrow-down" /></span>
-        </a>
-        <figure className="about-editorial-portrait">
-          <Image
-            src="/assets/projects/qatar-compass/team-1.webp"
-            alt="A group of candidates holding Emerald Isle folders at the office"
-            width={2400}
-            height={1350}
-            sizes="(max-width: 620px) calc(100vw - 32px), (max-width: 1550px) calc(100vw - 160px), 1390px"
-            preload
-          />
-          <figcaption>Our story starts with people.</figcaption>
-        </figure>
+        <nav className="about-editorial-actions" aria-label="About Emerald Isle links">
+          <a className="register-pill about-editorial-story" href="#about-story"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-down" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-down" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>Our story</a>
+        </nav>
+        <AboutProof />
       </div>
     </section>
   );

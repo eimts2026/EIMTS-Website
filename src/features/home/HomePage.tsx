@@ -35,7 +35,7 @@ export default function Home({ hero, urgentJobs = [] }: { hero: HeroContent; urg
       </div>
     </div></section>
     <section className="hf-section hf-industries" aria-labelledby="industries-title"><div className="hf-shell">
-      <div className="hf-industries-heading"><p className="hf-eyebrow">Where we work</p><h2 id="industries-title">Recruitment services in Sri Lanka.</h2><p>From skilled trades to service teams, we help employers find people across these sectors. Open roles vary by employer and destination.</p></div>
+      <div className="hf-industries-heading"><p className="hf-eyebrow">Where we work</p><h2 id="industries-title">Recruitment services <span className="heading-accent">in Sri Lanka.</span></h2><p>From skilled trades to service teams, we help employers find people across these sectors. Open roles vary by employer and destination.</p></div>
       <div className="hf-industries-grid">{industries.map(industry => <article className="hf-industry-card" key={industry.title}><span className="hf-industry-icon" aria-hidden="true"><i className={`hf-industry-icon--${industry.icon}`} /></span><h3>{industry.title}</h3><p>{industry.description}</p></article>)}</div>
       <div className="hf-industries-end"><span>Looking for your next role?</span><Link className="hf-link" href={jobsUrl}>Browse current vacancies <span aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span></Link></div>
     </div></section>

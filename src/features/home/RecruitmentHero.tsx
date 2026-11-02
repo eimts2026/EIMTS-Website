@@ -84,20 +84,18 @@ export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
         ))}
       </div>
       <div className="hf-shell">
-        <div className="recruit-hero-top"><span>Emerald Isle Manpower &amp; Travel Services</span><span>From Sri Lanka. Since 1995.</span></div>
         <div className="recruit-hero-mobile-image" aria-hidden="true">
           <Image src={activeSlide.image} alt="" width={1672} height={941} sizes="100vw" quality={70} loading="lazy" style={{ width: "100%", height: "auto" }} />
         </div>
         <div className="recruit-hero-grid">
           <div className="recruit-hero-copy" aria-live={isPaused ? "polite" : "off"} aria-atomic="true">
-            <p className="recruit-hero-kicker">{activeSlide.kicker || "Sri Lankan talent. Global opportunity."}</p>
             <div className="recruit-hero-title-entrance" key={`${activeIndex}-${activeSlide.title}`}>
               <TypewriterHeading text={activeSlide.title} />
             </div>
             <p className="recruit-hero-lead">{activeSlide.copy}</p>
             <div className="recruit-hero-actions">
               <Link className="register-pill recruit-action-pill" href="/foreign-job-vacancies/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>Browse jobs</Link>
-              <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href="/client-recruitment-solutions/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>For Clients</Link>
+              <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href="/contact/?inquiry=employer#contact-inquiry"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>For Clients</Link>
             </div>
             <a className="hero-review-trust" href="https://www.google.com/maps/place//@6.8425904,79.866525,17z/data=!3m1!4b1!4m3!3m2!1s0x3ae25b19204c0875:0xf99af88e1968c1a0!12e1?entry=ttu&g_ep=EgoyMDI2MDcxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" aria-label="930 plus Google reviews. Leave a review for Emerald Isle">
               <span className="hero-review-avatars" aria-hidden="true">{["8ab4cd865aa6b62352300cf71c5805c86d8523505636e2a499cda7932a803953", "a2ee1266115ad682a19f5d4752ea8efa7eefa3ae03e658f500cbb3e1a6145b0b", "f8db32ee1fe8c51fa678e3325eee3f8bf72a3a8cc8947784d5ef9c7bf5fb8adb", "449ffab8e7b480176aaea3dd5578119223a41e2e0c92c805a5a6b71ca4cbdd14"].map((image) => <img key={image} src={"https://cdn.21st.dev/assets/localized/" + image + ".jpg"} width={22} height={22} alt="" loading="lazy" />)}</span>

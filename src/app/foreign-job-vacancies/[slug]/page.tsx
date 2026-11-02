@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { JobApplicationForm } from "@/components/jobs/JobApplicationForm";
 import { BackButton } from "@/components/jobs/BackButton";
+import BootstrapIcon from "@/components/ui/BootstrapIcon";
 import { formatJobSalary } from "@/lib/salary";
 import { getPublishedJobBySlug } from "@/lib/jobs";
 import { pageMetadata, siteName, siteUrl } from "@/lib/site";
@@ -191,13 +192,14 @@ export default async function JobDetailPage({ params }: PageProps) {
                   </div>
                 )}
                 <a className={styles.applyNow} href="#apply">
-                  Apply Now
+                  <span>Apply Now</span>
+                  <span className={styles.applyIcon} aria-hidden="true"><BootstrapIcon name="arrow-up-right" /></span>
                 </a>
               </div>
             </div>
             {job.image_url && (
               <figure className={styles.heroPoster}>
-                <Image src={job.image_url} alt={`${job.title} — vacancy poster`} fill sizes="(max-width: 620px) 100vw, 50vw" quality={70} preload />
+                <Image src={job.image_url} alt={`${job.title} — vacancy poster`} width={600} height={600} sizes="(max-width: 900px) 300px, 300px" quality={70} preload />
               </figure>
             )}
           </div>

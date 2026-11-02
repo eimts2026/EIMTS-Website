@@ -21,29 +21,29 @@
 }
 
 .withPoster {
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
-  align-items: center;
+  grid-template-columns: minmax(0, 1.35fr) minmax(220px, 300px);
+  align-items: start;
 }
 
 .heroPoster {
   margin: 0;
-  padding: 0.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 18px;
-  background: rgba(5, 26, 18, 0.4);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 2px;
+  background: rgba(5, 26, 18, 0.25);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.22);
   justify-self: end;
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
 }
 
 .heroPoster img {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 480px;
+  max-height: 360px;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 1px;
 }
 
 .heroInner,
@@ -70,7 +70,7 @@
   display: inline-grid;
   gap: 0.1rem;
   padding: 0.55rem 1.2rem;
-  border-radius: 14px;
+  border-radius: 2px;
   background: #f3b84b;
   color: #1e2a17;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25);
@@ -94,20 +94,40 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.95rem 2.3rem;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #12a066, #067a4b);
-  color: #fff;
+  gap: 12px;
+  padding: 8px 10px 8px 20px;
+  border-radius: 2px;
+  background: #f3b84b;
   font-weight: 800;
   text-decoration: none;
-  box-shadow: 0 14px 34px rgba(6, 122, 75, 0.45);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: none;
+  transition: background .2s ease, color .2s ease;
+  color: #102a22;
 }
 
 .applyNow:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 40px rgba(6, 122, 75, 0.55);
+  background: #102a22;
+  color: #f7faf4;
 }
+
+.applyIcon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #102a22;
+  color: #f3b84b;
+}
+
+.applyIcon svg { width: 13px; height: 13px; }
+.applyNow:hover .applyIcon { background: #f3b84b; color: #102a22; }
+.applyNow:focus-visible { outline: 3px solid #f3b84b; outline-offset: 4px; }
+.heroGrid > div { min-width: 0; }
+.heroGrid h1 { overflow-wrap: anywhere; }
+.heroPoster { align-self: start; }
+.withPoster .heroActions { margin-bottom: 1rem; }
+.heroPoster img { max-height: 340px; }
 
 .overviewWrap {
   margin-top: clamp(-3.4rem, -5vw, -2.4rem);

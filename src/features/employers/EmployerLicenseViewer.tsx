@@ -18,7 +18,7 @@ export default function EmployerLicenseViewer() {
         aria-haspopup="dialog"
         onClick={() => dialogRef.current?.showModal()}
       >
-        <Image src="/assets/slbfe-license-reference.png" alt={licenseDescription} width={1603} height={637} sizes="(max-width: 620px) 100vw, 520px" quality={70} preload />
+        <Image src="/assets/certificates/colombo-head-office-license.webp" alt={licenseDescription} width={598} height={430} sizes="(max-width: 620px) 100vw, 520px" quality={85} preload />
       </button>
       <figcaption><span>View licence details <BootstrapIcon name="arrow-up-right" /></span><strong>SLBFE License No. 1162</strong></figcaption>
       <div className="employer-certificate-seal" aria-hidden="true"><strong>5</strong><span>Star<br />Award</span></div>
@@ -37,7 +37,7 @@ export default function EmployerLicenseViewer() {
       </button>
       <h2 id="employer-license-dialog-title">SLBFE License No. 1162</h2>
       <div className="employer-license-dialog__document" role="img" aria-label={licenseDescription}>
-        <img src="/assets/slbfe-license-reference.png" alt="" width="1603" height="637" />
+        <img src="/assets/certificates/colombo-head-office-license.webp" alt="" width="598" height="430" />
       </div>
       <p>Issued to Emerald Isle Manpower &amp; Travel Services by the Sri Lanka Bureau of Foreign Employment.</p>
     </dialog>

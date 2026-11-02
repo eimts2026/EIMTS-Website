@@ -37,6 +37,9 @@
 
 /* Emerald Isle 2026 brand experience */
 :root{--ei-ink:#10221a;--ei-green:#063f31;--ei-deep:#03271f;--ei-amber:#f3b84b;--ei-neutral:#f4f5f0;--ei-white:#fff;--ei-muted:#52635c;--ei-ease:cubic-bezier(.32,.72,0,1)}
+:root{--heading-accent-light:#526f61;--heading-accent-dark:#e5bf6d}
+.heading-accent{color:var(--heading-accent-light)}
+.heading-accent--dark,.journal-hero .animated-text__letter--accent,.employer-hero .animated-text__letter--accent{color:var(--heading-accent-dark)}
 body{overflow-x:hidden;background:var(--ei-neutral);color:var(--ei-ink)}
 .ei-home,.ei-about-page{background:var(--ei-neutral)}
 .ei-home h1,.ei-home h2,.ei-home h3,.ei-about-page h1,.ei-about-page h2,.ei-about-page h3{font-family:var(--font-sans);letter-spacing:-.035em;text-wrap:balance}
@@ -1358,6 +1361,15 @@ body{overflow-x:hidden;background:var(--ei-neutral);color:var(--ei-ink)}
 .footer-review-column .footer-review__google svg{width:23px;height:23px}
 @media(max-width:900px){.global-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.footer-review-column{padding-top:12px}}
 @media(max-width:620px){.global-footer>.wide-container{width:calc(100% - 28px)}.global-footer-lead{align-items:center;flex-direction:column;text-align:center;gap:24px}.global-footer-lead p{max-width:18ch;font-size:clamp(2.5rem,11vw,3.6rem)}.global-footer-grid{grid-template-columns:1fr;justify-items:center;text-align:center;gap:38px}.global-footer-grid>div{display:flex;flex-direction:column;align-items:center;text-align:center}.global-footer-brand img{margin-inline:auto}.global-footer-brand address{font-style:normal}.global-footer-grid h2{margin-bottom:12px}.global-footer-grid>div>a{justify-content:center}.footer-review-column{padding-top:0}.footer-review-column .footer-review{width:min(100%,320px);margin-inline:auto}.global-footer-bottom{text-align:center}}
+@media(max-width:620px){
+  .global-footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));justify-items:stretch;text-align:left;gap:28px 18px;padding-top:42px}
+  .global-footer-grid>div{min-width:0;align-items:flex-start;text-align:left}
+  .global-footer-grid>.global-footer-brand,.global-footer-grid>.footer-review-column{grid-column:1/-1}
+  .global-footer-brand img{margin-inline:0}
+  .global-footer-grid>div>a{justify-content:flex-start}
+  .global-footer-grid h2{margin-bottom:8px}
+  .footer-review-column .footer-review{margin-inline:0}
+}
 
 /* Cross-page responsive safeguards */
 html{min-width:0;-webkit-text-size-adjust:100%}
@@ -2031,8 +2043,11 @@ input,select,textarea,button{max-inline-size:100%}
   background:var(--dispatch-deep)!important;
 }
 .ei-article-page .ei-article-hero-grid{
-  grid-template-columns:minmax(0,1.45fr) minmax(230px,.55fr)!important;
+  grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr)!important;
+  align-items:start!important;
 }
+.ei-article-hero-aside{min-width:0}
+.ei-article-hero-aside .ei-article-meta{margin-top:24px!important}
 .ei-article-breadcrumb ol{min-width:0}
 .ei-article-breadcrumb li{min-width:0;overflow-wrap:anywhere}
 .ei-article-breadcrumb a{

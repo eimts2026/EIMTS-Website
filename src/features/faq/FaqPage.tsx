@@ -15,7 +15,7 @@ const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEn
 export default function FaqPage() {
   return <main id="main">
     <PageHero eyebrow="Candidate support" title="Emerald Isle Manpower FAQ" description="Quick answers to common questions about your account, CV, profile and foreign job applications." />
-    <section className="content-section alt"><div className="container"><div className="section-copy center"><p className="section-kicker">Frequently asked questions</p><h2>Get the help you need</h2></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>
+    <section className="content-section alt"><div className="container"><div className="section-copy center"><p className="section-kicker">Frequently asked questions</p><h2>Get the <span className="heading-accent">help you need</span></h2></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>
     <section className="cta-band"><div className="container cta-band-inner"><div><h2>Still need help?</h2><p>Our team can guide you through the next step.</p></div><div><Link className="primary-button inverse-button" href="/contact/">Contact support</Link></div></div></section>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
   </main>;

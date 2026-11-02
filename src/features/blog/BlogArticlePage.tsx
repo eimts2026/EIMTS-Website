@@ -209,6 +209,27 @@ export default function BlogArticlePage({
                 </p>
               </div>
 
+              <div className="ei-article-hero-aside">
+              <figure
+            className="ei-article-cover"
+            style={{
+              position: "relative",
+              minHeight: "clamp(260px, 52vw, 620px)",
+              margin: 0,
+              overflow: "hidden",
+              background: "#dbe4df",
+              boxShadow: "0 30px 80px rgba(3, 39, 31, .14)",
+            }}
+          >
+            <Image
+              src={article.image}
+              alt={article.imageAlt}
+              fill
+              preload
+              sizes="(max-width: 1152px) calc(100vw - 32px), 1120px"
+              style={{ objectFit: "cover" }}
+            />
+          </figure>
               <dl
                 className="ei-article-meta"
                 style={{
@@ -240,35 +261,10 @@ export default function BlogArticlePage({
                   </dd>
                 </div>
               </dl>
+              </div>
             </div>
           </div>
         </header>
-
-        <div
-          className="ei-article-cover-wrap"
-          style={{ ...shell, padding: "clamp(32px, 5vw, 58px) 0 0" }}
-        >
-          <figure
-            className="ei-article-cover"
-            style={{
-              position: "relative",
-              minHeight: "clamp(260px, 52vw, 620px)",
-              margin: 0,
-              overflow: "hidden",
-              background: "#dbe4df",
-              boxShadow: "0 30px 80px rgba(3, 39, 31, .14)",
-            }}
-          >
-            <Image
-              src={article.image}
-              alt={article.imageAlt}
-              fill
-              preload
-              sizes="(max-width: 1152px) calc(100vw - 32px), 1120px"
-              style={{ objectFit: "cover" }}
-            />
-          </figure>
-        </div>
 
         <div
           className="ei-article-body"
