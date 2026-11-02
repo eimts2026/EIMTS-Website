@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { BranchMap } from "./BranchMap";
 import { PageHero } from "../../components/ui/PageHero";
-import { InquiryForm } from "../../components/ui/InquiryForm";
+import { ContactInquiryForm } from "../../components/ui/ContactInquiryForm";
 
 import { branches } from "./branches";
 import "./ContactPage.css";
@@ -30,6 +30,7 @@ export default function ContactPage() {
     {/* ====================================================================== */}
     <PageHero
       eyebrow="We are here to help"
+      animateTitle
       title="Tell us where you want to go next."
       description="Reach our recruitment and employer teams. Choose the nearest office or send us a message."
     />
@@ -55,7 +56,7 @@ export default function ContactPage() {
         </div>
 
         {/* Protected inquiry submission with confirmed-delivery feedback. */}
-        <InquiryForm kind="contact" />
+        <ContactInquiryForm />
       </div>
     </section>
 

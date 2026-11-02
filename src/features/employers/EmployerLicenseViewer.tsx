@@ -1,5 +1,6 @@
 "use client";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
+import Image from "next/image";
 
 import { useRef } from "react";
 
@@ -17,7 +18,7 @@ export default function EmployerLicenseViewer() {
         aria-haspopup="dialog"
         onClick={() => dialogRef.current?.showModal()}
       >
-        <img src="/assets/slbfe-license-reference.png" alt={licenseDescription} width="1603" height="637" fetchPriority="high" />
+        <Image src="/assets/slbfe-license-reference.png" alt={licenseDescription} width={1603} height={637} sizes="(max-width: 620px) 100vw, 520px" quality={70} preload />
       </button>
       <figcaption><span>View licence details <BootstrapIcon name="arrow-up-right" /></span><strong>SLBFE License No. 1162</strong></figcaption>
       <div className="employer-certificate-seal" aria-hidden="true"><strong>5</strong><span>Star<br />Award</span></div>

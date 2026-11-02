@@ -1,5 +1,6 @@
 import Image from "next/image";
 import "./BlogPage.css";
+import { AnimatedText } from "@/components/ui/AnimatedText";
 import Link from "next/link";
 import { articles } from "@/lib/articles";
 import { siteName, siteUrl } from "@/lib/site";
@@ -43,7 +44,7 @@ export default function BlogPage() {
         <div className="container journal-hero-grid">
           <div className="journal-hero-copy">
             <p className="eyebrow">Career and recruitment insights</p>
-            <h1 id="journal-title">Navigate the world of work with clarity.</h1>
+            <h1 id="journal-title"><AnimatedText text="Navigate the world of work with clarity." /></h1>
             <p>Practical guidance for candidates, employers and professionals building careers across borders.</p><a className="journal-browse ei-scroll-cta" href="#latest-journal-title">Explore all articles <span aria-hidden="true"><BootstrapIcon name="arrow-down" /></span></a>
           </div>
 
@@ -52,7 +53,7 @@ export default function BlogPage() {
               src={featured.image}
               alt={featured.imageAlt}
               fill
-              priority
+              preload
               sizes="(max-width: 900px) 100vw, 55vw"
             />
             </span>

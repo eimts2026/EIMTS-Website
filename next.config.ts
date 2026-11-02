@@ -12,13 +12,15 @@ const remotePatterns: NonNullable<NextConfig["images"]>["remotePatterns"] = [
 
 try {
   const supabaseUrl = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || "");
-  remotePatterns?.push({
-    protocol: supabaseUrl.protocol === "http:" ? "http" : "https",
-    hostname: supabaseUrl.hostname,
-    port: supabaseUrl.port,
-    pathname: "/storage/v1/object/public/project-media/**",
-    search: "",
-  });
+  for (const bucket of ["job-media", "project-media"]) {
+    remotePatterns?.push({
+      protocol: supabaseUrl.protocol === "http:" ? "http" : "https",
+      hostname: supabaseUrl.hostname,
+      port: supabaseUrl.port,
+      pathname: `/storage/v1/object/public/${bucket}/**`,
+      search: "",
+    });
+  }
 } catch {
   // Builds without Supabase configured still use the bundled project images.
 }

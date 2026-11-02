@@ -1,8 +1,10 @@
 import Link from "../../components/ui/Link";
-import { EmployerInquiryForm } from "../../components/ui/EmployerInquiryForm";
+
 import { EmployerMotion } from "./EmployerMotion";
 import EmployerLicenseViewer from "./EmployerLicenseViewer";
+import { AnimatedText } from "../../components/ui/AnimatedText";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
+import Image from "next/image";
 import "./EmployerPage.css";
 
 const values = [
@@ -38,10 +40,10 @@ export default function EmployerPage() {
       <div className="container employer-hero-grid">
         <div className="employer-hero-copy">
           <p className="employer-hero-kicker"><span>Five Star</span> Employer solutions since 1995</p>
-          <h1 id="employer-hero-title">Build global teams with confidence.</h1>
+          <h1 id="employer-hero-title"><AnimatedText text="Build global teams with confidence." /></h1>
           <p className="employer-hero-lede">As the only SLBFE <strong>Five Star Award-winning recruitment company in Sri Lanka</strong>, we have proudly served clients across the GCC, Europe, Africa and Asia since 1995, providing tailored staffing solutions under <strong>License No. 1162</strong>.</p>
           <div className="employer-hero-actions">
-            <Link className="ei-button ei-button-bright" href="#employer-inquiry">Discuss your hiring needs <span className="ei-button__icon-wrapper" aria-hidden="true"><svg viewBox="0 0 14 15" fill="none" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" className="ei-button__icon-svg ei-button__icon-svg--copy" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link>
+            <Link className="ei-button ei-button-bright" href="/contact/?inquiry=employer#contact-inquiry">Discuss your hiring needs <span className="ei-button__icon-wrapper" aria-hidden="true"><svg viewBox="0 0 14 15" fill="none" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" className="ei-button__icon-svg ei-button__icon-svg--copy" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link>
             <a className="ei-scroll-cta" href="#employer-proof">See how we work <span aria-hidden="true"><BootstrapIcon name="arrow-down" /></span></a>
           </div>
           <div className="employer-hero-regions" aria-label="Regions served">
@@ -51,15 +53,15 @@ export default function EmployerPage() {
         <EmployerLicenseViewer />
       </div>
     </section>
-    <section className="content-section employer-proof" id="employer-proof"><div className="container split-layout"><div className="split-copy"><p className="section-kicker">Licensed recruitment partner</p><h2>Recruit flexibly. Grow with confidence.</h2><p>Since 1995, Emerald Isle has helped employers build dependable international teams across the GCC, Europe, Africa and Asia.</p><p>Our specialists cover hospitality, sales, finance, administration, HR, engineering, construction, automotive and transport—with compliance considered from the first brief.</p><div className="employer-proof-license"><strong>SLBFE 1162</strong><span>Licensed and accountable</span></div></div><div className="employer-proof-visual"><div className="employer-proof-image"><img src="/assets/candidate-service.webp" alt="Candidate and employer discussing an international recruitment opportunity" /></div><div className="metric-card"><strong>30+ years</strong><span>of responsible recruitment</span></div></div></div></section>
+    <section className="content-section employer-proof" id="employer-proof"><div className="container split-layout"><div className="split-copy"><p className="section-kicker">Licensed recruitment partner</p><h2>Recruit flexibly. Grow with confidence.</h2><p>Since 1995, Emerald Isle has helped employers build dependable international teams across the GCC, Europe, Africa and Asia.</p><p>Our specialists cover hospitality, sales, finance, administration, HR, engineering, construction, automotive and transport—with compliance considered from the first brief.</p><div className="employer-proof-license"><strong>SLBFE 1162</strong><span>Licensed and accountable</span></div></div><div className="employer-proof-visual"><div className="employer-proof-image"><Image src="/assets/candidate-service.webp" alt="Candidate and employer discussing an international recruitment opportunity" fill sizes="(max-width: 900px) 100vw, 50vw" quality={70} loading="lazy" /></div><div className="metric-card"><strong>30+ years</strong><span>of responsible recruitment</span></div></div></div></section>
     <section className="content-section alt employer-values" aria-labelledby="employer-values-title"><div className="container employer-values-layout"><div className="section-copy"><p className="section-kicker">Our values</p><h2 id="employer-values-title">Relationships that last</h2></div><div className="employer-values-list">{values.map(([title, body, icon], index) => <details className="employer-value-detail" key={title} open={index === 0}><summary><ValueIcon type={icon} /><h3>{title}</h3><span aria-hidden="true">+</span></summary><p>{body}</p></details>)}</div></div></section>
     <section className="employer-partnership" aria-labelledby="partnership-title"><div className="container"><div className="employer-partnership-head"><div><p className="section-kicker">A better working relationship</p><h2 id="partnership-title">Partnership beyond placement</h2></div></div><div className="employer-principles">{partnershipPrinciples.map(([title, body, icon]) => <article className="employer-principle" key={title}><ValueIcon type={icon} /><div><h3>{title}</h3><p>{body}</p></div></article>)}</div></div></section>
     <section className="employer-inquiry" id="employer-inquiry" aria-labelledby="employer-inquiry-title">
       <div className="container employer-inquiry-grid">
-        <EmployerInquiryForm />
+        <div className="employer-inquiry-form"><p className="section-kicker">Client inquiries</p><h2 id="employer-inquiry-title">Tell us about your hiring needs.</h2><p>Share your staffing requirements through our Contact page. Select Client or employer to reach our recruitment team.</p><Link className="ei-button" href="/contact/?inquiry=employer#contact-inquiry">Send a client inquiry <span aria-hidden="true">↗</span></Link></div>
         <aside className="employer-whatsapp" aria-label="Contact us on WhatsApp">
           <div className="employer-handshake-animation" aria-hidden="true">
-            <img src="/assets/employer-handshake.webp" alt="" width="1672" height="941" loading="lazy" />
+            <Image src="/assets/employer-handshake.webp" alt="" fill sizes="(max-width: 620px) 100vw, (max-width: 900px) 50vw, 30vw" quality={70} loading="lazy" />
           </div>
           <p className="section-kicker">Prefer a quick conversation?</p>
           <h2>Continue on WhatsApp.</h2>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { JobApplicationForm } from "@/components/jobs/JobApplicationForm";
 import { BackButton } from "@/components/jobs/BackButton";
@@ -196,7 +197,7 @@ export default async function JobDetailPage({ params }: PageProps) {
             </div>
             {job.image_url && (
               <figure className={styles.heroPoster}>
-                <img src={job.image_url} alt={`${job.title} — vacancy poster`} />
+                <Image src={job.image_url} alt={`${job.title} — vacancy poster`} fill sizes="(max-width: 620px) 100vw, 50vw" quality={70} preload />
               </figure>
             )}
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import HorizontalDragRail from "../../components/ui/HorizontalDragRail";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
 import ImageViewer from "./ImageViewer";
@@ -45,7 +46,7 @@ export default function CertificateSlider() {
           const thumbnail = source.source ?? `/assets/certificates/previews/${file}.webp`;
           return <article className="certificate-slide" key={file}>
             <ImageViewer className="certificate-open" src={fullImage} alt={title} title={title}>
-              <div className="certificate-image"><img src={thumbnail} alt="" width={width} height={height} decoding="async" /></div>
+              <div className="certificate-image"><Image src={thumbnail} alt="" width={width} height={height} sizes="(max-width: 620px) 78vw, (max-width: 900px) 40vw, 300px" quality={60} loading="lazy" /></div>
               <span className="certificate-open-hint" aria-hidden="true">View document <BootstrapIcon name="arrow-up-right" /></span>
             </ImageViewer>
             <span className="certificate-caption">{title}</span>

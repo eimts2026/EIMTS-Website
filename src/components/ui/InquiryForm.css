@@ -35,3 +35,14 @@
 @media(prefers-reduced-motion:reduce) { .inquiry-flip-inner { transition:none; } }
 
 .secure-inquiry-error { margin:0; font-size:13px; line-height:1.6; color:#9c2626; }
+.contact-inquiry-options{min-width:0;scroll-margin-top:120px}
+.inquiry-audience{margin:0 0 20px;padding:0;border:0;min-width:0}
+.inquiry-audience legend{font-weight:600;margin-bottom:12px;color:#173d2f}
+.inquiry-audience-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.inquiry-audience-choices label{display:flex;align-items:center;gap:10px;padding:16px;border:1px solid #d4e1d8;border-radius:12px;background:#fff;cursor:pointer}
+.inquiry-audience-choices label:has(input:checked){background:#e7f0e9;border-color:#23765f}
+.inquiry-audience-choices input{accent-color:#23765f;flex-shrink:0}
+.inquiry-audience-choices strong,.inquiry-audience-choices small{display:block}
+.inquiry-audience-choices strong{font-size:15px;color:#173d2f}
+.inquiry-audience-choices small{font-size:12px;color:#566c63}
+@media(max-width:480px){.inquiry-audience-choices{grid-template-columns:1fr}}

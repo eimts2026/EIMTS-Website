@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import Image from "next/image";
 
 export type Leader = {
   name: string;
@@ -38,7 +39,7 @@ export default function LeaderCard({ leader }: { leader: Leader }) {
     >
       <div className="ei-leader-portrait">
         {leader.image
-          ? <img src={leader.image} alt="" width="640" height="800" loading="lazy" />
+          ? <Image src={leader.image} alt={`${leader.name}, ${leader.role} at Emerald Isle`} width={640} height={800} sizes="(max-width: 620px) 50vw, (max-width: 1000px) 33vw, 280px" quality={70} loading="lazy" />
           : <span className="ei-leader-placeholder" aria-hidden="true">{leader.initials}</span>}
       </div>
       <button

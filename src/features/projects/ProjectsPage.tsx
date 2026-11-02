@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "../../components/ui/Link";
 import ProjectShowcase from "../../components/ui/3d-interactive-timeline";
 import type { PublicProject } from "../../lib/projects";
 import BootstrapIcon from "../../components/ui/BootstrapIcon";
+import { AnimatedText } from "../../components/ui/AnimatedText";
 
 export default function ProjectsPage({ projects }: { projects: PublicProject[] }) {
   const photoCount = projects.reduce(
@@ -16,9 +16,7 @@ export default function ProjectsPage({ projects }: { projects: PublicProject[] }
         <header className="container projects-hero-top">
           <div>
             <p className="eyebrow">Global recruitment &amp; mobilisation</p>
-            <h1 id="projects-hero-title">
-              From Colombo <span>to the world.</span>
-            </h1>
+            <h1 id="projects-hero-title"><AnimatedText text="From Colombo to the world." accent="to the world." /></h1>
           </div>
           <p className="projects-hero-note">
             {projects.length} flagship deployments, {photoCount} photographs.
@@ -31,7 +29,7 @@ export default function ProjectsPage({ projects }: { projects: PublicProject[] }
               <a className="projects-hero-panel" key={project.id} href={`#${project.id}`}>
                 <Image
                   src={project.hero.src}
-                  alt=""
+                  alt={`Candidates recruited for ${project.client} in ${project.country}`}
                   fill
                   sizes="(max-width: 860px) 50vw, 25vw"
                   quality={78}
@@ -58,17 +56,6 @@ export default function ProjectsPage({ projects }: { projects: PublicProject[] }
 
       {projects.length > 0 && <ProjectShowcase projects={projects} />}
 
-      <section className="cta-band" aria-labelledby="projects-cta-title">
-        <div className="container cta-band-inner">
-          <div>
-            <h2 id="projects-cta-title">Have a workforce project in mind?</h2>
-            <p>Tell us what you need, where you need it and when your team should be ready.</p>
-          </div>
-          <Link className="primary-button inverse-button" href="/contact/">
-            Start a conversation
-          </Link>
-        </div>
-      </section>
     </main>
   );
 }

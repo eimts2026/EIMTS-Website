@@ -263,7 +263,7 @@ export default function BlogArticlePage({
               src={article.image}
               alt={article.imageAlt}
               fill
-              priority
+              preload
               sizes="(max-width: 1152px) calc(100vw - 32px), 1120px"
               style={{ objectFit: "cover" }}
             />

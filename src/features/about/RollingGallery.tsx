@@ -8,6 +8,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
+import Image from "next/image";
 import ImageViewer from "./ImageViewer";
 
 export type RollingGalleryItem = {
@@ -178,7 +179,7 @@ export default function RollingGallery({
                 }}
               >
                 <ImageViewer className="ei-award-gallery-media" src={item.image} alt={item.alt ?? item.title} title={item.title} onOpenChange={(open) => { viewingRef.current = open; }}>
-                  <img src={item.image} alt={item.alt ?? item.title} loading="lazy" />
+                  <Image src={item.image} alt={item.alt ?? item.title} fill sizes="(max-width: 620px) 78vw, (max-width: 900px) 40vw, 300px" quality={60} loading="lazy" />
                 </ImageViewer>
               </figure>
             ))}

@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, useTransition, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { emptyJobFilters, jobSearchParams, type JobFilters, type JobSearch, type JobSort } from "@/lib/job-search-params";
 import type { JobSearchResult } from "@/lib/job-search";
 import { JobApplicationForm } from "@/components/jobs/JobApplicationForm";
@@ -341,7 +342,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
     <dialog className="job-detail-dialog" ref={dialogRef} aria-labelledby={selectedJob ? "job-detail-title" : undefined} onClose={() => setSelectedJob(null)} onClick={(event) => { if (event.target === event.currentTarget) setSelectedJob(null); }}>
       {selectedJob && <div className="job-detail-panel">
         <button className="job-detail-close" type="button" onClick={() => setSelectedJob(null)} aria-label="Close job details">x</button>
-        <div className="job-detail-visual"><img src={selectedJob.image} alt="" style={{ objectPosition: selectedJob.imagePosition }} /><span>{selectedJob.category}</span></div>
+        <div className="job-detail-visual"><Image src={selectedJob.image} alt={selectedJob.image === "/assets/blog-global-careers.webp" ? "" : `${selectedJob.title} vacancy poster for ${selectedJob.country || selectedJob.location}`} fill sizes="(max-width: 760px) 100vw, 42vw" quality={70} style={{ objectFit: "cover", objectPosition: selectedJob.imagePosition }} /><span>{selectedJob.category}</span></div>
         <div className="job-detail-content">
           <span className={"job-status" + (selectedJob.urgent ? " is-urgent" : "")}>{selectedJob.urgent ? "Urgent vacancy" : "Open vacancy"}</span>
           <h2 id="job-detail-title">{selectedJob.title}</h2>

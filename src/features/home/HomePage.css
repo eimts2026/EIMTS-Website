@@ -65,3 +65,29 @@
 @media(max-width:950px){.hf-industries-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.hf-industries-heading{margin-bottom:28px}.hf-industries-grid{grid-template-columns:1fr;gap:12px}.hf-industry-card{min-height:0;padding:22px}.hf-industry-icon{margin-bottom:17px}.hf-industries-end{flex-direction:column;gap:0;text-align:center}}
 @media(prefers-reduced-motion:reduce){.hf-industry-card{transition:none}}
+
+/* Home page continuity: keep section canvases unified and hide decorative rules. */
+.home-foundation .hf-section,
+.home-foundation .hf-story,
+.home-foundation .hf-industries{background:#fff}
+.home-foundation .hf-job-card,
+.home-foundation .hf-empty,
+.home-foundation .hf-quote,
+.home-foundation .hf-industry-card{border-color:transparent}
+.home-foundation .hf-job-bottom,
+.home-foundation .hf-values,
+.home-foundation .hf-story-facts,
+.home-foundation .hf-awards,
+.home-foundation .hf-quote figcaption{border-color:transparent}
+@media(hover:hover) and (pointer:fine){
+  .home-foundation :is(.hf-job-card,.hf-industry-card,.hf-purpose-grid article,.hf-quote){transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s ease,background-color .24s ease}
+  .home-foundation :is(.hf-job-card,.hf-industry-card,.hf-purpose-grid article,.hf-quote):hover{transform:translateY(-4px);box-shadow:0 14px 30px #123d2d1c}
+}
+.home-foundation :is(.hf-job-card,.hf-industry-card,.hf-purpose-grid article,.hf-quote):active{transform:scale(.99)}
+@media(prefers-reduced-motion:reduce){.home-foundation :is(.hf-job-card,.hf-industry-card,.hf-purpose-grid article,.hf-quote){transition:none}}
+.hf-review-author{display:flex;align-items:center;gap:12px}
+.hf-review-author>img{width:40px;height:40px;object-fit:cover;border-radius:50%}
+.hf-review-author strong,.hf-review-author small{display:block}
+.hf-review-author small{color:var(--hf-muted);font-size:12px}
+.hf-quote-rating{margin-top:20px;color:#e5ac2e;letter-spacing:2px}
+.hf-quote figcaption a,.hf-reviews-empty a{color:var(--hf-green);text-decoration:underline;text-underline-offset:3px}

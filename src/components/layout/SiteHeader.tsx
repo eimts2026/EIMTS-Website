@@ -77,8 +77,8 @@ export function SiteHeader() {
         .to(lines[2], { y: -6, duration: 0.16 }, 0)
         .to(lines[0], { rotation: 45, duration: 0.22 }, 0.12)
         .to(lines[2], { rotation: -45, duration: 0.22 }, 0.12)
-        .to(panel, { autoAlpha: 1, y: 0, clipPath: "inset(0 0 0% 0 round 18px)", duration: 0.36 }, 0.08)
-        .to(items, { opacity: 1, y: 0, duration: 0.24, stagger: 0.025 }, 0.18);
+        .to(panel, { autoAlpha: 1, y: 0, clipPath: "inset(0 0 0% 0 round 18px)", duration: 0.18 }, 0)
+        .to(items, { opacity: 1, y: 0, duration: 0.14, stagger: 0.008 }, 0.02);
     }, root);
     return () => { context.revert(); mobileTimeline.current = null; };
   }, []);

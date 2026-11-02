@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, ReactNode } from "react";
+import { AnimatedText } from "./AnimatedText";
 
 // ============================================================================
 // PAGE HERO REUSABLE COMPONENT
@@ -16,6 +17,7 @@ import { useState, useRef, useEffect, ReactNode } from "react";
 export type PageHeroProps = {
   eyebrow: string;
   title: string;
+  animateTitle?: boolean;
   description: string;
   videoSrc?: string;
   posterSrc?: string;
@@ -26,6 +28,7 @@ export type PageHeroProps = {
 export function PageHero({
   eyebrow,
   title,
+  animateTitle = false,
   description,
   videoSrc,
   posterSrc,
@@ -96,7 +99,7 @@ export function PageHero({
       <div className="container page-hero-content">
         <span className="page-hero-line" aria-hidden="true" />
         <p className="eyebrow">{eyebrow}</p>
-        <h1>{title}</h1>
+        <h1>{animateTitle ? <AnimatedText text={title} /> : title}</h1>
         <p>{description}</p>
         {children}
       </div>
