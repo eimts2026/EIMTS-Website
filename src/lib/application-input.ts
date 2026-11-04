@@ -20,9 +20,12 @@ export async function readApplicationForm(request: Request): Promise<FormData> {
   const reader = request.body.getReader();
   const chunks: Uint8Array[] = [];
   let size = 0;
+  let timedOut = false;
+  const timer = setTimeout(() => { timedOut = true; void reader.cancel().catch(() => undefined); }, 15000);
   try {
     while (true) {
       const {done, value} = await reader.read();
+      if (timedOut) throw new ApplicationInputError("Upload timed out. Please try again.", 408);
       if (done) break;
       size += value.byteLength;
       if (size > MAX_APPLICATION_BYTES) {
@@ -31,7 +34,7 @@ export async function readApplicationForm(request: Request): Promise<FormData> {
       }
       chunks.push(value);
     }
-  } finally { reader.releaseLock(); }
+  } finally { clearTimeout(timer); reader.releaseLock(); }
   const bytes = new Uint8Array(size);
   let offset = 0;
   for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
@@ -43,6 +46,10 @@ export async function readApplicationForm(request: Request): Promise<FormData> {
 }
 
 export function validateApplication(form: FormData) {
+  const allowed = new Set(["job_id", "name", "email", "phone", "nic", "age", "cv"]);
+  for (const key of form.keys()) {
+    if (!allowed.has(key)) throw new ApplicationInputError("Unexpected application field.");
+  }
   const field = (key: string, max: number) => {
     const values = form.getAll(key);
     const raw = values[0] ?? "";
@@ -76,6 +83,10 @@ export function validateApplication(form: FormData) {
     throw new ApplicationInputError("Please attach your CV.");
   }
   if (cv.size > MAX_CV_BYTES) throw new ApplicationInputError("Your CV must be 4 MB or smaller. For a larger CV, email cv@emeraldisle.lk.");
+  const extensions: Record<string, string> = { "application/pdf": "pdf", "application/msword": "doc", "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx" };
+  if (cv.name.length > 255 || /[\u0000-\u001f\u007f]/.test(cv.name) || cv.name.split(".").pop()?.toLowerCase() !== extensions[cv.type]) {
+    throw new ApplicationInputError("The CV filename and file type must match: PDF, DOC or DOCX.");
+  }
   if (!["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(cv.type)) {
     throw new ApplicationInputError("Please upload a PDF, DOC or DOCX CV.");
   }

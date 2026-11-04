@@ -1,3 +1,4 @@
+import "server-only";
 import nodemailer from "nodemailer";
 import { applicationEmailTemplate, type ApplicationDetails } from "./application-email-template";
 
@@ -25,6 +26,9 @@ export async function sendApplicationEmail(application: ApplicationEmail) {
     host: process.env.SMTP_HOST,
     port,
     secure: port === 465,
+    requireTLS: port !== 465,
+    disableFileAccess: true,
+    disableUrlAccess: true,
     connectionTimeout: 15000,
     greetingTimeout: 15000,
     socketTimeout: 60000,

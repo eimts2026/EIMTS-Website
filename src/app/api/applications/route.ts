@@ -7,7 +7,7 @@ import { sendApplicationEmail, isEmailConfigured } from "@/lib/email";
 import { ApplicationInputError, readApplicationForm, validateApplication } from "@/lib/application-input";
 
 function failure(message: string, status = 400) {
-  return NextResponse.json({ message }, { status });
+  return NextResponse.json({ message }, { status, headers: { "Cache-Control": "no-store" } });
 }
 
 export async function POST(request: Request) {
@@ -94,5 +94,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     message: "Your application and CV have been sent to cv@emeraldisle.lk.",
-  });
+  }, { headers: { "Cache-Control": "no-store" } });
 }
