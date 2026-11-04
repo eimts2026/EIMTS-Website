@@ -8,7 +8,7 @@ export default function AboutHero() {
   return (
     <section className="about-editorial" aria-labelledby="about-hero-title">
       <div className="about-editorial-team-image">
-        <Image src="/assets/about-team-hero.webp" alt="Emerald Isle team gathered together at the office" fill sizes="100vw" quality={78} loading="eager" fetchPriority="high" />
+        <Image src="/assets/about-team-anniversary-2026.webp" alt="Emerald Isle team gathered together at the office" fill sizes="100vw" quality={78} loading="eager" fetchPriority="high" />
       </div>
       <div className="container about-editorial-layout">
         <header className="about-editorial-heading">
