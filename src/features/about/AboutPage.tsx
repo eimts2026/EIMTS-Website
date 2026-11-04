@@ -60,8 +60,19 @@ const awardGallery: RollingGalleryItem[] = [
 export default function AboutPage() {
   return <main id="main" className="ei-about-page">
     <AboutHero />
-    <section className="ei-about-story" id="about-story"><div className="container ei-about-story-grid"><div><h2>Sri Lankan talent. <span className="heading-accent">Global opportunity.</span></h2></div><div><StoryScrollText paragraphs={["Emerald Isle Manpower & Travel Services is a Sri Lankan recruitment agency connecting people with overseas employment and helping employers build capable teams. Since 1995, we have brought personal attention and industry expertise to international recruitment.","Every recruitment assignment is unique. Our specialist teams combine labour-market research, careful screening and close client collaboration to create the right fit for skills, culture and long-term success.","From Sri Lanka, our network extends through Nepal, Bangladesh, India, Pakistan, Indonesia, the Philippines, Kenya and Myanmar, supporting placements across the Middle East, Europe, Romania and Ireland."]} /><div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center", marginTop: "24px" }}><Link className="ei-button ei-button-dark" href="/client-recruitment-solutions/#employer-inquiry">Talk to our team <span className="ei-button__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link><Link className="ei-button ei-button-amber" href="/contact/#branch-map-section">Find us <span className="ei-button__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link></div></div></div></section>
+    <section className="ei-about-story" id="about-story"><div className="container ei-about-story-grid"><div><h2 data-reveal="block">Sri Lankan talent. <span className="heading-accent">Global opportunity.</span></h2></div><div><StoryScrollText paragraphs={["Emerald Isle Manpower & Travel Services is a Sri Lankan recruitment agency connecting people with overseas employment and helping employers build capable teams. Since 1995, we have brought personal attention and industry expertise to international recruitment.","Every recruitment assignment is unique. Our specialist teams combine labour-market research, careful screening and close client collaboration to create the right fit for skills, culture and long-term success.","From Sri Lanka, our network extends through Nepal, Bangladesh, India, Pakistan, Indonesia, the Philippines, Kenya and Myanmar, supporting placements across the Middle East, Europe, Romania and Ireland."]} /><div className="ei-about-story-actions" style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center", marginTop: "24px" }}><Link className="ei-button ei-button-dark" href="/client-recruitment-solutions/#employer-inquiry">Talk to our team <span className="ei-button__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link><Link className="ei-button ei-button-amber" href="/contact/#branch-map-section">Find us <span className="ei-button__icon-wrapper"><svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg" width={10} height={10}><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg><svg viewBox="0 0 14 15" fill="none" width={10} height={10} xmlns="http://www.w3.org/2000/svg" className="ei-button__icon-svg ei-button__icon-svg--copy"><path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor" /></svg></span></Link></div></div></div></section>
 
+    <section className="ei-management" aria-labelledby="management-title">
+      <div className="container">
+        <div className="ei-title-row">
+          <h2 id="management-title">The people <span className="heading-accent">guiding Emerald Isle.</span></h2>
+          <p>Experienced leadership, shared standards and a commitment to responsible recruitment.</p>
+        </div>
+        <div className="ei-leader-list">
+          {leaders.map((leader) => <LeaderCard key={leader.name} leader={leader} />)}
+        </div>
+      </div>
+    </section>
     <section className="ei-about-credentials" aria-labelledby="credentials-title">
       <div className="container">
         <div className="ei-about-credentials-head"><h2 id="credentials-title">Our recruitment licences</h2><p>Registered with the Sri Lanka Bureau of Foreign Employment.</p></div>
@@ -72,17 +83,6 @@ export default function AboutPage() {
           <div><dt>Kurunegala branch</dt><dd><span>SLBFE licence no.</span>2268</dd></div>
         </dl>
         <a className="ei-about-verify" href="https://www.slbfe.lk/" target="_blank" rel="noreferrer">Check agency registration with SLBFE <span className="sr-only">(opens in a new tab)</span></a>
-      </div>
-    </section>
-    <section className="ei-management" aria-labelledby="management-title">
-      <div className="container">
-        <div className="ei-title-row">
-          <h2 id="management-title">The people <span className="heading-accent">guiding Emerald Isle.</span></h2>
-          <p>Experienced leadership, shared standards and a commitment to responsible recruitment.</p>
-        </div>
-        <div className="ei-leader-list">
-          {leaders.map((leader) => <LeaderCard key={leader.name} leader={leader} />)}
-        </div>
       </div>
     </section>
     <section className="ei-about-strengths" aria-labelledby="strengths-title">

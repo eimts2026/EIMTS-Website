@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     formats: ["image/avif", "image/webp"],
-    qualities: [70, 78, 85],
+    qualities: [60, 70, 78, 85],
     minimumCacheTTL: 2678400,
     remotePatterns,
   },
