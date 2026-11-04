@@ -33,7 +33,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
       return;
     }
     if (cv.size > MAX_CV_BYTES) {
-      setMessage("Your CV must be 3 MB or smaller. For a larger CV, email cv@emeraldisle.lk.");
+      setMessage("Your CV must be 4 MB or smaller. For a larger CV, email cv@emeraldisle.lk.");
       return;
     }
 
@@ -89,7 +89,7 @@ export function JobApplicationForm({ jobId, className }: { jobId: string; classN
         <input name="phone" type="tel" autoComplete="tel" maxLength={40} required />
       </label>
       <label>
-        CV (PDF, DOC or DOCX · maximum 3 MB)
+        CV (PDF, DOC or DOCX · maximum 4 MB)
         <input
           name="cv"
           type="file"
