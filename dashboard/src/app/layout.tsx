@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { IdleSessionGuard } from "@/components/IdleSessionGuard";
 import "./styles.css";
 
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           }}
         />
 
+        <IdleSessionGuard />
         {children}
         <footer className="dashboard-footer"><span>All rights reserved — EmeraldIsle Man Power</span><span>Crafted with <span className="footer-rgb-heart" aria-label="love">❤️</span></span></footer>
       </body>

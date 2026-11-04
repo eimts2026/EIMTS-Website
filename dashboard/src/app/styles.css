@@ -2167,3 +2167,55 @@ select.glass-select-native option{background:var(--field);color:var(--ink)}
 .glass-select-list li{min-height:44px;line-height:1.4}
 .glass-select-list li[aria-disabled="true"]{color:var(--muted);cursor:default}
 @media(prefers-reduced-motion:reduce){.glass-select-list{animation:none}}
+.idle-session-backdrop {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(2, 8, 5, 0.72);
+}
+
+.idle-session-dialog {
+  width: min(100%, 420px);
+  padding: clamp(24px, 6vw, 34px);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xl);
+  background: #101b15;
+  color: var(--ink);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+}
+
+:root[data-theme="light"] .idle-session-dialog {
+  --ink: #14231c;
+  --muted: #566b60;
+  --hairline-strong: rgba(9, 32, 22, 0.14);
+  background: #ffffff;
+}
+
+.idle-session-dialog .eyebrow {
+  margin: 0 0 10px;
+  color: var(--emerald-bright);
+}
+
+.idle-session-dialog h2 {
+  margin: 0;
+  color: var(--ink);
+}
+
+.idle-session-dialog p:not(.eyebrow) {
+  margin: 14px 0 22px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.idle-session-dialog p strong {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.idle-session-dialog .primary-button {
+  width: 100%;
+  min-height: 48px;
+}

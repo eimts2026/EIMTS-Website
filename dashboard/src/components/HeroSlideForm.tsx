@@ -16,10 +16,6 @@ export function HeroSlideForm({ action, slide }: Props) {
         <div>
           <p className="eyebrow">Slide details</p>
           <h2>Shown at the top of the homepage</h2>
-          <p className="form-hint">
-            Use a wide image (around 1824 × 1024 px works well) with the focus
-            away from the left side, where the text sits.
-          </p>
         </div>
         <div className="form-grid">
           <label className="full">
@@ -53,7 +49,7 @@ export function HeroSlideForm({ action, slide }: Props) {
             defaultUrl={slide?.image_url}
             folder="hero"
             label="Background image"
-            hint="JPG, PNG or WebP — resized and converted to WebP before upload."
+            hint="Recommended size: 1920 × 1080 px · 16:9 landscape."
             required
           />
           <label>
@@ -68,8 +64,10 @@ export function HeroSlideForm({ action, slide }: Props) {
             Button link
             <input
               name="cta_url"
+              type="text"
+              inputMode="url"
               defaultValue={slide ? slide.cta_url || "" : "/foreign-job-vacancies/"}
-              placeholder="/foreign-job-vacancies/ or https://…"
+              placeholder="/foreign-job-vacancies/ or https://example.com"
             />
           </label>
           <label>
@@ -84,8 +82,10 @@ export function HeroSlideForm({ action, slide }: Props) {
             Second link
             <input
               name="cta2_url"
+              type="text"
+              inputMode="url"
               defaultValue={slide ? slide.cta2_url || "" : "/client-recruitment-solutions/"}
-              placeholder="/client-recruitment-solutions/ or https://…"
+              placeholder="/client-recruitment-solutions/ or https://example.com"
             />
           </label>
           <label>

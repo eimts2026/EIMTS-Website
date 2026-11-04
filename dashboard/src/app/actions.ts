@@ -11,6 +11,34 @@ function text(formData: FormData, name: string) {
   return String(formData.get(name) || "").trim();
 }
 
+function heroButtonUrl(value: string, field: string) {
+  const input = value.trim();
+  if (!input) return null;
+  if (/[\\\u0000-\u0020]/.test(input) || input.startsWith("//")) {
+    throw new Error(`${field} must be a site path or a valid HTTPS URL.`);
+  }
+
+  if (/^https?:\/\//i.test(input)) {
+    let parsed: URL;
+    try {
+      parsed = new URL(input);
+    } catch {
+      throw new Error(`${field} must be a valid HTTPS URL.`);
+    }
+    if (!parsed.hostname || parsed.username || parsed.password) {
+      throw new Error(`${field} must be a valid HTTPS URL.`);
+    }
+    parsed.protocol = "https:";
+    return parsed.toString();
+  }
+
+  if (/^[a-z][a-z0-9+.-]*:/i.test(input)) {
+    throw new Error(`${field} must use HTTPS for external links.`);
+  }
+
+  return input.startsWith("/") || input.startsWith("#") ? input : `/${input}`;
+}
+
 function slugify(value: string) {
   return value
     .toLowerCase()
@@ -239,9 +267,9 @@ function heroSlidePayload(formData: FormData) {
     copy: text(formData, "copy"),
     image_url: imageUrl,
     cta_label: text(formData, "cta_label") || null,
-    cta_url: text(formData, "cta_url") || null,
+    cta_url: heroButtonUrl(text(formData, "cta_url"), "Button link"),
     cta2_label: text(formData, "cta2_label") || null,
-    cta2_url: text(formData, "cta2_url") || null,
+    cta2_url: heroButtonUrl(text(formData, "cta2_url"), "Second link"),
     is_takeover: formData.get("is_takeover") === "on",
     active: formData.get("active") === "on",
     starts_at: startsAt ? colomboDayStart(startsAt) : null,

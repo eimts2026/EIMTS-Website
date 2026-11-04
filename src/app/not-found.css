@@ -1,0 +1,6 @@
+.not-found-page{display:grid;place-items:center;min-height:75svh;padding:150px 24px 80px;background:#f3f5ef;color:#172b27;text-align:center}
+.not-found-content{width:min(100%,600px);margin-inline:auto}
+.not-found-content .section-kicker{margin:0 0 16px;color:#08795d;font-weight:700}
+.not-found-content h1{margin:0;font-size:clamp(36px,6vw,64px);line-height:1.1;letter-spacing:-.04em}
+.not-found-content>p:not(.section-kicker){margin:20px 0 28px;color:#566c63;line-height:1.7}
+@media(max-width:600px){.not-found-page{min-height:75svh;padding:120px 24px 64px}}

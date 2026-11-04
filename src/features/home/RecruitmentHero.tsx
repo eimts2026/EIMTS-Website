@@ -15,6 +15,23 @@ import "./RecruitmentHero.css";
 const ROTATE_EVERY_MS = 7500;
 let heroRealtimeClient: ReturnType<typeof createClient> | null = null;
 
+function heroLink(value: string | null, fallback: string) {
+  const url = value?.trim();
+  if (!url || /[\\\u0000-\u0020]/.test(url) || url.startsWith("//")) return fallback;
+  if (/^https?:\/\//i.test(url)) {
+    try {
+      const parsed = new URL(url);
+      if (!parsed.hostname || parsed.username || parsed.password) return fallback;
+      parsed.protocol = "https:";
+      return parsed.toString();
+    } catch {
+      return fallback;
+    }
+  }
+  if (/^[a-z][a-z0-9+.-]*:/i.test(url)) return fallback;
+  return url.startsWith("/") || url.startsWith("#") ? url : `/${url}`;
+}
+
 export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -52,6 +69,11 @@ export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
 
   if (!activeSlide) return null;
 
+  const primaryCtaHref = heroLink(activeSlide.ctaUrl, "/foreign-job-vacancies/");
+  const secondaryCtaHref = heroLink(activeSlide.cta2Url, "/contact/?inquiry=employer#contact-inquiry");
+  const primaryCtaExternal = primaryCtaHref.startsWith("https://");
+  const secondaryCtaExternal = secondaryCtaHref.startsWith("https://");
+
   const changeSlide = (step: number) => {
     setActiveIndex((index) => (index + step + slides.length) % slides.length);
   };
@@ -76,10 +98,9 @@ export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
             alt=""
             fill
             sizes="100vw"
-            quality={70}
+            quality={78}
             loading={index === 0 ? "eager" : "lazy"}
             fetchPriority={index === 0 ? "high" : "auto"}
-            style={{ objectPosition: "70% center" }}
           />
         ))}
       </div>
@@ -90,12 +111,13 @@ export default function RecruitmentHero({ hero }: { hero: HeroContent }) {
         <div className="recruit-hero-grid">
           <div className="recruit-hero-copy" aria-live={isPaused ? "polite" : "off"} aria-atomic="true">
             <div className="recruit-hero-title-entrance" key={`${activeIndex}-${activeSlide.title}`}>
-              <TypewriterHeading text={activeSlide.title} />
+              {activeSlide.kicker && <p className="recruit-hero-kicker">{activeSlide.kicker}</p>}
+              <TypewriterHeading text={activeSlide.title} accent="Cooking This Season?" />
             </div>
             <p className="recruit-hero-lead">{activeSlide.copy}</p>
             <div className="recruit-hero-actions">
-              <Link className="register-pill recruit-action-pill" href="/foreign-job-vacancies/"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>Browse jobs</Link>
-              <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href="/contact/?inquiry=employer#contact-inquiry"><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>For Clients</Link>
+              <Link className="register-pill recruit-action-pill" href={primaryCtaHref} target={primaryCtaExternal ? "_blank" : undefined} rel={primaryCtaExternal ? "noopener noreferrer" : undefined}><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>{activeSlide.ctaLabel || "Browse jobs"}</Link>
+              <Link className="register-pill recruit-action-pill recruit-action-pill--employer" href={secondaryCtaHref} target={secondaryCtaExternal ? "_blank" : undefined} rel={secondaryCtaExternal ? "noopener noreferrer" : undefined}><span className="register-pill__icon-wrapper" aria-hidden="true"><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg" /><BootstrapIcon name="arrow-up-right" className="register-pill__icon-svg register-pill__icon-svg--copy" /></span>{activeSlide.cta2Label || "For Clients"}</Link>
             </div>
             <a className="hero-review-trust" href="https://www.google.com/maps/place//@6.8425904,79.866525,17z/data=!3m1!4b1!4m3!3m2!1s0x3ae25b19204c0875:0xf99af88e1968c1a0!12e1?entry=ttu&g_ep=EgoyMDI2MDcxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" aria-label="930 plus Google reviews. Leave a review for Emerald Isle">
               <span className="hero-review-avatars" aria-hidden="true">{["8ab4cd865aa6b62352300cf71c5805c86d8523505636e2a499cda7932a803953", "a2ee1266115ad682a19f5d4752ea8efa7eefa3ae03e658f500cbb3e1a6145b0b", "f8db32ee1fe8c51fa678e3325eee3f8bf72a3a8cc8947784d5ef9c7bf5fb8adb", "449ffab8e7b480176aaea3dd5578119223a41e2e0c92c805a5a6b71ca4cbdd14"].map((image) => <img key={image} src={"https://cdn.21st.dev/assets/localized/" + image + ".jpg"} width={22} height={22} alt="" loading="lazy" />)}</span>
