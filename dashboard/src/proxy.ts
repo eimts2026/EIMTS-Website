@@ -5,10 +5,37 @@ import { canAccessRoute } from "./lib/auth-policy";
 export async function proxy(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  const supabaseOrigin = url ? new URL(url).origin : "";
+  const supabaseWebsocketOrigin = supabaseOrigin.replace(/^http/, "ws");
+  const policy = [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
+    "script-src-attr 'none'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' ${supabaseOrigin} ${supabaseWebsocketOrigin}`,
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    ...(process.env.NODE_ENV === "production" ? ["upgrade-insecure-requests"] : []),
+  ].join("; ");
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-nonce", nonce);
+  requestHeaders.set("Content-Security-Policy", policy);
 
-  if (!url || !key) return NextResponse.next({ request });
+  function secureResponse(response: NextResponse) {
+    response.headers.set("Content-Security-Policy", policy);
+    response.headers.set("Cache-Control", "private, no-store");
+    response.headers.set("Vercel-CDN-Cache-Control", "no-store");
+    return response;
+  }
 
-  let response = NextResponse.next({ request });
+  if (!url || !key) return secureResponse(NextResponse.next({ request: { headers: requestHeaders } }));
+
+  let response = secureResponse(NextResponse.next({ request: { headers: requestHeaders } }));
   const supabase = createServerClient(url, key, {
     cookies: {
       getAll: () => request.cookies.getAll(),
@@ -16,17 +43,18 @@ export async function proxy(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) =>
           request.cookies.set(name, value),
         );
-        response = NextResponse.next({ request });
+        requestHeaders.set("cookie", request.headers.get("cookie") || "");
+        response = secureResponse(NextResponse.next({ request: { headers: requestHeaders } }));
         cookiesToSet.forEach(({ name, value, options }) =>
           response.cookies.set(name, value, options),
         );
         Object.entries(headers).forEach(([name, value]) => response.headers.set(name, value));
+        secureResponse(response);
       },
     },
   });
 
   const { data: { user }, error } = await supabase.auth.getUser();
-  response.headers.set("Cache-Control", "private, no-store");
   const path = request.nextUrl.pathname;
   if (["/login", "/reset-password", "/access-denied"].includes(path)) return response;
 
@@ -37,8 +65,7 @@ export async function proxy(request: NextRequest) {
     if (pathname === "/login") target.searchParams.set("next", path + request.nextUrl.search);
     const redirect = NextResponse.redirect(target);
     response.cookies.getAll().forEach(cookie => redirect.cookies.set(cookie));
-    redirect.headers.set("Cache-Control", "private, no-store");
-    return redirect;
+    return secureResponse(redirect);
   }
 
   if (error || !user || user.is_anonymous) return redirectTo("/login");

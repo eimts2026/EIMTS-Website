@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
+import { connection } from "next/server";
 import { IdleSessionGuard } from "@/components/IdleSessionGuard";
 import "./styles.css";
 
@@ -15,13 +17,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  await connection();
+  const nonce = (await headers()).get("x-nonce") || undefined;
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <script
+          nonce={nonce}
           // Applies the stored theme before first paint to avoid a flash.
           dangerouslySetInnerHTML={{
             __html:
