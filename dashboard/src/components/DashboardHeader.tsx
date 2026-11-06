@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { signOut } from "@/app/actions";
 import { NavLinks } from "./NavLinks";
+import { RealtimeStatus } from "./RealtimeStatus";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function DashboardHeader({ email }: { email: string }) {
@@ -15,13 +16,16 @@ export function DashboardHeader({ email }: { email: string }) {
         <small>Content desk</small>
       </Link>
       <NavLinks />
-      <form action={signOut}>
-        <span>{email}</span>
-        <ThemeToggle />
-        <button className="ghost-button" type="submit">
-          Sign out
-        </button>
-      </form>
+      <div className="dashboard-header-actions">
+        <RealtimeStatus />
+        <form action={signOut}>
+          <span>{email}</span>
+          <ThemeToggle />
+          <button className="ghost-button" type="submit">
+            Sign out
+          </button>
+        </form>
+      </div>
     </header>
   );
 }
