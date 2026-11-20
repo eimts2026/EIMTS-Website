@@ -44,6 +44,7 @@ const categorySuggestions = [
   "Hospitality",
   "Housekeeping & Cleaning",
   "Healthcare",
+  "Education",
   "Caregiving",
   "Driving & Logistics",
   "Security",

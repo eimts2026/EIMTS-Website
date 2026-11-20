@@ -15,7 +15,7 @@ const routes = {
 
 const jobGroups = [
   { title: "Engineering", links: ["Automotive / Vehicle Maintenance / Service & Repair", "Marine / Aviation / Watersports", "Construction / Skilled Trades", "General Labour / Cleaners", "Agricultural / Gardening", "Engineering / Technical", "Transport / Driving", "Security / Safety"] },
-  { title: "Retail, Admin & Accounts", links: ["Accounting / Auditing / Finance", "Logistic / Warehouse / Transport", "Sales / Marketing / Merchandise", "Secretary / Admin", "HR / Training", "Retail"] },
+  { title: "Retail, Admin & Accounts", links: ["Accounting / Auditing / Finance", "Logistic / Warehouse / Transport", "Sales / Marketing / Merchandise", "Secretary / Admin", "HR / Training", "Retail", "Education"] },
   { title: "Hospitality & Healthcare", links: ["Hotel / Restaurant / Food", "Spa / Beauty / Salon", "Healthcare"] },
 ];
 
