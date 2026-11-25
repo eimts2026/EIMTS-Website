@@ -11,9 +11,10 @@ type Props = {
   placeholder?: string;
   required?: boolean;
   allowCustom?: boolean;
+  onValueChange?: (value: string) => void;
 };
 
-export function GlassSelect({ name, options, defaultValue, ariaLabel, placeholder, required, allowCustom = false }: Props) {
+export function GlassSelect({ name, options, defaultValue, ariaLabel, placeholder, required, allowCustom = false, onValueChange }: Props) {
   const items = options.map(option => typeof option === "string" ? { value: option, label: option } : option);
   const initial = defaultValue ?? (allowCustom ? "" : items[0]?.value ?? "");
   if (initial && !items.some(item => item.value === initial)) items.unshift({ value: initial, label: initial });
@@ -23,6 +24,7 @@ export function GlassSelect({ name, options, defaultValue, ariaLabel, placeholde
   const [filtering, setFiltering] = useState(false);
   const [active, setActive] = useState(0);
   const root = useRef<HTMLDivElement>(null);
+  const input = useRef<HTMLInputElement>(null);
   const id = useId();
   const visible = filtering ? items.filter(item => `${item.label} ${item.value}`.toLowerCase().includes(query.toLowerCase())) : items;
   function close() {
@@ -32,6 +34,7 @@ export function GlassSelect({ name, options, defaultValue, ariaLabel, placeholde
   function choose(item: Option) {
     setValue(item.value);
     setQuery(item.label);
+    onValueChange?.(item.value);
     setOpen(false);
     setFiltering(false);
   }
@@ -39,12 +42,19 @@ export function GlassSelect({ name, options, defaultValue, ariaLabel, placeholde
     if (open) document.getElementById(`${id}-${active}`)?.scrollIntoView({ block: "nearest" });
   }, [active, open, id]);
 
+  useEffect(() => {
+    const selectedLabel = items.find(item => item.value === value)?.label ?? "";
+    input.current?.setCustomValidity(!allowCustom && (query !== selectedLabel || (required && !value))
+      ? "Choose an option from the list." : "");
+  }, [query, value, allowCustom, required, options]);
+
   return <div className="glass-select" ref={root} onBlur={event => {
     if (!event.currentTarget.contains(event.relatedTarget)) close();
   }}>
     {!allowCustom && <input type="hidden" name={name} value={value} />}
     <div className="glass-combobox-field">
       <input
+        ref={input}
         className="glass-select-trigger"
         name={allowCustom ? name : undefined}
         value={query}
@@ -75,7 +85,7 @@ export function GlassSelect({ name, options, defaultValue, ariaLabel, placeholde
     </div>
     {open && <ul id={`${id}-list`} className="glass-select-list" role="listbox" aria-label={ariaLabel || name}>
       {visible.map((item, index) => <li key={item.value} id={`${id}-${index}`} role="option" aria-selected={value === item.value} data-active={active === index || undefined}
-        onPointerDown={event => event.preventDefault()} onClick={() => choose(item)} onPointerMove={() => setActive(index)}>
+        onPointerDown={event => event.preventDefault()} onClick={event => { event.preventDefault(); choose(item); }} onPointerMove={() => setActive(index)}>
         <span>{item.label}</span>{value === item.value && <span aria-hidden="true">✓</span>}
       </li>)}
       {!visible.length && <li role="option" aria-selected={false} aria-disabled="true">{allowCustom ? "Use your typed value" : "No matching options"}</li>}

@@ -812,6 +812,7 @@ td small {
   justify-content: flex-end;
   align-items: center;
   gap: 0.35rem;
+  white-space: nowrap;
 }
 
 .row-actions a,
@@ -890,6 +891,11 @@ td small {
 .form-grid .full {
   grid-column: 1 / -1;
 }
+
+.job-subcategories { border: 1px solid var(--hairline); border-radius: var(--radius-field); padding: .75rem 1rem; min-width: 0; }
+.job-subcategories legend { font-size: .8rem; font-weight: 600; }
+.job-subcategories label { display: flex; align-items: center; gap: .65rem; padding: .45rem 0; cursor: pointer; }
+.job-subcategories input { width: 1rem; height: 1rem; flex-shrink: 0; accent-color: #08795d; }
 
 .publish-panel {
   position: sticky;
@@ -2242,7 +2248,10 @@ select option {
 
 /* Let the browser own selection, dismissal, and mobile picker behavior. */
 select.glass-select-native{display:block;appearance:auto;cursor:pointer;font-family:inherit;padding-right:0.85rem}
-select.glass-select-native option{background:var(--field);color:var(--ink)}
+select.glass-select-native { color-scheme: dark; background-image: none; }
+select.glass-select-native option { background: #121c16; color: #eef5f0; }
+:root[data-theme="light"] select.glass-select-native { color-scheme: light; }
+:root[data-theme="light"] select.glass-select-native option { background: #fff; color: #14231c; }
 
 /* Searchable form selections */
 .glass-combobox-field{position:relative}

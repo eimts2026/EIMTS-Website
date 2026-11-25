@@ -69,6 +69,10 @@
   color: var(--ei-amber) !important;
   font-weight: 700;
 }
+
+.mega-column h2 a { color: inherit !important; font: inherit; text-transform: inherit; padding: 0; }
+.mobile-job-group p a { color: inherit !important; font-weight: 700 !important; }
+.job-select-menu .job-select-option.primary-option { font-weight: 700; background: #edf5f0; }
 .mega-column .mega-highlight:hover {
   color: #fff !important;
 }
