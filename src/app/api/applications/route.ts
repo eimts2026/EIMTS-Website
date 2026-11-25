@@ -61,7 +61,7 @@ export async function POST(request: Request) {
   // Resolve trusted vacancy details from the database.
   const { data: job } = await supabase
     .from("jobs")
-    .select("title,category")
+    .select("title,category,primary_category")
     .eq("id", jobId)
     .eq("status", "published")
     .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
   try {
     const result = await sendApplicationEmail({
       jobTitle: job.title,
-      category: job.category || "General recruitment",
+      category: job.primary_category || job.category || "General recruitment",
       fullName,
       age,
       nic,

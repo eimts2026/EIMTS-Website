@@ -1,5 +1,6 @@
 import type { JobRecord } from "@eimts/database";
 import { toColomboDateInput } from "@/lib/dates";
+import { JobCategoryFields } from "./JobCategoryFields";
 import { GlassSelect } from "./GlassSelect";
 import { ImageDropzone } from "./ImageDropzone";
 import { SubmitButton } from "./SubmitButton";
@@ -32,25 +33,6 @@ const countrySuggestions = [
   "Romania",
   "Poland",
   "Cyprus",
-];
-
-const categorySuggestions = [
-  "Construction",
-  "Welding",
-  "Electrical",
-  "Plumbing",
-  "Engineering",
-  "Manufacturing",
-  "Hospitality",
-  "Housekeeping & Cleaning",
-  "Healthcare",
-  "Education",
-  "Caregiving",
-  "Driving & Logistics",
-  "Security",
-  "Garment & Factory",
-  "Agriculture",
-  "Domestic Work",
 ];
 
 const currencies = ["LKR", "USD", "AED", "SAR", "QAR", "KWD", "BHD", "OMR", "TRY", "MYR", "THB", "SGD", "KRW", "EUR", "GBP"];
@@ -89,10 +71,7 @@ export function JobForm({ action, job }: Props) {
               placeholder="e.g. Istanbul"
             />
           </label>
-          <label>
-            Category *
-            <GlassSelect name="category" ariaLabel="category" defaultValue={job?.category} options={categorySuggestions} placeholder="Search or enter category" required allowCustom />
-          </label>
+          <JobCategoryFields job={job} />
           <label>
             Employment type
             <GlassSelect

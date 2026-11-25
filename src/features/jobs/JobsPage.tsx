@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, useTransition, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { jobGroups } from "@eimts/database";
 import Image from "next/image";
 import { emptyJobFilters, jobSearchParams, type JobFilters, type JobSearch, type JobSort } from "@/lib/job-search-params";
 import type { JobSearchResult } from "@/lib/job-search";
@@ -17,6 +18,7 @@ export type Job = {
   salary?: string | null;
   expiresAt?: string | null;
   category: string;
+  subcategories?: string[];
   employmentType: string;
   urgent: boolean;
   image: string;
@@ -74,7 +76,7 @@ function CheckIcon() {
   return <svg className="job-select-check" viewBox="0 0 20 20" aria-hidden="true"><path d="m4.5 10.2 3.2 3.2 7.8-7.8" /></svg>;
 }
 
-type SelectOption = { value: string; label: string };
+type SelectOption = { value: string; label: string; primary?: boolean };
 
 type SelectMenuProps = {
   label: string;
@@ -174,7 +176,7 @@ function SelectMenu({ label, name, value, options, onChange, icon, className = "
     </button>
     {isOpen && <div className="job-select-menu" id={listId} role="listbox" aria-label={label}>
       {options.map((option, index) => <button
-        className="job-select-option"
+        className={"job-select-option" + (option.primary ? " primary-option" : "")}
         type="button"
         role="option"
         aria-selected={option.value === value}
@@ -204,10 +206,17 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
   const sort = search.sort;
   const pageSize = search.pageSize;
   const locationOptions = [{value:"",label:"All locations"}, ...initialResult.locations.map(facet => ({value:facet.value,label:facet.value+" ("+facet.count+")"}))];
-  const categoryOptions = [{value:"",label:"All categories"}, ...initialResult.categories.map(facet => ({value:facet.value,label:facet.value+" ("+facet.count+")"}))];
+  const counts = new Map(initialResult.categories.map(facet => [facet.value, facet.count]));
+  const categoryOptions = [
+    { value: "", label: "All categories" },
+    ...jobGroups.flatMap(({ title, links }) => [
+      { value: title, label: title + " (" + (counts.get(title) ?? 0) + ")", primary: true },
+      ...links.map(value => ({ value, label: value + " (" + (counts.get(value) ?? 0) + ")" })),
+    ]),
+  ];
   if (search.location && !locationOptions.some(option => option.value === search.location)) locationOptions.push({value:search.location,label:search.location+" (0)"});
   if (search.category && !categoryOptions.some(option => option.value === search.category)) categoryOptions.push({value:search.category,label:search.category});
-  const popularSearches = initialResult.categories.slice(0,4).map(facet => facet.value);
+  const popularSearches = initialResult.categories.filter(facet => jobGroups.some(group => group.links.includes(facet.value))).sort((a,b) => b.count - a.count).slice(0,4).map(facet => facet.value);
   useEffect(() => { setDraft({title:search.title,location:search.location,category:search.category}); },[search.title,search.location,search.category]);
   useEffect(() => {
     const key = jobSearchParams(search).toString();
@@ -238,7 +247,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
   function commitFilters(filters: Filters) { previous.current.clear(); navigate({...search,...filters,cursor:""}); }
   function applyFilters(event: FormEvent<HTMLFormElement>) { event.preventDefault(); commitFilters(draft); }
   function clearFilters() { commitFilters(emptyFilters); }
-  function choosePopularSearch(term: string) { commitFilters({...emptyFilters,title:term}); }
+  function choosePopularSearch(term: string) { commitFilters({...emptyFilters,category:term}); }
   function nextPage() {
     if (!initialResult.nextCursor || pending) return;
     previous.current.set(initialResult.nextCursor,search.cursor);
@@ -270,7 +279,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
             onChange={(location) => setDraft({ ...draft, location })}
           />
           <SelectMenu
-            className="job-filter-select"
+            className="job-filter-select job-category-select"
             label="Category"
             name="filter-category"
             value={draft.category}
@@ -351,6 +360,7 @@ export default function JobsPage({ initialResult, search, loadError = "" }: { in
             <h3>Vacancy details</h3>
             <dl className="job-detail-facts">
               <div><dt>Category</dt><dd>{selectedJob.category}</dd></div>
+              {!!selectedJob.subcategories?.length && <div><dt>Subcategories</dt><dd>{selectedJob.subcategories.join(" · ")}</dd></div>}
               <div><dt>Destination</dt><dd>{selectedJob.location}</dd></div>
               <div><dt>Employment</dt><dd>{selectedJob.employmentType}</dd></div>
               <div><dt>Status</dt><dd>{selectedJob.urgent ? "Urgent" : "Open"}</dd></div>

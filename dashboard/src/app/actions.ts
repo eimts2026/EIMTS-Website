@@ -1,6 +1,6 @@
 "use server";
 
-import type { ProjectImageRecord } from "@eimts/database";
+import { readJobCategories, type ProjectImageRecord } from "@eimts/database";
 import { revalidatePublicJobs } from "@/lib/revalidate-public-jobs";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -99,7 +99,7 @@ function jobPayload(formData: FormData) {
     title,
     country: text(formData, "country"),
     location: text(formData, "location") || null,
-    category: text(formData, "category"),
+    ...readJobCategories(formData),
     employment_type: text(formData, "employment_type") || "Full-time",
     salary_negotiable: formData.get("salary_negotiable") === "on",
     currency: (text(formData, "currency") || "LKR").toUpperCase(),
@@ -115,7 +115,6 @@ function jobPayload(formData: FormData) {
     urgent: formData.get("urgent") === "on",
     featured: formData.get("featured") === "on",
     status,
-    published_at: status === "published" ? new Date().toISOString() : null,
     // Keep the vacancy open for the whole closing day in Sri Lanka.
     expires_at: expiresAt ? colomboDayEnd(expiresAt) : null,
   };
@@ -157,7 +156,6 @@ export async function updateJobStatus(id: string, status: string) {
     .from("jobs")
     .update({
       status,
-      published_at: status === "published" ? new Date().toISOString() : null,
     })
     .eq("id", id);
   if (error) throw new Error(error.message);

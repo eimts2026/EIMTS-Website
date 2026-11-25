@@ -95,6 +95,7 @@ export default async function DashboardPage() {
                     <th>Vacancy</th>
                     <th>Location</th>
                     <th>Status</th>
+                    <th>Published date</th>
                     <th>Updated</th>
                     <th>Urgency</th>
                     <th>
@@ -106,7 +107,7 @@ export default async function DashboardPage() {
                   {jobs.map((job) => (
                     <tr key={job.id}>
                       <td>
-                        <div className="vacancy-preview">{job.image_url && <img src={job.image_url} alt="" loading="lazy" />}<div><strong>{job.title}</strong><small>{job.category}</small></div></div>
+                        <div className="vacancy-preview">{job.image_url && <img src={job.image_url} alt="" loading="lazy" />}<div><strong>{job.title}</strong><small>{job.primary_category ?? job.category}</small></div></div>
                       </td>
                       <td>{job.location || job.country}</td>
                       <td>
@@ -115,10 +116,19 @@ export default async function DashboardPage() {
                         </span>
                       </td>
                       <td>
+                        {job.published_at ? new Intl.DateTimeFormat("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          timeZone: "Asia/Colombo",
+                        }).format(new Date(job.published_at)) : "—"}
+                      </td>
+                      <td>
                         {new Intl.DateTimeFormat("en-GB", {
                           day: "2-digit",
                           month: "short",
                           year: "numeric",
+                          timeZone: "Asia/Colombo",
                         }).format(new Date(job.updated_at))}
                       </td>
                       <td>
@@ -128,7 +138,8 @@ export default async function DashboardPage() {
                           {job.urgent ? "Urgent" : "Standard"}
                         </span>
                       </td>
-                      <td className="row-actions">
+                      <td>
+                        <div className="row-actions">
                         <Link href={`/jobs/${job.id}`}>Edit</Link>
                         {profile.role !== "viewer" && job.status !== "published" && (
                           <form
@@ -151,6 +162,7 @@ export default async function DashboardPage() {
                         {profile.role === "admin" && (
                           <DeleteJobButton id={job.id} title={job.title} />
                         )}
+                        </div>
                       </td>
                     </tr>
                   ))}

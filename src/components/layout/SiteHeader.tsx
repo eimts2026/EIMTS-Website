@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { jobGroups } from "@eimts/database";
 import { gsap } from "gsap";
 
 const routes = {
@@ -13,11 +14,9 @@ const routes = {
   contact: "/contact/",
 };
 
-const jobGroups = [
-  { title: "Engineering", links: ["Automotive / Vehicle Maintenance / Service & Repair", "Marine / Aviation / Watersports", "Construction / Skilled Trades", "General Labour / Cleaners", "Agricultural / Gardening", "Engineering / Technical", "Transport / Driving", "Security / Safety"] },
-  { title: "Retail, Admin & Accounts", links: ["Accounting / Auditing / Finance", "Logistic / Warehouse / Transport", "Sales / Marketing / Merchandise", "Secretary / Admin", "HR / Training", "Retail", "Education"] },
-  { title: "Hospitality & Healthcare", links: ["Hotel / Restaurant / Food", "Spa / Beauty / Salon", "Healthcare"] },
-];
+function categoryHref(label: string) {
+  return routes.jobs + "?filter-category=" + encodeURIComponent(label);
+}
 
 function Caret() {
   return <span className="nav-caret" aria-hidden="true" />;
@@ -29,10 +28,10 @@ function JobMegaMenu({ onClose }: { onClose?: () => void }) {
       <div className="jobs-mega-grid">
         {jobGroups.map((group) => (
           <section className="mega-column" key={group.title}>
-            <h2>{group.title}</h2>
+            <h2><a href={categoryHref(group.title)} onClick={onClose}>{group.title}</a></h2>
             {group.links.map((label) => (
               <a
-                href={routes.jobs + "?filter-category=" + encodeURIComponent(label)}
+                href={categoryHref(label)}
                 key={label}
                 onClick={onClose}
               >
@@ -217,7 +216,7 @@ export function SiteHeader() {
           <details className="mobile-job-menu">
             <summary>Find jobs <Caret /></summary>
             <a className="mobile-all-jobs" href={routes.jobs}>All foreign vacancies</a>
-            {jobGroups.map((group) => <div className="mobile-job-group" key={group.title}><p>{group.title}</p>{group.links.map((label) => <a href={routes.jobs + "?filter-category=" + encodeURIComponent(label)} key={label}>{label}</a>)}</div>)}
+            {jobGroups.map((group) => <div className="mobile-job-group" key={group.title}><p><a href={categoryHref(group.title)}>{group.title}</a></p>{group.links.map((label) => <a href={categoryHref(label)} key={label}>{label}</a>)}</div>)}
           </details>
           <a href={routes.employer}>Employers</a>
           <a href={routes.projects}>Projects</a>

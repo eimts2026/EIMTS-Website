@@ -1,3 +1,5 @@
+export { jobGroups, readJobCategories } from "./job-categories";
+
 export type JobStatus = "draft" | "published" | "paused" | "expired";
 
 export type JobRecord = {
@@ -7,6 +9,8 @@ export type JobRecord = {
   country: string;
   location: string | null;
   category: string;
+  primary_category: string | null;
+  subcategories: string[] | null;
   employment_type: string;
   salary_negotiable?: boolean;
   salary_amount: number | null;

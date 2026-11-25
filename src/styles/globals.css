@@ -1684,6 +1684,25 @@ input,select,textarea,button{max-inline-size:100%}
 .jobs-filter.jobs-filter-modern .job-select-trigger:hover{background:#f7faf8}
 .jobs-filter.jobs-filter-modern .job-select-trigger:focus-visible,.jobs-filter.jobs-filter-modern .job-select-trigger[aria-expanded="true"]{outline:0;background:#f7faf8;box-shadow:inset 0 0 0 2px #08795d,inset 0 0 0 5px rgba(243,184,75,.42)}
 .jobs-filter.jobs-filter-modern .job-select-menu{min-width:max(100%,250px)}
+.jobs-filter.jobs-filter-modern .job-category-select .job-select-menu {
+  left: auto;
+  right: 0;
+  width: max(100%, min(23rem, calc(100vw - 3rem)));
+  min-width: 0;
+}
+.job-category-select .job-select-option > span {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+.jobs-filter.jobs-filter-modern .job-category-select .primary-option {
+  font-weight: 750;
+  color: #075d48;
+  border-top: 1px solid #d7e0db;
+}
+@media (max-width: 760px) {
+  .jobs-filter.jobs-filter-modern .job-category-select .job-select-menu { width: 100%; }
+}
 .jobs-filter.jobs-filter-modern .job-select-option{min-width:0;border-radius:9px;background:#fff;color:#34493f}
 .jobs-filter.jobs-filter-modern .job-select-option:hover,.jobs-filter.jobs-filter-modern .job-select-option:focus-visible{background:#edf4f0;color:#075d48}
 .jobs-filter.jobs-filter-modern .job-select-option[aria-selected="true"]{background:#e1eee8;color:#075d48}

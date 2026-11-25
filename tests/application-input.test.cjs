@@ -13,6 +13,7 @@ const {safeNavigationUrl} = load('src/lib/safe-url.ts');
 function validForm() {
   const form=new FormData();
   for(const [key,value] of Object.entries({job_id:'12345678-1234-4234-8234-123456789abc',name:"José O’Connor",age:'25',email:'candidate+jobs@example.com',phone:'+94 77 123 4567'})) form.set(key,value);
+  form.set('nic', '199912345678');
   form.set('cv',new File(['%PDF-1.7'], 'cv.pdf', {type:'application/pdf'}));return form;
 }
 test('accepts international names without stripping punctuation',()=>assert.equal(validateApplication(validForm()).fullName,"José O’Connor"));

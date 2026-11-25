@@ -96,7 +96,7 @@ export default async function JobDetailPage({ params }: PageProps) {
     {
       icon: <TagIcon />,
       label: "Category",
-      value: job.category,
+      value: [job.primary_category ?? job.category, ...(job.subcategories ?? [])].join(" · "),
     },
   ].filter(Boolean) as Array<{ icon: React.ReactNode; label: string; value: string }>;
 
@@ -162,7 +162,7 @@ export default async function JobDetailPage({ params }: PageProps) {
           >
             <div>
               <div className={styles.badges}>
-                <span>{job.category}</span>
+                <span>{job.primary_category ?? job.category}</span>
                 <span>{job.country}</span>
                 {job.urgent && <strong>Urgent</strong>}
               </div>

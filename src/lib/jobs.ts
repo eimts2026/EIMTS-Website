@@ -12,6 +12,8 @@ export type PublicJobDetail = {
   country: string;
   location: string | null;
   category: string;
+  primary_category: string | null;
+  subcategories: string[] | null;
   employment_type: string;
   salary_negotiable?: boolean;
   salary_amount: number | null;
@@ -37,6 +39,8 @@ export type PublishedJobRow = {
   country: string;
   location: string | null;
   category: string;
+  primary_category: string | null;
+  subcategories: string[] | null;
   employment_type: string;
   urgent: boolean;
   image_url: string | null;
@@ -57,7 +61,7 @@ async function loadPublishedJobs(options: { urgentOnly?: boolean; limit?: number
   let query = supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,urgent,image_url,image_position,expires_at,salary_negotiable,salary_amount,salary_lkr,currency",
+      "id,slug,title,country,location,category,primary_category,subcategories,employment_type,urgent,image_url,image_position,expires_at,salary_negotiable,salary_amount,salary_lkr,currency",
     )
     .eq("status", "published")
     .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`)
@@ -82,7 +86,8 @@ export function mapPublishedJob(job: PublishedJobRow): Job { return {
     country: job.country,
     salary: formatJobSalary(job),
     expiresAt: job.expires_at,
-    category: job.category,
+    category: job.primary_category ?? job.category,
+    subcategories: job.subcategories ?? [],
     employmentType: job.employment_type,
     urgent: job.urgent,
     image: job.image_url || "/assets/blog-global-careers.webp",
@@ -102,7 +107,7 @@ const loadPublishedJobBySlug = publicCache("job-detail", async function getPubli
   const { data, error } = await supabase
     .from("jobs")
     .select(
-      "id,slug,title,country,location,category,employment_type,salary_negotiable,salary_amount,salary_lkr,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
+      "id,slug,title,country,location,category,primary_category,subcategories,employment_type,salary_negotiable,salary_amount,salary_lkr,currency,summary,description,requirements,image_url,urgent,published_at,expires_at",
     )
     .eq("slug", slug)
     .eq("status", "published")

@@ -57,7 +57,7 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
       jobs = [{ id: 'test-inquiry', kind, attempts: 1, payload }];
       assert.deepEqual(await processInquiryQueue(), { claimed: 1, sent: 1, deferred: 0, sentIds: ['test-inquiry'], deferredIds: [], attentionIds: [] });
       assert.deepEqual(mails[0].to, ['info@emeraldislemanpower.com']);
-      assert.deepEqual(mails[0].cc, kind === 'employer' ? ['support@emeraldislemanpower.com', 'recruitment@emeraldisle.lk'] : ['admin@emeraldisle.lk']);
+      assert.deepEqual(mails[0].cc, kind === 'employer' ? ['recruitment@emeraldisle.lk', 'linda@emeraldisle.lk'] : ['rec2@emeraldisle.lk', 'rec.engineering@emeraldisle.lk']);
       assert.equal(mails[0].replyTo, 'person@example.com');
       if (kind === 'contact') {
         assert.equal(mails[0].subject, '[GENERAL CONTACT] Test | person@example.com');
@@ -86,6 +86,7 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
     assert.ok(updates.some(value => value.status === 'dead' && value.last_error === 'partial_acceptance'));
     rejectCc = false; mails = [];
     const { sendApplicationEmail } = load('src/lib/email.ts', {
+      'server-only': {},
       nodemailer, './application-email-template': { applicationEmailTemplate: () => ({ text: 'Test application' }) },
     });
     assert.deepEqual(await sendApplicationEmail({
@@ -94,7 +95,7 @@ test('email routing includes CC recipients in headers and inquiry acceptance che
       cvContentType: 'application/pdf', cvBytes: new TextEncoder().encode('%PDF-test').buffer,
     }), { sent: true });
     assert.equal(mails[0].to, 'cv@emeraldisle.lk');
-    assert.equal(mails[0].cc, 'admin@emeraldisle.lk');
+    assert.equal(mails[0].cc, undefined);
     assert.equal(mails[0].replyTo, 'candidate@example.com');
     assert.equal(mails[0].attachments.length, 1);
     assert.equal(mails[0].attachments[0].content.toString(), '%PDF-test');
